@@ -1,0 +1,11 @@
+{
+  "name": "quoteme",
+  "version": "1.0.0",
+  "description": "Quote Me App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Group 10",
+  "license": "ISC"
+}
