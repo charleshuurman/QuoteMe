@@ -1,4 +1,24 @@
 const typeDefs = `
+  type Quote {
+    _id: ID
+    content: String
+    emotion: Mood
+    isprivate: Boolean
+    user: User
+    reactions: [Reaction]
+  }
+
+  type Reaction {
+    _id: ID
+    content: String
+    user: User
+  }
+
+  type Mood {
+    _id: ID
+    mood: String
+  }
+
   type Category {
     _id: ID
     name: String
@@ -25,6 +45,7 @@ const typeDefs = `
     firstName: String
     lastName: String
     email: String
+    subscription: Int
     orders: [Order]
   }
 
@@ -54,5 +75,18 @@ const typeDefs = `
     login(email: String!, password: String!): Auth
   }
 `;
+
+// TODO:  Add these for TypeDefs and Resolvers.js (take care to ensure Mongoose Models work with the resolvers)
+// Add queries
+//   Get all public Quotes from All Users (for the Bulletin)
+//   Get all Quotes from the current logged in user (for the Journal)
+
+// Add mutations
+//   Add a Quote(post)
+//   Delete a Quote
+//   Add a Reaction to the Quote
+//   Delete a Reaction from a Quote
+//   Add a Mood (?)
+//   Delete a Mood (?)
 
 module.exports = typeDefs;
