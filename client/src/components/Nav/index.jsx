@@ -7,7 +7,7 @@ function Nav() {
       return (
         <ul className="primary flex-row menu menu-vertical lg:menu-horizontal rounded-box">
           <li>
-            <Link to="/Home">Home</Link>
+            <Link to="/">Home</Link>
           </li>
           <li>
             <Link to="/DashBoard">DashBoard</Link>
