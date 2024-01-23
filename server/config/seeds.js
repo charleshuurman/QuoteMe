@@ -2,6 +2,11 @@ const db = require('./connection');
 const { User, Product, Category } = require('../models');
 const cleanDB = require('./cleanDB');
 
+// TODO:
+//   Change/populate all shop categories to display subscriptions instead
+
+// TODO: 
+//    Clean the Quote / Reaction / Mood collections as well
 db.once('open', async () => {
   await cleanDB('Category', 'categories');
   await cleanDB('Product', 'products');
@@ -146,6 +151,13 @@ db.once('open', async () => {
     lastName: 'Holt',
     email: 'eholt@testmail.com',
     password: 'password12345'
+  });
+
+  await User.create({
+    firstName: 'User',
+    lastName: 'One',
+    email: 'user1@hotmail.com',
+    password: 'user1'
   });
 
   console.log('users seeded');
