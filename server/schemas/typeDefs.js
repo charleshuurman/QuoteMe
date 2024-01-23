@@ -65,6 +65,7 @@ const typeDefs = `
     user: User
     order(_id: ID!): Order
     checkout(products: [ID]!): Checkout
+    getQuotes(emotions: [String]): [Quote]
   }
 
   type Mutation {

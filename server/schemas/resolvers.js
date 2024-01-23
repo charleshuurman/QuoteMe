@@ -4,6 +4,31 @@ const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
 
 const resolvers = {
   Query: {
+  //   getQuotes: async (_, { emotions }) => {
+  //     try {
+  //       const prompt = `You are an affirmations generator. When provided a user's emotions, please respond with only 3 quotes to uplift that person. The user's answers, when asked how they are feeling right now, are: ${emotions.join(", ")}`;
+
+  //       const options = {
+  //         method: 'POST',
+  //         url: process.env.RAPIDAPI_URL, // OpenAI URL
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           'X-RapidAPI-Key': process.env.RAPIDAPI_KEY,
+  //           'X-RapidAPI-Host': process.env.RAPIDAPI_HOST,
+  //         },
+  //         data: { prompt: prompt },
+  //       };
+
+  //       const response = await axios.request(options);
+
+  //       return response.data.choices.map(choice => ({ text: choice }));
+  //     } catch (error) {
+  //       console.error('Error in getQuotes:', error);
+  //       throw new Error('Error fetching quotes');
+  //     }
+  //   }
+  // },
+
     categories: async () => {
       return await Category.find();
     },
