@@ -1,6 +1,6 @@
 import ChooseFeeling from "../components/ChooseFeeling";
 import GeneratedQuotes from "../components/GeneratedQuotes";
-import BulletinBoard from "../components/BulletinBoard";
+import DashBoard from "../components/PostQuote";
 
 const Home = () => {
   return (
@@ -8,7 +8,7 @@ const Home = () => {
       <h1>Home</h1>
       <ChooseFeeling />
       <GeneratedQuotes />
-      <BulletinBoard />
+      <DashBoard />
     </div>
   );
 };
