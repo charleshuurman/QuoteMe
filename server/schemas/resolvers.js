@@ -86,6 +86,26 @@ const resolvers = {
 
       throw AuthenticationError;
     },
+    singleUser: async (parent, { userId }) => {
+      console.log("singleUser");
+      return User.findOne({ _id: userId });
+    },
+
+    users: async () => {
+      console.log("users");      
+      return User.find().populate(['quotes', 'friends']);
+    },
+    quotes: async (parent, { username }) => {
+      const params = username ? { username } : {};
+      return Quote.find(params).sort({ createdAt: -1 });
+    },
+    quote: async (parent, { quoteId }) => {
+      return Quote.findOne({ _id: quoteId });
+    },
+    allquotes: async () => {
+      return Quote.find().populate(['comments', 'reactions']);
+    },
+
     order: async (parent, { _id }, context) => {
       if (context.user) {
         const user = await User.findById(context.user._id).populate({
@@ -184,6 +204,7 @@ const resolvers = {
     },
 
     // TODO: populate  createQuote, deleteQuote, updateQuote, likeQuote, createComment
+
     createQuote: async (parent, args, context) => {
       console.log('createQuote');
       return null;
@@ -194,12 +215,80 @@ const resolvers = {
     updateQuote: async (parent, args, context) => {
       console.log('updateQuote');
     },
-    likeQuote: async (parent, args, context) => {
-      console.log('likeQuote');
+
+    likeQuote: async (parent, {quoteId}) => {
+      console.log('likeQuote');      
+
+      return await Quote.findByIdAndUpdate(quoteId, { "liked": true }, { new: true });
     },
-    createComment: async (parent, args, context) => {
+
+    unlikeQuote: async (parent, {quoteId}) => {
+      console.log('unlikeQuote');      
+
+      return await Quote.findByIdAndUpdate(quoteId, { "liked": false }, { new: true });
+    },
+
+    createComment: async (parent, {quoteId, commentText}, context) => {
       console.log('createComment');
+
+      // For debugging purpose only, delete this code when running with client
+
+      const UserInfo = {        
+        username: "barbara"
+      }
+
+      context.user = UserInfo;
+
+      // For debugging purpose only
+
+      if (context.user) {
+        return Quote.findOneAndUpdate(
+          { _id: quoteId },
+          {
+            $addToSet: {
+              comments: { commentText, commentAuthor: context.user.username },
+            },
+          },
+          {
+            new: true,
+            runValidators: true,
+          }
+        );
+      }
+      throw AuthenticationError;
+
     },
+    deleteComment: async (parent, {quoteId, commentId}, context) => {
+      console.log('deleteComment');
+
+      // For debugging purpose only, delete this code when running with client
+
+      const UserInfo = {        
+        username: "barbara"
+      }
+
+      context.user = UserInfo;
+
+      // For debugging purpose only
+
+
+      if (context.user) {
+        return Quote.findOneAndUpdate(
+          { _id: quoteId },
+          {
+            $pull: {
+              comments: {
+                _id: commentId,
+                commentAuthor: context.user.username,
+              },
+            },
+          },
+          { new: true }
+        );
+      }
+      throw AuthenticationError;
+    },
+
   }
 };
 

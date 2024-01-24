@@ -74,14 +74,25 @@ export const LIKE_QUOTE = gql`
 `;
 
 export const CREATE_COMMENT = gql`
-  mutation createComment($quoteId: ID!, $text: String!) {
-    createComment(quoteId: $quoteId, text: $text) {
+  mutation createComment($quoteId: ID!, $commentText: String!) {
+    createComment(quoteId: $quoteId, commentText: $commentText) {
       _id
-      text
-      quote {
+      comments {
         _id
-        text
-        author
+        commentText
+        commentAuthor
+        createdAt        
+      }
+    }
+  }
+`;
+
+export const DELETE_COMMENT = gql`
+  mutation deleteComment($quoteId: ID!, $commentId: ID!) {
+    createComment(quoteId: $quoteId, commentId: $commentId) {
+      _id
+      comments {
+        _id
       }
     }
   }
