@@ -79,6 +79,7 @@ const typeDefs = `
     order(_id: ID!): Order
     checkout(products: [ID]!): Checkout
     getQuote(_id: ID!): Quote
+    getMyQuotes: [Quote]
     listQuotes: [Quote]
     users: [User]
     quotes (userId: ID!): [Quote]
@@ -92,10 +93,10 @@ const typeDefs = `
   type Mutation {
     addUser(userName: String!, firstName: String!, lastName: String!, email: String!, password: String!): Auth
     addOrder(products: [ID]!): Order
-    updateUser(userName: String!, firstName: String, lastName: String, email: String, password: String): User
+    updateUser(userName: String!, firstName: String!, lastName: String!, email: String!, password: String!): User
     updateProduct(_id: ID!, quantity: Int!): Product
     login(email: String!, password: String!): Auth
-    createQuote(content: String!): Quote
+    createQuote(content: String!, emotion: String!, isPrivate: Boolean!, isGenerated: Boolean!, liked: Boolean!): Quote
     updateQuote(_id: ID!): Quote
     deleteQuote(_id: ID!): Quote
     likeQuote(quoteId: ID!): Quote

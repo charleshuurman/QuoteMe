@@ -1,6 +1,7 @@
 const connection = require('../config/connection');
 const { User, Quote } = require('../models');
 const { getRandomName, getRandomNames, getRandomQuote, getRandomReaction, getRandomArrItem, generateRandomDate } = require('./quotedata');
+const bcrypt = require('bcrypt');
 
 connection.on('error', (err) => err);
 
@@ -24,11 +25,13 @@ connection.once('open', async () => {
   // Loop 20 times -- add users to the users array
   for (let i = 1; i <= 20; i++) {
     let newname = getRandomName();
+    let newpassword = await bcrypt.hash(`user${i}`, 10);
     users.push({
       firstName: newname,
       lastName: newname,
       userName: newname,
       email: `user${i}@mymail.com`,
+      password: newpassword,
       orders: []
     });
   };
