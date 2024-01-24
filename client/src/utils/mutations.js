@@ -51,3 +51,38 @@ export const ADD_USER = gql`
     }
   }
 `;
+
+export const CREATE_QUOTE = gql`
+  mutation createQuote($text: String!, $author: String!) {
+    createQuote(text: $text, author: $author) {
+      _id
+      text
+      author
+    }
+  }
+`;
+
+export const LIKE_QUOTE = gql`
+  mutation likeQuote($quoteId: ID!) {
+    likeQuote(quoteId: $quoteId) {
+      _id
+      text
+      author
+      likes
+  }
+}
+`;
+
+export const CREATE_COMMENT = gql`
+  mutation createComment($quoteId: ID!, $text: String!) {
+    createComment(quoteId: $quoteId, text: $text) {
+      _id
+      text
+      quote {
+        _id
+        text
+        author
+      }
+    }
+  }
+`;
