@@ -25,6 +25,10 @@ const quoteSchema = new Schema(
       type: Boolean,
       default: false
     },
+    liked: {
+      type: Boolean,
+      default: false
+    },
     createdAt: {
       type: Date,
       default: Date.now, // date timestamp added automatically (if date is not specified upon creation)

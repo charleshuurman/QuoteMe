@@ -204,6 +204,7 @@ const resolvers = {
     },
 
     // TODO: populate  createQuote, deleteQuote, updateQuote, likeQuote, createComment
+
     createQuote: async (parent, args, context) => {
       console.log('createQuote');
       return null;
@@ -214,11 +215,31 @@ const resolvers = {
     updateQuote: async (parent, args, context) => {
       console.log('updateQuote');
     },
-    likeQuote: async (parent, args, context) => {
-      console.log('likeQuote');
+
+    likeQuote: async (parent, {quoteId}) => {
+      console.log('likeQuote');      
+
+      return await Quote.findByIdAndUpdate(quoteId, { "liked": true }, { new: true });
     },
+
+    unlikeQuote: async (parent, {quoteId}) => {
+      console.log('unlikeQuote');      
+
+      return await Quote.findByIdAndUpdate(quoteId, { "liked": false }, { new: true });
+    },
+
     createComment: async (parent, {quoteId, commentText}, context) => {
       console.log('createComment');
+
+      // For debugging purpose only, delete this code when running with client
+
+      const UserInfo = {        
+        username: "barbara"
+      }
+
+      context.user = UserInfo;
+
+      // For debugging purpose only
 
       if (context.user) {
         return Quote.findOneAndUpdate(
@@ -239,6 +260,17 @@ const resolvers = {
     },
     deleteComment: async (parent, {quoteId, commentId}, context) => {
       console.log('deleteComment');
+
+      // For debugging purpose only, delete this code when running with client
+
+      const UserInfo = {        
+        username: "barbara"
+      }
+
+      context.user = UserInfo;
+
+      // For debugging purpose only
+
 
       if (context.user) {
         return Quote.findOneAndUpdate(

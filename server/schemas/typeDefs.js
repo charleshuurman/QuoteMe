@@ -12,6 +12,7 @@ const typeDefs = `
     emotion: Mood
     isPrivate: Boolean
     isGenerated: Boolean
+    liked: Boolean
     createdAt: String    
     username: String
     comments: [Comment]
@@ -57,7 +58,7 @@ const typeDefs = `
     email: String
     quotes: [Quote]
     friends: [User]
-    
+
     subscription: Int
     orders: [Order]
   }
@@ -96,8 +97,8 @@ const typeDefs = `
     createQuote(content: String!): Quote
     updateQuote(_id: ID!): Quote
     deleteQuote(_id: ID!): Quote
-    likeQuote(_id: ID!): Quote
-    unlikeQuote(_id: ID!): Quote
+    likeQuote(quoteId: ID!): Quote
+    unlikeQuote(quoteId: ID!): Quote
     createComment(quoteId: ID!, commentText: String!): Quote
     deleteComment(quoteId: ID!, commentId: ID!): Quote
   }
