@@ -8,7 +8,6 @@ const Home = () => {
       <h1>Home</h1>
       <ChooseFeeling />
       <GeneratedQuotes />
-      <DashBoard />
     </div>
   );
 };
