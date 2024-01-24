@@ -77,6 +77,7 @@ connection.once('open', async () => {
       userName: getRandomArrItem(users).userName,
       emotion: moods[Math.floor(Math.random()*moods.length)],
       isPrivate: (Math.random() < 0.5)?true:false,
+      isGenerated: (Math.random() < 0.5)?true:false,
       createdAt: generateRandomDate(new Date(2021, 0, 1), new Date())
     });
   };

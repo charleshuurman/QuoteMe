@@ -66,7 +66,7 @@ const typeDefs = `
     user: User
     order(_id: ID!): Order
     checkout(products: [ID]!): Checkout
-    getQuotes(emotions: [String]): [Quote]
+    listQuotes: [Quote]
   }
 
   type Mutation {
@@ -75,6 +75,11 @@ const typeDefs = `
     updateUser(userName: String!, firstName: String, lastName: String, email: String, password: String): User
     updateProduct(_id: ID!, quantity: Int!): Product
     login(email: String!, password: String!): Auth
+    createQuote(content: String!): Quote
+    updateQuote(_id: ID!): Quote
+    deleteQuote(_id: ID!): Quote
+    likeQuote(_id: ID!): Quote
+    createComment(_id: ID!, text: String!): Quote
   }
 `;
 
@@ -90,5 +95,13 @@ const typeDefs = `
 //   Delete a Reaction from a Quote
 //   Add a Mood (?)
 //   Delete a Mood (?)
+
+// getQuote(_id: ID!): Quote
+// getMyJournal(): [Quote]
+// getBulletins(): [Quote]
+
+
+// API interface:
+// (getQuote, getBulletins, getMyJournal), then mutations (ie. createQuote, deleteQuote, updateQuote, likeQuote, createComment ).
 
 module.exports = typeDefs;
