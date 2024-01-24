@@ -1,3 +1,54 @@
+
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const GeneratedQuotes = ({ selectedFeeling }) => {
+  const [quotes, setQuotes] = useState([]);
+
+  useEffect(() => {
+    if (selectedFeeling) {
+      fetchQuotes(selectedFeeling);
+    }
+  }, [selectedFeeling]);
+
+  const fetchQuotes = async (feeling) => {
+    try {
+      const response = await axios.post(process.env.REACT_APP_API_URL, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.REACT_APP_RAPIDAPI_KEY}`
+        },
+        data: {
+          prompt: `You are an affirmations generator. When given a list of current emotions, please respond with only 3 meaningful and heartfelt quotes to uplift the user. The user's emotions, when asked how they are feeling right now, is ${feeling}.`,
+          max_tokens: 150,  // Adjust as needed
+        }
+      });
+      const generatedQuotes = response.data.choices[0].text.trim().split('\n');
+      setQuotes(generatedQuotes);
+    } catch (error) {
+      console.error('Error fetching quotes:', error);
+    }
+  };
+
+  return (
+    <div>
+      {quotes.length > 0 ? (
+        <div>
+          <h2>Quotes for {selectedFeeling}</h2>
+          {quotes.map((quote, index) => (
+            <p key={index}>{quote}</p>
+          ))}
+        </div>
+      ) : (
+        <p>Select a feeling to generate quotes.</p>
+      )}
+    </div>
+  );
+};
+
+export default GeneratedQuotes;
+
+
 // import React, { useState } from 'react';
 // import { useQuery, gql } from '@apollo/client';
 
@@ -90,38 +141,7 @@
 // export default GeneratedQuotes;
 
 
-import React from 'react';
 
-const exampleQuotes = [
-  { feeling: 'Happy', quote: 'Happiness is not by chance, but by choice.', author: 'Jim Rohn' },
-  { feeling: 'Anxious', quote: 'The only way to do great work is to love what you do.', author: 'Steve Jobs' },
-  { feeling: 'Sad', quote: 'Life is 10% what happens to us and 90% how we react to it.', author: 'Charles R. Swindoll' },
-  { feeling: 'Happy', quote: 'Happiness is not by chance, but by choice2.', author: 'Jim Rohn' },
-  { feeling: 'Inspired', quote: 'The only way to do great work is to love what you do2.', author: 'Steve Jobs' },
-  // ...add more quotes as needed
-];
-
-const ChooseFeeling = () => {
-  return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Hope these quotes are just what you needed:</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-        {exampleQuotes.map((item, index) => (
-          <div key={index} className="bg-base-100 shadow-xl p-4 rounded-lg">
-            <p className="text-lg font-semibold">{item.quote}</p>
-            <p className="text-md text-gray-700">{item.author}</p>
-            <p className="text-sm text-gray-500 italic">{item.feeling}</p>
-            <div className="mt-4 text-right">
-              <button className="btn btn-primary">Save</button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-export default ChooseFeeling;
 
 
 
