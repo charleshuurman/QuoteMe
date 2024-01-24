@@ -1,11 +1,20 @@
 const typeDefs = `
+  type Comment {
+    _id: ID
+    commentText: String
+    commentAuthor: String
+    createdAt: String    
+  }
+
   type Quote {
     _id: ID
     content: String
     emotion: Mood
-    isprivate: Boolean
-    user: User
-    reactions: [Reaction]
+    isPrivate: Boolean
+    isGenerated: Boolean
+    createdAt: String    
+    username: String
+    comments: [Comment]
   }
 
   type Reaction {
@@ -42,10 +51,13 @@ const typeDefs = `
 
   type User {
     _id: ID
-    userName: String
     firstName: String
     lastName: String
+    userName: String        
     email: String
+    quotes: [Quote]
+    friends: [User]
+    
     subscription: Int
     orders: [Order]
   }
@@ -66,7 +78,13 @@ const typeDefs = `
     user: User
     order(_id: ID!): Order
     checkout(products: [ID]!): Checkout
+    getQuote(_id: ID!): Quote    
     listQuotes: [Quote]
+    users: [User]
+    quotes (userId: ID!): [Quote]
+    quote (quoteId: ID!): Quote
+    allquotes: [Quote]
+    singleUser (userId: ID!): User
   }
 
   type Mutation {
@@ -79,7 +97,9 @@ const typeDefs = `
     updateQuote(_id: ID!): Quote
     deleteQuote(_id: ID!): Quote
     likeQuote(_id: ID!): Quote
-    createComment(_id: ID!, text: String!): Quote
+    unlikeQuote(_id: ID!): Quote
+    createComment(quoteId: ID!, commentText: String!): Quote
+    deleteComment(quoteId: ID!, commentId: ID!): Quote
   }
 `;
 
