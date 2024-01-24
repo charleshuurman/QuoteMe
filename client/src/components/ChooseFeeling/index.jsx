@@ -5,20 +5,26 @@ const emotions = [
   { name: 'Sad', emoji: '😢' },
   { name: 'Anxious', emoji: '😰' },
   { name: 'Angry', emoji: '😠' },
-  { name: 'Inspired', emoji: '🤩' } 
+  { name: 'Inspired', emoji: '🤩' }
 ];
 
 const ChooseFeeling = ({ onEmotionSelect }) => {
   const [selectedEmotion, setSelectedEmotion] = useState(null);
 
   const handleEmotionClick = (emotion) => {
+    console.log('onEmotionSelect prop:', onEmotionSelect);
     setSelectedEmotion(emotion);
-    onEmotionSelect(emotion); // Notify parent component about the selection
-  };
+
+    if (typeof onEmotionSelect === 'function') {
+      onEmotionSelect(emotion); 
+    } else {
+      console.error('onEmotionSelect is not a function');
+    }
+  }; 
 
   const handleChooseAgain = () => {
     setSelectedEmotion(null);
-    onEmotionSelect(null); // Reset the selection
+    onEmotionSelect(null); 
   };
 
   return (
@@ -26,13 +32,12 @@ const ChooseFeeling = ({ onEmotionSelect }) => {
       {selectedEmotion ? (
         <div className="w-full text-left">
           <button 
-            className="btn-back" // Add your styling for the back button
+            className="btn-back"
             onClick={handleChooseAgain}
           >
             ← Choose Again
           </button>
           <h2 className="text-2xl font-semibold mb-4">Quotes for {selectedEmotion.name}</h2>
-          {/* Here you might render GeneratedQuote component or handle it in the parent component */}
         </div>
       ) : (
         <>
@@ -43,7 +48,7 @@ const ChooseFeeling = ({ onEmotionSelect }) => {
                 key={index}
                 className={`p-4 rounded-lg shadow-lg text-center ${emotion.name === selectedEmotion?.name ? 'bg-blue-200' : 'bg-white'}`}
                 onClick={() => handleEmotionClick(emotion)}
-                style={{ transition: 'background-color 0.3s', fontSize: '2rem' }} // Adjust font size as needed
+                style={{ transition: 'background-color 0.3s', fontSize: '2rem' }}
               >
                 <span className="text-6xl">{emotion.emoji}</span>
                 <p className="mt-2 font-medium">{emotion.name}</p>
@@ -57,6 +62,7 @@ const ChooseFeeling = ({ onEmotionSelect }) => {
 };
 
 export default ChooseFeeling;
+
 
 
 
@@ -127,4 +133,3 @@ export default ChooseFeeling;
 // };
 
 // export default ChooseFeeling;
-

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -13,17 +12,20 @@ const GeneratedQuotes = ({ selectedFeeling }) => {
 
   const fetchQuotes = async (feeling) => {
     try {
-      const response = await axios.post(process.env.REACT_APP_API_URL, {
+      const response = await axios({
+        method: 'post',
+        url: process.env.REACT_APP_OPENAI_API_URL,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.REACT_APP_RAPIDAPI_KEY}`
+          'X-RapidAPI-Key': process.env.REACT_APP_RAPIDAPI_KEY,
+          'X-RapidAPI-Host': process.env.REACT_APP_RAPIDAPI_HOST,
         },
         data: {
-          prompt: `You are an affirmations generator. When given a list of current emotions, please respond with only 3 meaningful and heartfelt quotes to uplift the user. The user's emotions, when asked how they are feeling right now, is ${feeling}.`,
-          max_tokens: 150,  // Adjust as needed
+          prompt: `You are an affirmations generator. When given a list of current emotions, please respond with 3 meaningful and heartfelt quotes to uplift the user, separated by '|||'. The user's emotions, when asked how they are feeling right now, is ${feeling}.`,
+          max_tokens: 250,
         }
       });
-      const generatedQuotes = response.data.choices[0].text.trim().split('\n');
+      const generatedQuotes = response.data.result.trim().split('|||').map(quote => quote.trim());
       setQuotes(generatedQuotes);
     } catch (error) {
       console.error('Error fetching quotes:', error);
@@ -47,6 +49,7 @@ const GeneratedQuotes = ({ selectedFeeling }) => {
 };
 
 export default GeneratedQuotes;
+
 
 
 // import React, { useState } from 'react';

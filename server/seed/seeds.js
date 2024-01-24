@@ -200,13 +200,15 @@ db.once('open', async () => {
 
   console.log('products seeded');
 
-  await User.create({
+  console.log('creating pamela');
+  let result = await User.create({
     firstName: 'Pamela',
     lastName: 'Washington',
-    username: 'p.washington',
+    userName: 'p.washington',
     email: 'pamela@testmail.com',
     password: 'password12345',
     friends: [],
+    quotes: [],
     orders: [
       {
         products: [products[0]._id, products[1]._id]
@@ -214,23 +216,30 @@ db.once('open', async () => {
     ]
   });
 
+  console.log('creating elijah');
+
   await User.create({
     firstName: 'Elijah',
     lastName: 'Holt',
-    username: 'e.holt',
+    userName: 'e.holt',
     email: 'eholt@testmail.com',
     password: 'password12345',
-    friends: []
+    quotes: [],
+    // friends: [],
+    orders: []
   });
 
+  console.log('creating users 1-10');
   for (let i = 1; i <=10; i++) {
+    console.log(`  adding user ${i}`);
     await User.create({
       firstName: 'User',
       lastName: `${i}`,
-      username: `user${i}`,
+      userName: `user${i}`,
       email: `user${i}@hotmail.com`,
       password: `user${i}`,
-      friends: []
+      quotes: [],
+      // friends: []
     });
   };
 

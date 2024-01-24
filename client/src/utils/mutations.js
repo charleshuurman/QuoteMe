@@ -31,12 +31,14 @@ export const ADD_ORDER = gql`
 
 export const ADD_USER = gql`
   mutation addUser(
+    $userName: String!
     $firstName: String!
     $lastName: String!
     $email: String!
     $password: String!
   ) {
     addUser(
+      userName: $userName
       firstName: $firstName
       lastName: $lastName
       email: $email
@@ -45,6 +47,41 @@ export const ADD_USER = gql`
       token
       user {
         _id
+      }
+    }
+  }
+`;
+
+export const CREATE_QUOTE = gql`
+  mutation createQuote($text: String!, $author: String!) {
+    createQuote(text: $text, author: $author) {
+      _id
+      text
+      author
+    }
+  }
+`;
+
+export const LIKE_QUOTE = gql`
+  mutation likeQuote($quoteId: ID!) {
+    likeQuote(quoteId: $quoteId) {
+      _id
+      text
+      author
+      likes
+  }
+}
+`;
+
+export const CREATE_COMMENT = gql`
+  mutation createComment($quoteId: ID!, $text: String!) {
+    createComment(quoteId: $quoteId, text: $text) {
+      _id
+      text
+      quote {
+        _id
+        text
+        author
       }
     }
   }
