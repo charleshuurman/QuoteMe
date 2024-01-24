@@ -45,9 +45,15 @@ const resolvers = {
     // },
 
     listQuotes: async () => {
-      let results = await User.find();
-      console.log (results);
-      return [];
+      return await Quote.find();
+    },
+
+    publicQuotes: async () => {
+      return await Quote.find({ isPrivate: false });
+    },
+
+    privateQuotes: async () => {
+      return await Quote.find({ isPrivate: true });
     },
 
     categories: async () => {
@@ -92,7 +98,7 @@ const resolvers = {
     },
 
     users: async () => {
-      console.log("users");      
+      console.log("users");
       return User.find().populate(['quotes', 'friends']);
     },
     quotes: async (parent, { username }) => {
@@ -216,24 +222,24 @@ const resolvers = {
       console.log('updateQuote');
     },
 
-    likeQuote: async (parent, {quoteId}) => {
-      console.log('likeQuote');      
+    likeQuote: async (parent, { quoteId }) => {
+      console.log('likeQuote');
 
       return await Quote.findByIdAndUpdate(quoteId, { "liked": true }, { new: true });
     },
 
-    unlikeQuote: async (parent, {quoteId}) => {
-      console.log('unlikeQuote');      
+    unlikeQuote: async (parent, { quoteId }) => {
+      console.log('unlikeQuote');
 
       return await Quote.findByIdAndUpdate(quoteId, { "liked": false }, { new: true });
     },
 
-    createComment: async (parent, {quoteId, commentText}, context) => {
+    createComment: async (parent, { quoteId, commentText }, context) => {
       console.log('createComment');
 
       // For debugging purpose only, delete this code when running with client
 
-      const UserInfo = {        
+      const UserInfo = {
         username: "barbara"
       }
 
@@ -258,12 +264,12 @@ const resolvers = {
       throw AuthenticationError;
 
     },
-    deleteComment: async (parent, {quoteId, commentId}, context) => {
+    deleteComment: async (parent, { quoteId, commentId }, context) => {
       console.log('deleteComment');
 
       // For debugging purpose only, delete this code when running with client
 
-      const UserInfo = {        
+      const UserInfo = {
         username: "barbara"
       }
 

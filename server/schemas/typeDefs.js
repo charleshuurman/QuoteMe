@@ -3,18 +3,19 @@ const typeDefs = `
     _id: ID
     commentText: String
     commentAuthor: String
-    createdAt: String    
+    createdAt: String
   }
 
   type Quote {
     _id: ID
     content: String
-    emotion: Mood
+    emotion: String
     isPrivate: Boolean
     isGenerated: Boolean
     liked: Boolean
-    createdAt: String    
-    username: String
+    createdAt: String
+    userName: String
+    reactions: [Reaction]
     comments: [Comment]
   }
 
@@ -22,11 +23,10 @@ const typeDefs = `
     _id: ID
     content: String
     user: User
-  }
-
-  type Mood {
-    _id: ID
-    mood: String
+    reactionId: ID
+    reactionBody: String
+    userName: String
+    createdAt: String
   }
 
   type Category {
@@ -54,11 +54,10 @@ const typeDefs = `
     _id: ID
     firstName: String
     lastName: String
-    userName: String        
+    userName: String
     email: String
     quotes: [Quote]
     friends: [User]
-
     subscription: Int
     orders: [Order]
   }
@@ -79,13 +78,15 @@ const typeDefs = `
     user: User
     order(_id: ID!): Order
     checkout(products: [ID]!): Checkout
-    getQuote(_id: ID!): Quote    
+    getQuote(_id: ID!): Quote
     listQuotes: [Quote]
     users: [User]
     quotes (userId: ID!): [Quote]
     quote (quoteId: ID!): Quote
     allquotes: [Quote]
     singleUser (userId: ID!): User
+    publicQuotes: [Quote]
+    privateQuotes: [Quote]
   }
 
   type Mutation {
@@ -105,9 +106,35 @@ const typeDefs = `
 `;
 
 // TODO:  Add these for TypeDefs and Resolvers.js (take care to ensure Mongoose Models work with the resolvers)
-// Add queries
-//   Get all public Quotes from All Users (for the Bulletin)
-//   Get all Quotes from the current logged in user (for the Journal)
+// API Documentation
+
+// Quote
+// -----
+// Example:
+// Query listQuotes {
+//   listQuotes {
+//     _id
+//     content
+//     emotion
+//     isPrivate
+//     isGenerated
+//     userName
+//     reactions {
+//       reactionBody
+//       userName
+//     }
+//   }
+// }
+
+// listQuotes: [Quote]
+//   List all quotes in database (TODO: should only be doable by admin user)
+
+// publicQuotes: [Quote]
+//   List all only publicly available quotes (for the Bulletin)
+
+// privateQuotes: [Quote]
+//   List only private quotes (TODO: based on the logged in user)
+
 
 // Add mutations
 //   Add a Quote(post)
