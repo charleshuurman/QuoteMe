@@ -15,7 +15,7 @@ const userSchema = new Schema({
     required: true,
     trim: true
   },
-  username: {
+  userName: {
     type: String,
     unique: true,
     required: true,
@@ -38,7 +38,6 @@ const userSchema = new Schema({
   friends: [{
     type: Schema.Types.ObjectId,
     ref: 'User',
-    unique: true
   }],
   orders: [Order.schema]
 });

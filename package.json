@@ -21,6 +21,7 @@
     "tailwindcss": "^3.4.1"
   },
   "dependencies": {
+    "dotenv": "^16.4.0",
     "react-daisyui": "^5.0.0"
   }
 }

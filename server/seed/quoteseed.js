@@ -27,7 +27,7 @@ connection.once('open', async () => {
     users.push({
       firstName: newname,
       lastName: newname,
-      username: newname,
+      userName: newname,
       email: `user${i}@mymail.com`,
       orders: []
     });
@@ -74,7 +74,7 @@ connection.once('open', async () => {
   for (let i = 1; i <= 30; i++) {
     quotes.push({
       content: getRandomQuote(),
-      username: getRandomArrItem(users).username,
+      userName: getRandomArrItem(users).userName,
       emotion: moods[Math.floor(Math.random()*moods.length)],
       isPrivate: (Math.random() < 0.5)?true:false,
       createdAt: generateRandomDate(new Date(2021, 0, 1), new Date())
@@ -113,7 +113,7 @@ connection.once('open', async () => {
           $addToSet: {
             reactions: {
               reactionBody: getRandomReaction(),
-              username: getRandomArrItem(users).username,
+              userName: getRandomArrItem(users).userName,
               createdAt: generateRandomDate(new Date(2021, 0, 1), new Date())
             }
           }
@@ -132,10 +132,10 @@ connection.once('open', async () => {
 
   // iterate through all users to inject their quotes
   for (let i = 0; i < storedUsers.length; i++) {
-    console.log("--->", storedUsers[i].username);
-    let userQuotes = await Quote.find({ username: storedUsers[i].username });
+    console.log("--->", storedUsers[i].userName);
+    let userQuotes = await Quote.find({ userName: storedUsers[i].userName });
     let userwithQuote = await User.findOneAndUpdate({ _id: storedUsers[i]._id }, { $set: { quotes: userQuotes } }, { new: true, returnOriginal: false }).populate('quotes').populate('friends').exec();
-    console.log(`User ${storedUsers[i].username}'s quotes:`, userwithQuote);
+    console.log(`User ${storedUsers[i].userName}'s quotes:`, userwithQuote);
   };
 
   console.table(users);
