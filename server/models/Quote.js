@@ -34,7 +34,7 @@ const quoteSchema = new Schema(
       default: Date.now, // date timestamp added automatically (if date is not specified upon creation)
       get: formatDate,   // format the date
     },
-    username: {
+    userName: {
       type: String,      // username
       required: true,
       ref: 'User',       // references the 'User' model
