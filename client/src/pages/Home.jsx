@@ -1,11 +1,12 @@
-import React from 'react';
-import QuotesContainer from '../../src/components/GeneratedQuotes'; 
+import ChooseFeeling from "../components/ChooseFeeling";
+import GeneratedQuotes from "../components/GeneratedQuotes";
 
 const Home = () => {
   return (
     <div className="container">
       <h1>Home</h1>
-      <QuotesContainer />
+      <ChooseFeeling />
+      <GeneratedQuotes />
     </div>
   );
 };

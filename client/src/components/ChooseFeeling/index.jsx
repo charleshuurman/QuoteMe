@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import GeneratedQuotes from './GeneratedQuotes';
+import GeneratedQuotes from '../GeneratedQuotes';
 
 const emotions = [
   { name: 'Happy', emoji: '😊' },
