@@ -1,5 +1,6 @@
 const { User, Product, Category, Order, Quote } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
+const { UserNotFoundError, QuoteNotFoundError } = require('../utils/errors.js');
 const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
 
 const resolvers = {
@@ -57,6 +58,7 @@ const resolvers = {
     },
 
     getMyQuotes: async (parent, args, context) => {
+      console.log("User ", context.user);
       if (context.user) {
         const user = await User.findById(context.user._id);
 
@@ -221,9 +223,10 @@ const resolvers = {
 
     // TODO: populate  createQuote, deleteQuote, updateQuote, likeQuote, createComment
 
+    // Create a Quote
     createQuote: async (parent, args, context) => {
       console.log('createQuote', args);
-      console.log('usercontext', context.user);
+      // console.log('usercontext', context.user);
 
       const user = await User.findById(context.user._id);
 
@@ -242,11 +245,72 @@ const resolvers = {
       throw AuthenticationError;
     },
 
-    deleteQuote: async (parent, args, context) => {
-      console.log('deleteQuote');
+    // Delete a Quote
+    deleteQuote: async (parent, { _id }, context) => {
+      console.log('deleteQuote', _id, context.user);
+
+      // Check if the user is logged in via the context
+      if (context.user) {
+
+        const quoteToDelete = await Quote.findById(_id);
+
+        // Check if we found the quote specified by the Quote's _id
+        if (quoteToDelete) {
+          quoteToDelete.userName = context.user.userName;
+          console.log('Found quotetodelete:', quoteToDelete);
+
+          // Check to see if the user logged in is the one that created the Quote object.
+          if (quoteToDelete.userName === context.user.userName) {
+            console.log('deleting ', quoteToDelete.toJSON());
+            const updatedUser = await User.findByIdAndUpdate(context.user._id,
+              { $pull: { quotes: quoteToDelete._id } },
+              { runValidators: true, new: true });
+            const deletedQuote = await Quote.deleteOne({ _id: _id });
+            return quoteToDelete;
+          } else {
+            console.log('Error: username is different from the user that is logged in');
+            throw UserNotFoundError;
+          }
+        } else {
+          console.log('Cannot delete: No such quote _id exists');
+          throw QuoteNotFoundError;
+        }
+      } else {
+        throw AuthenticationError;
+      }
     },
+
+    // Update a Quote
     updateQuote: async (parent, args, context) => {
-      console.log('updateQuote');
+      console.log('updateQuote', args._id, context.user);
+
+      // Check if the user is logged in via the context
+      if (context.user) {
+
+        const quoteToUpdate = await Quote.findById(args._id);
+
+        // Check if we found the quote specified by the Quote's _id
+        if (quoteToUpdate) {
+          console.log('Found quotetoupdate:', quoteToUpdate);
+
+          // Check to see if the user logged in is the one that created the Quote object (everyone else is unauthorized to delete this)
+          if (quoteToUpdate.userName === context.user.userName) {
+            console.log('updating ', quoteToUpdate.toJSON());
+            const updatedQuote = await Quote.findByIdAndUpdate(args._id,
+              args,
+              { runValidators: true, new: true });
+            return updatedQuote;
+          } else {
+            console.log('Error: username is different from the user that is logged in');
+            throw UserNotFoundError;
+          }
+        } else {
+          console.log('Cannot delete: No such quote _id exists');
+          throw QuoteNotFoundError;
+        }
+      } else {
+        throw AuthenticationError;
+      };
     },
 
     likeQuote: async (parent, { quoteId }) => {

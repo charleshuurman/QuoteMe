@@ -97,7 +97,7 @@ const typeDefs = `
     updateProduct(_id: ID!, quantity: Int!): Product
     login(email: String!, password: String!): Auth
     createQuote(content: String!, emotion: String!, isPrivate: Boolean!, isGenerated: Boolean!, liked: Boolean!): Quote
-    updateQuote(_id: ID!): Quote
+    updateQuote(_id: ID!, content: String!, emotion: String!, isPrivate: Boolean!, isGenerated: Boolean!, liked: Boolean!): Quote
     deleteQuote(_id: ID!): Quote
     likeQuote(quoteId: ID!): Quote
     unlikeQuote(quoteId: ID!): Quote
@@ -106,11 +106,14 @@ const typeDefs = `
   }
 `;
 
-// TODO:  Add these for TypeDefs and Resolvers.js (take care to ensure Mongoose Models work with the resolvers)
+// TODO: Add query and mutations required for the front-end
+
 // API Documentation
 
-// Quote
-// -----
+// Quote section
+// -------------
+
+// listQuotes --- lists all quotes
 // Example:
 // Query listQuotes {
 //   listQuotes {
@@ -135,6 +138,79 @@ const typeDefs = `
 
 // privateQuotes: [Quote]
 //   List only private quotes (TODO: based on the logged in user)
+
+
+// createQuote --- create a quote
+// - Example Apollo graphQL Query
+// mutation mut001($content: String!, $emotion: String!, $isPrivate: Boolean!, $isGenerated: Boolean!, $liked: Boolean!) {
+//   createQuote(content: $content, emotion: $emotion, isPrivate: $isPrivate, isGenerated: $isGenerated, liked: $liked) {
+//     _id
+//     content
+//     emotion
+//     isPrivate
+//     isGenerated
+//     liked
+//     createdAt
+//     userName
+//   }
+// }
+// - Example Apollo graphQL variables
+// {
+//   "content": "Hello, world!  This is a quote!",
+//   "emotion": "Happy",
+//   "isPrivate": false,
+//   "isGenerated": true,
+//   "liked": true,
+//   "userName": "userName",
+// }
+
+// deleteQuote --- delete a quote and remove the quote from the user's quotes array
+// - Example Apollo graphQL Query
+// mutation mut002($deleteQuoteId: ID!) {
+//   deleteQuote(_id: $deleteQuoteId) {
+//     _id
+//     content
+//     emotion
+//     isPrivate
+//     isGenerated
+//     liked
+//     createdAt
+//     userName
+//     reactions {
+//       _id
+//       content
+//     }
+//     comments {
+//       commentText
+//       commentAuthor
+//       createdAt
+//     }
+//   }
+// }
+// - Example variables
+// {"deleteQuoteId": "65b19596c8ec92e88047c2fe"}
+
+// updateQuote --- modify the properties of a Quote (TODO: ensure properties like userName and createdAt isn't updatable)
+// - Example Apollo query
+// mutation mut003($updateQuoteId: ID!, $content: String!, $emotion: String!, $isPrivate: Boolean!, $isGenerated: Boolean!, $liked: Boolean!) {
+//   updateQuote(_id: $updateQuoteId, content: $content, emotion: $emotion, isPrivate: $isPrivate, isGenerated: $isGenerated, liked: $liked) {
+//     _id
+//     content
+//     emotion
+//     isPrivate
+//     isGenerated
+//     liked
+//   }
+// }
+// - Example variables
+// {
+// "updateQuoteId": "65b1f17a2b0e9e91d79a3124",
+// "content": "Hello, world update 2!  This is a quote updated twice!",
+// "emotion": "Joy",
+// "isPrivate": false,
+// "isGenerated": true,
+// "liked": true,
+// }
 
 
 // Add mutations
