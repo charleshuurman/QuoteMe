@@ -3,22 +3,25 @@ import React, { useState, useEffect } from 'react';
 // Predefined quotes for each emotion
 const quotesData = {
   Happy: [
-    "Happiness quote 1...",
-    "Happiness quote 2...",
-    "Happiness quote 3...",
-    // ...add more quotes as needed
+    "The more you praise and celebrate your life, the more there is in life to celebrate. — Oprah Winfrey",
+    "Happiness is not by chance, but by choice. — Jim Rohn",
+    "The secret of being happy is accepting where you are in life and making the most out of every day.",
+    "Happiness is not something ready made. It comes from your own actions. — Dalai Lama",
+    "The purpose of our lives is to be happy. — Dalai Lama",
+    
+
   ],
   Sad: [
     "Sadness quote 1...",
     "Sadness quote 2...",
     "Sadness quote 3...",
-    // ...add more quotes as needed
+
   ],
   Anxious: [
     "Anxiety quote 1...",
     "Anxiety quote 2...",
     "Anxiety quote 3...",
-    // ...add more quotes as needed
+
   ],
   // ...add other emotions and their quotes
 };

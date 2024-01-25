@@ -17,7 +17,7 @@ const emotions = [
   { name: 'Nervous', emoji: '😟' },
   { name: 'Hopeless', emoji: '😔' },
   { name: 'Jealous', emoji: '😒' },
-  { name: 'Calm', emoji: '😌' }
+  { name: 'Lost', emoji: '🤔' }
 ];
 
 const ChooseFeeling = () => {
@@ -32,30 +32,29 @@ const ChooseFeeling = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-4">
+    <div className="flex flex-col items-center justify-center p-4 bg-gray-100">
       {selectedEmotion ? (
         <>
           <div className="w-full text-left">
             <button 
-              className="btn-back"
+              className="btn btn-secondary"
               onClick={handleChooseAgain}
             >
               ← Choose Again
             </button>
-            <h2 className="text-2xl font-semibold mb-4">Quotes for {selectedEmotion.name}</h2>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Quotes for {selectedEmotion.name}</h2>
           </div>
           <GeneratedQuotes selectedFeeling={selectedEmotion.name} />
         </>
       ) : (
         <>
-          <h2 className="text-2xl font-semibold mb-4">Quotes. How are you feeling?</h2>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">How are you feeling?</h2>
           <div className="flex flex-wrap justify-center gap-4">
             {emotions.map((emotion, index) => (
               <button
                 key={index}
-                className={`p-4 rounded-lg shadow-lg text-center ${emotion.name === selectedEmotion?.name ? 'bg-blue-200' : 'bg-white'}`}
-                onClick={() => handleEmotionClick(emotion)}
-                style={{ transition: 'background-color 0.3s', fontSize: '2rem' }}
+                className={`p-4 rounded-lg shadow-lg text-center transition-colors duration-300 ease-in-out ${emotion.name === selectedEmotion?.name ? 'bg-blue-300' : 'bg-white'} hover:bg-blue-200`}
+                style={{ fontSize: '2rem' }}
               >
                 <span className="text-6xl">{emotion.emoji}</span>
                 <p className="mt-2 font-medium">{emotion.name}</p>
@@ -69,6 +68,7 @@ const ChooseFeeling = () => {
 };
 
 export default ChooseFeeling;
+
 
 
 
