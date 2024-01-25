@@ -1,33 +1,70 @@
-const { User, Product, Category, Order } = require('../models');
+const { User, Product, Category, Order, Quote } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
 
 const resolvers = {
   Query: {
-  //   getQuotes: async (_, { emotions }) => {
-  //     try {
-  //       const prompt = `You are an affirmations generator. When provided a user's emotions, please respond with only 3 quotes to uplift that person. The user's answers, when asked how they are feeling right now, are: ${emotions.join(", ")}`;
+    //   getQuotes: async (_, { emotions }) => {
+    //     try {
+    //       const prompt = `You are an affirmations generator. When provided a user's emotions, please respond with only 3 quotes to uplift that person. The user's answers, when asked how they are feeling right now, are: ${emotions.join(", ")}`;
 
-  //       const options = {
-  //         method: 'POST',
-  //         url: process.env.RAPIDAPI_URL, // OpenAI URL
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           'X-RapidAPI-Key': process.env.RAPIDAPI_KEY,
-  //           'X-RapidAPI-Host': process.env.RAPIDAPI_HOST,
-  //         },
-  //         data: { prompt: prompt },
-  //       };
+    //       const options = {
+    //         method: 'POST',
+    //         url: process.env.RAPIDAPI_URL, // OpenAI URL
+    //         headers: {
+    //           'Content-Type': 'application/json',
+    //           'X-RapidAPI-Key': process.env.RAPIDAPI_KEY,
+    //           'X-RapidAPI-Host': process.env.RAPIDAPI_HOST,
+    //         },
+    //         data: { prompt: prompt },
+    //       };
 
-  //       const response = await axios.request(options);
+    //       const response = await axios.request(options);
 
-  //       return response.data.choices.map(choice => ({ text: choice }));
-  //     } catch (error) {
-  //       console.error('Error in getQuotes:', error);
-  //       throw new Error('Error fetching quotes');
-  //     }
-  //   }
-  // },
+    //       return response.data.choices.map(choice => ({ text: choice }));
+    //     } catch (error) {
+    //       console.error('Error in getQuotes:', error);
+    //       throw new Error('Error fetching quotes');
+    //     }
+    //   }
+    // },
+
+    // TODO: populate getQuote, getBulletins, getMyJournal!
+    // getQuote: async() => {
+    //   console.log('getQuote');
+    // },
+    // getBulletins: async() => {
+    //   console.log('getBulletins');
+    // },
+    // getMyJournal: async() => {
+    //   console.log('getMyJournal');
+    // },
+
+    // getBulletins: async () => {
+    //   return null;
+    // },
+
+    listQuotes: async () => {
+      return await Quote.find();
+    },
+
+    publicQuotes: async () => {
+      return await Quote.find({ isPrivate: false });
+    },
+
+    privateQuotes: async (parent, args, context) => {
+      return await Quote.find({ isPrivate: true });
+    },
+
+    getMyQuotes: async (parent, args, context) => {
+      if (context.user) {
+        const user = await User.findById(context.user._id);
+
+        return await Quote.find({ userName: user.userName });
+      }
+
+      throw AuthenticationError;
+    },
 
     categories: async () => {
       return await Category.find();
@@ -51,6 +88,7 @@ const resolvers = {
       return await Product.findById(_id).populate('category');
     },
     user: async (parent, args, context) => {
+      // console.log('User query', parent, args, context);
       if (context.user) {
         const user = await User.findById(context.user._id).populate({
           path: 'orders.products',
@@ -64,6 +102,26 @@ const resolvers = {
 
       throw AuthenticationError;
     },
+    singleUser: async (parent, { userId }) => {
+      console.log("singleUser");
+      return User.findOne({ _id: userId });
+    },
+
+    users: async () => {
+      console.log("users");
+      return User.find().populate(['quotes', 'friends']);
+    },
+    quotes: async (parent, { username }) => {
+      const params = username ? { username } : {};
+      return Quote.find(params).sort({ createdAt: -1 });
+    },
+    quote: async (parent, { quoteId }) => {
+      return Quote.findOne({ _id: quoteId });
+    },
+    allquotes: async () => {
+      return Quote.find().populate(['comments', 'reactions']);
+    },
+
     order: async (parent, { _id }, context) => {
       if (context.user) {
         const user = await User.findById(context.user._id).populate({
@@ -159,7 +217,111 @@ const resolvers = {
       const token = signToken(user);
 
       return { token, user };
-    }
+    },
+
+    // TODO: populate  createQuote, deleteQuote, updateQuote, likeQuote, createComment
+
+    createQuote: async (parent, args, context) => {
+      console.log('createQuote', args);
+      console.log('usercontext', context.user);
+
+      const user = await User.findById(context.user._id);
+
+      if (context.user) {
+
+        args.userName = context.user.userName;
+        const createdQuote = await Quote.create(args);
+        // await createdThought.save();
+        const updatedUser = await User.findByIdAndUpdate(context.user._id,
+          { $addToSet: { quotes: createdQuote._id } },
+          { runValidators: true, new: true });
+
+        return updatedUser;
+      }
+
+      throw AuthenticationError;
+    },
+
+    deleteQuote: async (parent, args, context) => {
+      console.log('deleteQuote');
+    },
+    updateQuote: async (parent, args, context) => {
+      console.log('updateQuote');
+    },
+
+    likeQuote: async (parent, { quoteId }) => {
+      console.log('likeQuote');
+
+      return await Quote.findByIdAndUpdate(quoteId, { "liked": true }, { new: true });
+    },
+
+    unlikeQuote: async (parent, { quoteId }) => {
+      console.log('unlikeQuote');
+
+      return await Quote.findByIdAndUpdate(quoteId, { "liked": false }, { new: true });
+    },
+
+    createComment: async (parent, { quoteId, commentText }, context) => {
+      console.log('createComment');
+
+      // For debugging purpose only, delete this code when running with client
+
+      const UserInfo = {
+        username: "barbara"
+      }
+
+      context.user = UserInfo;
+
+      // For debugging purpose only
+
+      if (context.user) {
+        return Quote.findOneAndUpdate(
+          { _id: quoteId },
+          {
+            $addToSet: {
+              comments: { commentText, commentAuthor: context.user.username },
+            },
+          },
+          {
+            new: true,
+            runValidators: true,
+          }
+        );
+      }
+      throw AuthenticationError;
+
+    },
+    deleteComment: async (parent, { quoteId, commentId }, context) => {
+      console.log('deleteComment');
+
+      // For debugging purpose only, delete this code when running with client
+
+      const UserInfo = {
+        username: "barbara"
+      }
+
+      context.user = UserInfo;
+
+      // For debugging purpose only
+
+
+      if (context.user) {
+        return Quote.findOneAndUpdate(
+          { _id: quoteId },
+          {
+            $pull: {
+              comments: {
+                _id: commentId,
+                commentAuthor: context.user.username,
+              },
+            },
+          },
+          { new: true }
+        );
+      }
+      throw AuthenticationError;
+    },
+
   }
 };
 

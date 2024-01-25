@@ -21,17 +21,45 @@ const quoteSchema = new Schema(
       type: Boolean,
       default: true
     },
+    isGenerated: {
+      type: Boolean,
+      default: false
+    },
+    liked: {
+      type: Boolean,
+      default: false
+    },
     createdAt: {
       type: Date,
       default: Date.now, // date timestamp added automatically (if date is not specified upon creation)
       get: formatDate,   // format the date
     },
-    username: {
+    userName: {
       type: String,      // username
       required: true,
       ref: 'User',       // references the 'User' model
     },
     reactions: [reactionSchema],  // reactionSchema specifies a Mongoose subdocument
+    comments: [
+      {
+        commentText: {
+          type: String,
+          required: true,
+          minlength: 1,
+          maxlength: 280,
+        },
+        commentAuthor: {
+          type: String,
+          required: true,
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+          get: (timestamp) => dateFormat(timestamp),
+        },
+      },
+    ],
+  
   },
   {
     toJSON: {

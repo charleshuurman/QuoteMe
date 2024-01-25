@@ -1,22 +1,32 @@
 const typeDefs = `
+  type Comment {
+    _id: ID
+    commentText: String
+    commentAuthor: String
+    createdAt: String
+  }
+
   type Quote {
     _id: ID
     content: String
-    emotion: Mood
-    isprivate: Boolean
-    user: User
+    emotion: String
+    isPrivate: Boolean
+    isGenerated: Boolean
+    liked: Boolean
+    createdAt: String
+    userName: String
     reactions: [Reaction]
+    comments: [Comment]
   }
 
   type Reaction {
     _id: ID
     content: String
     user: User
-  }
-
-  type Mood {
-    _id: ID
-    mood: String
+    reactionId: ID
+    reactionBody: String
+    userName: String
+    createdAt: String
   }
 
   type Category {
@@ -42,10 +52,12 @@ const typeDefs = `
 
   type User {
     _id: ID
-    userName: String
     firstName: String
     lastName: String
+    userName: String
     email: String
+    quotes: [Quote]
+    friends: [User]
     subscription: Int
     orders: [Order]
   }
@@ -66,22 +78,64 @@ const typeDefs = `
     user: User
     order(_id: ID!): Order
     checkout(products: [ID]!): Checkout
-    getQuotes(emotions: [String]): [Quote]
+    getQuote(_id: ID!): Quote
+    getMyQuotes: [Quote]
+    listQuotes: [Quote]
+    users: [User]
+    quotes (userId: ID!): [Quote]
+    quote (quoteId: ID!): Quote
+    allquotes: [Quote]
+    singleUser (userId: ID!): User
+    publicQuotes: [Quote]
+    privateQuotes: [Quote]
   }
 
   type Mutation {
     addUser(userName: String!, firstName: String!, lastName: String!, email: String!, password: String!): Auth
     addOrder(products: [ID]!): Order
-    updateUser(userName: String!, firstName: String, lastName: String, email: String, password: String): User
+    updateUser(userName: String!, firstName: String!, lastName: String!, email: String!, password: String!): User
     updateProduct(_id: ID!, quantity: Int!): Product
     login(email: String!, password: String!): Auth
+    createQuote(content: String!, emotion: String!, isPrivate: Boolean!, isGenerated: Boolean!, liked: Boolean!): Quote
+    updateQuote(_id: ID!): Quote
+    deleteQuote(_id: ID!): Quote
+    likeQuote(quoteId: ID!): Quote
+    unlikeQuote(quoteId: ID!): Quote
+    createComment(quoteId: ID!, commentText: String!): Quote
+    deleteComment(quoteId: ID!, commentId: ID!): Quote
   }
 `;
 
 // TODO:  Add these for TypeDefs and Resolvers.js (take care to ensure Mongoose Models work with the resolvers)
-// Add queries
-//   Get all public Quotes from All Users (for the Bulletin)
-//   Get all Quotes from the current logged in user (for the Journal)
+// API Documentation
+
+// Quote
+// -----
+// Example:
+// Query listQuotes {
+//   listQuotes {
+//     _id
+//     content
+//     emotion
+//     isPrivate
+//     isGenerated
+//     userName
+//     reactions {
+//       reactionBody
+//       userName
+//     }
+//   }
+// }
+
+// listQuotes: [Quote]
+//   List all quotes in database (TODO: should only be doable by admin user)
+
+// publicQuotes: [Quote]
+//   List all only publicly available quotes (for the Bulletin)
+
+// privateQuotes: [Quote]
+//   List only private quotes (TODO: based on the logged in user)
+
 
 // Add mutations
 //   Add a Quote(post)
@@ -90,5 +144,13 @@ const typeDefs = `
 //   Delete a Reaction from a Quote
 //   Add a Mood (?)
 //   Delete a Mood (?)
+
+// getQuote(_id: ID!): Quote
+// getMyJournal(): [Quote]
+// getBulletins(): [Quote]
+
+
+// API interface:
+// (getQuote, getBulletins, getMyJournal), then mutations (ie. createQuote, deleteQuote, updateQuote, likeQuote, createComment ).
 
 module.exports = typeDefs;
