@@ -42,7 +42,6 @@ const ChooseFeeling = () => {
             >
               ← Choose Again
             </button>
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Quotes for {selectedEmotion.name}</h2>
           </div>
           <GeneratedQuotes selectedFeeling={selectedEmotion.name} />
         </>
