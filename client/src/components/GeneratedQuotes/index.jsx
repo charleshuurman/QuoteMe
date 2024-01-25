@@ -11,7 +11,19 @@ const GeneratedQuotes = ({ selectedFeeling }) => {
   }, [selectedFeeling]);
 
   const fetchQuotes = async (feeling) => {
+    // Logging the selected feeling
+    console.log("Selected feeling:", feeling);
+  
     try {
+      // Preparing the data payload for the API request
+      const dataPayload = {
+        prompt: `You are an affirmations generator. When given a list of current emotions, please respond with 3 meaningful and heartfelt quotes to uplift the user, separated by '|||'. The user's emotions, when asked how they are feeling right now, is ${feeling}.`,
+        max_tokens: 250,
+      };
+  
+      // Logging the data payload
+      console.log("Data payload for API request:", dataPayload);
+  
       const response = await axios({
         method: 'post',
         url: process.env.REACT_APP_OPENAI_API_URL,
@@ -20,17 +32,17 @@ const GeneratedQuotes = ({ selectedFeeling }) => {
           'X-RapidAPI-Key': process.env.REACT_APP_RAPIDAPI_KEY,
           'X-RapidAPI-Host': process.env.REACT_APP_RAPIDAPI_HOST,
         },
-        data: {
-          prompt: `You are an affirmations generator. When given a list of current emotions, please respond with 3 meaningful and heartfelt quotes to uplift the user, separated by '|||'. The user's emotions, when asked how they are feeling right now, is ${feeling}.`,
-          max_tokens: 250,
-        }
+        data: dataPayload
       });
+
       const generatedQuotes = response.data.result.trim().split('|||').map(quote => quote.trim());
       setQuotes(generatedQuotes);
+  
     } catch (error) {
       console.error('Error fetching quotes:', error);
     }
   };
+  
 
   return (
     <div>
