@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import ChooseFeeling from './ChooseFeeling';
-import GeneratedQuotes from './GeneratedQuotes';
+import ChooseFeeling from '../ChooseFeeling';
+import GeneratedQuotes from '..GeneratedQuotes';
 
 const QuotesContainer = () => {
   const [selectedFeeling, setSelectedFeeling] = useState(null);

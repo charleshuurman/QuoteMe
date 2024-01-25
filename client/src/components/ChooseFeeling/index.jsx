@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import GeneratedQuotes from './GeneratedQuotes';
 
 const emotions = [
   { name: 'Happy', emoji: '😊' },
@@ -8,37 +9,32 @@ const emotions = [
   { name: 'Inspired', emoji: '🤩' }
 ];
 
-const ChooseFeeling = ({ onEmotionSelect }) => {
+const ChooseFeeling = () => {
   const [selectedEmotion, setSelectedEmotion] = useState(null);
 
   const handleEmotionClick = (emotion) => {
-    console.log('onEmotionSelect prop:', onEmotionSelect);
     setSelectedEmotion(emotion);
-
-    if (typeof onEmotionSelect === 'function') {
-      onEmotionSelect(emotion); 
-    } else {
-      console.error('onEmotionSelect is not a function');
-    }
-  }; 
+  };
 
   const handleChooseAgain = () => {
     setSelectedEmotion(null);
-    onEmotionSelect(null); 
   };
 
   return (
     <div className="flex flex-col items-center justify-center p-4">
       {selectedEmotion ? (
-        <div className="w-full text-left">
-          <button 
-            className="btn-back"
-            onClick={handleChooseAgain}
-          >
-            ← Choose Again
-          </button>
-          <h2 className="text-2xl font-semibold mb-4">Quotes for {selectedEmotion.name}</h2>
-        </div>
+        <>
+          <div className="w-full text-left">
+            <button 
+              className="btn-back"
+              onClick={handleChooseAgain}
+            >
+              ← Choose Again
+            </button>
+            <h2 className="text-2xl font-semibold mb-4">Quotes for {selectedEmotion.name}</h2>
+          </div>
+          <GeneratedQuotes selectedFeeling={selectedEmotion.name} />
+        </>
       ) : (
         <>
           <h2 className="text-2xl font-semibold mb-4">Quotes. How are you feeling?</h2>
@@ -62,6 +58,7 @@ const ChooseFeeling = ({ onEmotionSelect }) => {
 };
 
 export default ChooseFeeling;
+
 
 
 
