@@ -1,9 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
-const apiUrl = import.meta.env.VITE_REACT_APP_OPENAI_API_URL;
-const apiKey = import.meta.env.VITE_REACT_APP_RAPIDAPI_KEY;
-const apiHost = import.meta.env.VITE_REACT_APP_RAPIDAPI_HOST;
+// Predefined quotes for each emotion
+const quotesData = {
+  Happy: [
+    "Happiness quote 1...",
+    "Happiness quote 2...",
+    "Happiness quote 3...",
+    // ...add more quotes as needed
+  ],
+  Sad: [
+    "Sadness quote 1...",
+    "Sadness quote 2...",
+    "Sadness quote 3...",
+    // ...add more quotes as needed
+  ],
+  Anxious: [
+    "Anxiety quote 1...",
+    "Anxiety quote 2...",
+    "Anxiety quote 3...",
+    // ...add more quotes as needed
+  ],
+  // ...add other emotions and their quotes
+};
 
 const GeneratedQuotes = ({ selectedFeeling }) => {
   const [quotes, setQuotes] = useState([]);
@@ -14,45 +32,15 @@ const GeneratedQuotes = ({ selectedFeeling }) => {
     }
   }, [selectedFeeling]);
 
-  const fetchQuotes = async (feeling) => {
-    console.log("Selected feeling:", feeling);
+  const fetchQuotes = (feeling) => {
+    // Get the full array of quotes for the selected feeling
+    const availableQuotes = quotesData[feeling] || [];
 
-    const dataPayload = {
-      messages: [
-        {
-          role: "user",
-          content: `You are an affirmations generator. When given a list of current emotions, please respond with 3 meaningful and heartfelt quotes to uplift the user. The quotes should not be numbered and should simply have '|||' between each to distinguish them. The user's emotions, when asked how they are feeling right now, is ${feeling}.`
-        }
-      ],
-      web_access: false,
-      system_prompt: "",
-      temperature: 0.9,
-      top_k: 5,
-      top_p: 0.9,
-      max_tokens: 256
-    };
+    // Shuffle through quotes and pick 3 at random
+    const shuffledQuotes = availableQuotes.sort(() => 0.5 - Math.random());
+    const selectedQuotes = shuffledQuotes.slice(0, 3);
 
-    console.log("Data payload for API request:", dataPayload);
-
-    try {
-      const response = await axios({
-        method: 'post',
-        url: apiUrl,
-        headers: {
-          'Content-Type': 'application/json',
-          'X-RapidAPI-Key': apiKey,
-          'X-RapidAPI-Host': apiHost,
-        },
-        data: dataPayload
-      });
-
-      // Process the response
-      const generatedQuotes = response.data.result.trim().split('|||').map(quote => quote.trim());
-      setQuotes(generatedQuotes);
-
-    } catch (error) {
-      console.error('Error fetching quotes:', error);
-    }
+    setQuotes(selectedQuotes);
   };
 
   return (
@@ -72,9 +60,6 @@ const GeneratedQuotes = ({ selectedFeeling }) => {
 };
 
 export default GeneratedQuotes;
-
-
-
 
 
 

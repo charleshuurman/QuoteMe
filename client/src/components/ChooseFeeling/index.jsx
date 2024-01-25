@@ -6,7 +6,18 @@ const emotions = [
   { name: 'Sad', emoji: '😢' },
   { name: 'Anxious', emoji: '😰' },
   { name: 'Angry', emoji: '😠' },
-  { name: 'Inspired', emoji: '🤩' }
+  { name: 'Stressed', emoji: '😥' },
+  { name: 'Lonely', emoji: '🙍‍♂️' },
+  { name: 'Overwhelmed', emoji: '😵' },
+  { name: 'Frustrated', emoji: '😤' },
+  { name: 'Disappointed', emoji: '😞' },
+  { name: 'Grateful', emoji: '🙏' },
+  { name: 'Exhausted', emoji: '😩' },
+  { name: 'Insecure', emoji: '🙇‍♂️' },
+  { name: 'Nervous', emoji: '😟' },
+  { name: 'Hopeless', emoji: '😔' },
+  { name: 'Jealous', emoji: '😒' },
+  { name: 'Calm', emoji: '😌' }
 ];
 
 const ChooseFeeling = () => {
