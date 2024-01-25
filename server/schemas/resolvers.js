@@ -57,6 +57,10 @@ const resolvers = {
       return await Quote.find({ isPrivate: true });
     },
 
+    getBulletin: async () => {
+      return await Quote.find({ isPrivate: false });
+    },
+
     getMyQuotes: async (parent, args, context) => {
       console.log("User ", context.user);
       if (context.user) {
@@ -110,8 +114,8 @@ const resolvers = {
       console.log("users");
       return User.find().populate(['quotes', 'friends']);
     },
-    quotes: async (parent, { username }) => {
-      const params = username ? { username } : {};
+    quotes: async (parent, { userName }) => {
+      const params = userName ? { userName: userName } : {};
       return Quote.find(params).sort({ createdAt: -1 });
     },
     quote: async (parent, { quoteId }) => {
@@ -359,6 +363,19 @@ const resolvers = {
         throw AuthenticationError;
       };
     },
+
+    setPrivate: async (parent, {quoteId}) => {
+      console.log('setPrivate');      
+
+      return await Quote.findByIdAndUpdate(quoteId, { "isPrivate": true }, { new: true });
+    },
+
+    setPublic: async (parent, {quoteId}) => {
+      console.log('setPublic');      
+
+      return await Quote.findByIdAndUpdate(quoteId, { "isPrivate": false }, { new: true });
+    },
+
 
     createComment: async (parent, { quoteId, commentText }, context) => {
       console.log('createComment');

@@ -88,6 +88,7 @@ const typeDefs = `
     singleUser (userId: ID!): User
     publicQuotes: [Quote]
     privateQuotes: [Quote]
+    getBulletin: [Quote]
   }
 
   type Mutation {
@@ -101,6 +102,8 @@ const typeDefs = `
     deleteQuote(_id: ID!): Quote
     likeQuote(quoteId: ID!): Quote
     unlikeQuote(quoteId: ID!): Quote
+    setPrivate(quoteId: ID!): Quote
+    setPublic(quoteId: ID!): Quote
     createComment(quoteId: ID!, commentText: String!): Quote
     deleteComment(quoteId: ID!, commentId: ID!): Quote
   }
