@@ -12,7 +12,7 @@ const typeDefs = `
     emotion: String
     isPrivate: Boolean
     isGenerated: Boolean
-    liked: Boolean
+    imageUrl: String
     createdAt: String
     userName: String
     reactions: [Reaction]
@@ -58,7 +58,7 @@ const typeDefs = `
     email: String
     quotes: [Quote]
     friends: [User]
-    subscription: Int
+    tier: Int
     orders: [Order]
   }
 
@@ -96,8 +96,8 @@ const typeDefs = `
     updateUser(userName: String!, firstName: String!, lastName: String!, email: String!, password: String!): User
     updateProduct(_id: ID!, quantity: Int!): Product
     login(email: String!, password: String!): Auth
-    createQuote(content: String!, emotion: String!, isPrivate: Boolean!, isGenerated: Boolean!, liked: Boolean!): Quote
-    updateQuote(_id: ID!, content: String!, emotion: String!, isPrivate: Boolean!, isGenerated: Boolean!, liked: Boolean!): Quote
+    createQuote(content: String!, emotion: String!, isPrivate: Boolean!, isGenerated: Boolean!, imageUrl: String!): Quote
+    updateQuote(_id: ID!, content: String!, emotion: String!, isPrivate: Boolean!, isGenerated: Boolean!, imageUrl: String!): Quote
     deleteQuote(_id: ID!): Quote
     likeQuote(quoteId: ID!): Quote
     unlikeQuote(quoteId: ID!): Quote
@@ -140,14 +140,14 @@ const typeDefs = `
 
 // createQuote --- create a quote
 // - Example Apollo graphQL Query
-// mutation mut001($content: String!, $emotion: String!, $isPrivate: Boolean!, $isGenerated: Boolean!, $liked: Boolean!) {
-//   createQuote(content: $content, emotion: $emotion, isPrivate: $isPrivate, isGenerated: $isGenerated, liked: $liked) {
+// mutation mut001($content: String!, $emotion: String!, $isPrivate: Boolean!, $isGenerated: Boolean!, $imageUrl: Boolean!) {
+//   createQuote(content: $content, emotion: $emotion, isPrivate: $isPrivate, isGenerated: $isGenerated, imageUrl: $imageUrl) {
 //     _id
 //     content
 //     emotion
 //     isPrivate
 //     isGenerated
-//     liked
+//     imageUrl
 //     createdAt
 //     userName
 //   }
@@ -158,7 +158,7 @@ const typeDefs = `
 //   "emotion": "Happy",
 //   "isPrivate": false,
 //   "isGenerated": true,
-//   "liked": true,
+//   "imageUrl": "http://placekitten.com/150/150",
 //   "userName": "userName",
 // }
 
@@ -171,7 +171,7 @@ const typeDefs = `
 //     emotion
 //     isPrivate
 //     isGenerated
-//     liked
+//     imageUrl
 //     createdAt
 //     userName
 //     reactions {
@@ -190,14 +190,14 @@ const typeDefs = `
 
 // updateQuote --- modify the properties of a Quote (TODO: ensure properties like userName and createdAt isn't updatable)
 // - Example Apollo query
-// mutation mut003($updateQuoteId: ID!, $content: String!, $emotion: String!, $isPrivate: Boolean!, $isGenerated: Boolean!, $liked: Boolean!) {
-//   updateQuote(_id: $updateQuoteId, content: $content, emotion: $emotion, isPrivate: $isPrivate, isGenerated: $isGenerated, liked: $liked) {
+// mutation mut003($updateQuoteId: ID!, $content: String!, $emotion: String!, $isPrivate: Boolean!, $isGenerated: Boolean!, $imageUrl: Boolean!) {
+//   updateQuote(_id: $updateQuoteId, content: $content, emotion: $emotion, isPrivate: $isPrivate, isGenerated: $isGenerated, imageUrl: $imageUrl) {
 //     _id
 //     content
 //     emotion
 //     isPrivate
 //     isGenerated
-//     liked
+//     imageUrl
 //   }
 // }
 // - Example variables
@@ -207,7 +207,7 @@ const typeDefs = `
 // "emotion": "Joy",
 // "isPrivate": false,
 // "isGenerated": true,
-// "liked": true,
+// "imageUrl": true,
 // }
 
 
@@ -220,7 +220,7 @@ const typeDefs = `
 //     emotion
 //     isPrivate
 //     isGenerated
-//     liked
+//     imageUrl
 //     createdAt
 //     userName
 //     reactions {
@@ -244,7 +244,7 @@ const typeDefs = `
 //     emotion
 //     isPrivate
 //     isGenerated
-//     liked
+//     imageUrl
 //     createdAt
 //     userName
 //     reactions {

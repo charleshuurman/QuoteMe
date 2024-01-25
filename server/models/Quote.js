@@ -25,9 +25,8 @@ const quoteSchema = new Schema(
       type: Boolean,
       default: false
     },
-    liked: {
-      type: Boolean,
-      default: false
+    imageUrl: {
+      type: String,
     },
     createdAt: {
       type: Date,

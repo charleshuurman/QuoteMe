@@ -12,6 +12,7 @@ import Signup from './pages/Signup';
 import Success from './pages/Success';
 import OrderHistory from './pages/OrderHistory';
 
+import Profile from './pages/Profile';
 import Journal from './pages/Journal';
 import Dashboard from './pages/Dashboard';
 import CreateQuote from './pages/CreateQuote';
@@ -49,6 +50,9 @@ const router = createBrowserRouter([
       }, {
         path: '/dashboard',
         element: <Dashboard />
+      }, {
+        path: '/profile',
+        element: <Profile />
       }, {
         path: '/createquote',
         element: <CreateQuote />

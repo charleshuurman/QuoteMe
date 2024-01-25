@@ -92,12 +92,9 @@ const resolvers = {
     user: async (parent, args, context) => {
       // console.log('User query', parent, args, context);
       if (context.user) {
-        const user = await User.findById(context.user._id).populate({
-          path: 'orders.products',
-          populate: 'category'
-        });
+        const user = await User.findById(context.user._id).populate(['quotes', 'friends']);
 
-        user.orders.sort((a, b) => b.purchaseDate - a.purchaseDate);
+        // user.orders.sort((a, b) => b.purchaseDate - a.purchaseDate);
 
         return user;
       }

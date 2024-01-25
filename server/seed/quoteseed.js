@@ -23,15 +23,17 @@ connection.once('open', async () => {
   // Create empty array to hold users
   const users = [];
   // Loop 20 times -- add users to the users array
-  for (let i = 1; i <= 20; i++) {
+  for (let i = 1; i <= 25; i++) {
     let newname = getRandomName();
     let newpassword = await bcrypt.hash(`user${i}`, 10);
     users.push({
       firstName: newname,
       lastName: newname,
       userName: newname,
-      email: `user${i}@mymail.com`,
+      email: `user${i}@hotmail.com`,
       password: newpassword,
+      tier: Math.floor(Math.random() * 5),
+      isAdmin: false,
       orders: []
     });
   };
@@ -74,13 +76,14 @@ connection.once('open', async () => {
   // =========================
   // Get some random quote objects using a helper function that we imported from ./data
   let quotes = [];
-  for (let i = 1; i <= 30; i++) {
+  for (let i = 1; i <= 35; i++) {
     quotes.push({
       content: getRandomQuote(),
       userName: getRandomArrItem(users).userName,
       emotion: moods[Math.floor(Math.random()*moods.length)],
       isPrivate: (Math.random() < 0.5)?true:false,
       isGenerated: (Math.random() < 0.5)?true:false,
+      imageUrl: `http://placekitten.com/${100+(Math.floor(Math.random()*10)*10)}/${100+(Math.floor(Math.random()*10)*10)}`,
       createdAt: generateRandomDate(new Date(2021, 0, 1), new Date())
     });
   };
