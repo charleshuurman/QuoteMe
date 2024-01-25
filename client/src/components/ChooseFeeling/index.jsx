@@ -36,7 +36,7 @@ const ChooseFeeling = () => {
       {selectedEmotion ? (
         <>
           <div className="w-full text-left">
-            <button 
+            <button
               className="btn btn-secondary"
               onClick={handleChooseAgain}
             >
@@ -55,6 +55,7 @@ const ChooseFeeling = () => {
                 key={index}
                 className={`p-4 rounded-lg shadow-lg text-center transition-colors duration-300 ease-in-out ${emotion.name === selectedEmotion?.name ? 'bg-blue-300' : 'bg-white'} hover:bg-blue-200`}
                 style={{ fontSize: '2rem' }}
+                onClick={() => handleEmotionClick(emotion)} 
               >
                 <span className="text-6xl">{emotion.emoji}</span>
                 <p className="mt-2 font-medium">{emotion.name}</p>
