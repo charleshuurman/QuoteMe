@@ -1,6 +1,9 @@
+// Importing React with the useState hook
 import React, { useState } from 'react';
+// Importing the GeneratedQuotes component
 import GeneratedQuotes from '../GeneratedQuotes';
 
+// Array of emotions with their corresponding names and emoji symbols
 const emotions = [
   { name: 'Happy', emoji: '😊' },
   { name: 'Sad', emoji: '😢' },
@@ -20,19 +23,25 @@ const emotions = [
   { name: 'Lost', emoji: '🤔' }
 ];
 
+// Defining the ChooseFeeling functional component
 const ChooseFeeling = () => {
+  // useState hook to manage the state of the selected emotion
   const [selectedEmotion, setSelectedEmotion] = useState(null);
 
+  // Function to handle emotion selection
   const handleEmotionClick = (emotion) => {
     setSelectedEmotion(emotion);
   };
 
+  // Function to reset the emotion selection
   const handleChooseAgain = () => {
     setSelectedEmotion(null);
   };
 
+  // JSX to render the component UI
   return (
     <div className="flex flex-col items-center justify-center p-4 bg-gray-100">
+      {/* Conditional rendering based on whether an emotion is selected */}
       {selectedEmotion ? (
         <>
           <div className="w-full text-left">
@@ -43,12 +52,14 @@ const ChooseFeeling = () => {
               ← Choose Again
             </button>
           </div>
+          {/* Render GeneratedQuotes component with the selected emotion */}
           <GeneratedQuotes selectedFeeling={selectedEmotion.name} />
         </>
       ) : (
         <>
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">How are you feeling?</h2>
           <div className="flex flex-wrap justify-center gap-4">
+            {/* Map over emotions array to render each emotion as a button */}
             {emotions.map((emotion, index) => (
               <button
                 key={index}
@@ -67,77 +78,5 @@ const ChooseFeeling = () => {
   );
 };
 
+// Export the ChooseFeeling component for use in other parts of the application
 export default ChooseFeeling;
-
-
-
-
-
-
-
-// import Auth from "../../utils/auth";
-
-// const ChooseFeeling = () => {
-//   return (
-//     <>
-//       <h1>ChooseFeeling</h1>
-//       <div className="hero min-h-screen bg-base-200">
-//         <div className="hero-content text-center">
-//           <div className="max-w-md">
-//             <h1 className="text-5xl font-bold">Hello there</h1>
-//             <p className="py-6">How are you feeling?</p>
-//             <ul className="menu menu-lg bg-base-200 w-56 rounded-box">
-//               <li>
-//                 <a>Happy</a>
-//               </li>
-//               <li>
-//                 <a>Sad</a>
-//               </li>
-//               <li>
-//                 <a>Bored</a>
-//               </li>
-//             </ul>
-//             <button className="btn btn-primary">Save a Quote</button>
-//           </div>
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default ChooseFeeling;
-
-// import React, { useState } from 'react';
-
-// const emotions = [
-//   { name: 'Happy', emoji: '😊' },
-//   { name: 'Sad', emoji: '😢' },
-//   { name: 'Anxious', emoji: '😰' },
-//   { name: 'Angry', emoji: '😠' },
-//   { name: 'Inspired', emoji: '🤩' } 
-// ];
-
-// const ChooseFeeling = () => {
-//   const [selectedEmotion, setSelectedEmotion] = useState(null);
-
-//   return (
-//     <div className="flex flex-col items-center justify-center p-4">
-//       <h2 className="text-2xl font-semibold mb-4">Quotes. How are you feeling?</h2>
-//       <div className="flex flex-wrap justify-center gap-4">
-//         {emotions.map((emotion, index) => (
-//           <button
-//             key={index}
-//             className={`p-4 rounded-lg shadow-lg text-center ${selectedEmotion === emotion.name ? 'bg-blue-200' : 'bg-white'}`}
-//             onClick={() => setSelectedEmotion(emotion.name)}
-//             style={{ transition: 'background-color 0.3s', fontSize: '2rem' }} // Adjust font size as needed
-//           >
-//             <span className="text-6xl">{emotion.emoji}</span> {/* Adjusted text size */}
-//             <p className="mt-2 font-medium">{emotion.name}</p>
-//           </button>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ChooseFeeling;

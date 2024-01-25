@@ -353,33 +353,39 @@ const quotesData = {
   ]
 };
 
+// Functional component to display generated quotes based on the selected feeling
 const GeneratedQuotes = ({ selectedFeeling }) => {
+  // State hook for storing quotes
   const [quotes, setQuotes] = useState([]);
 
+  // Effect hook to fetch quotes when the selectedFeeling changes
   useEffect(() => {
     if (selectedFeeling) {
       fetchQuotes(selectedFeeling);
     }
-  }, [selectedFeeling]);
+  }, [selectedFeeling]); // Dependency array with selectedFeeling to re-run the effect when it changes
 
+  // Function to fetch and set quotes based on the feeling
   const fetchQuotes = (feeling) => {
-    // Get the full array of quotes for the selected feeling
+    // Retrieve the array of quotes for the selected feeling
     const availableQuotes = quotesData[feeling] || [];
 
-    // Shuffle through quotes and pick 3 at random
+    // Randomize the quotes array and select the first 3 quotes
     const shuffledQuotes = availableQuotes.sort(() => 0.5 - Math.random());
     const selectedQuotes = shuffledQuotes.slice(0, 3);
 
+    // Update the state with the selected quotes
     setQuotes(selectedQuotes);
   };
 
+  // JSX to render the quotes UI
   return (
     <div>
-      {quotes.length > 0 && (
+      {quotes.length > 0 && ( // Conditional rendering based on the number of quotes
         <div>
           <h2 className="text-xl font-semibold mb-4">Quotes for {selectedFeeling}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {quotes.map((quote, index) => (
+            {quotes.map((quote, index) => ( // Mapping over the quotes array to render each quote
               <div key={index} className="bg-white p-4 shadow-md rounded-lg h-full">
                 <p className="text-lg">{quote}</p>
               </div>
@@ -391,4 +397,5 @@ const GeneratedQuotes = ({ selectedFeeling }) => {
   );
 };
 
+// Export the GeneratedQuotes component for use in other parts of the application
 export default GeneratedQuotes;
