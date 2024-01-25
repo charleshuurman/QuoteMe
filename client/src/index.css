@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --primary: #232F3E;
+  /* --primary: #232F3E;
   --secondary: #F3A847;
   --tertiary: #B12704;
   --light: #fafafa;
   --dark: #272f32;
-  --error: rgb(228, 46, 1);
+  --error: rgb(228, 46, 1); */
   --spacing-one: calc(1rem * 0.5);
   --spacing-two: calc(1rem);
 }
@@ -29,7 +29,7 @@ body {
   font-weight: 400;
   line-height: 1.5;
   font-size: 16px;
-  color: var(--dark);
+  /* color: var(--dark); */
 }
 
 h1,
@@ -74,7 +74,7 @@ p {
 }
 
 a {
-  color: var(--tertiary);
+  /* color: var(--tertiary); */
   text-decoration: none;
   font-weight: bold;
 }
@@ -83,15 +83,15 @@ a:hover {
   text-decoration: underline;
 }
 
-header {
+/* header {
   background: var(--primary);
 }
 
 header a {
   color: var(--light);
-}
+} */
 
-button {
+/* button {
   font-size: 1rem;
   text-decoration: none;
   padding: 0.25rem 1rem;
@@ -101,7 +101,7 @@ button {
   cursor: pointer;
   margin: 0 1px;
   background-color: var(--secondary);
-}
+} */
 
 button:hover {
   opacity: .8;
@@ -112,29 +112,29 @@ button[disabled] {
   opacity: .8;
 }
 
-img {
+/* img {
   max-width: 100%;
-}
+} */
 
 span[role="img"] {
   cursor: default;
 }
 
-form {
+/* form {
   width: 40%;
-}
+} */
 
 input {
   font-size: 1rem;
   padding: 0.25rem;
-  border: 1px solid var(--dark);
+  /* border: 1px solid var(--dark); */
   outline: none;
   border-radius: 3px;
   transition: box-shadow 0.2s;
 }
 
 input:focus {
-  border: 1px solid var(--secondary);
+  /* border: 1px solid var(--secondary); */
   box-shadow: 0 0 .25rem rgba(0, 0, 0, .5);
 }
 
@@ -145,18 +145,18 @@ input:focus {
   margin-right: auto;
 }
 
-.flex-row {
+/* .flex-row {
   display: flex;
   flex-wrap: wrap;
-}
+} */
 
 .space-between {
   justify-content: space-between;
 }
 
-.flex-end {
+/* .flex-end {
   justify-content: flex-end;
-}
+} */
 
 .mx-1 {
   margin-right: var(--spacing-one);
@@ -198,17 +198,17 @@ input:focus {
   padding-bottom: var(--spacing-two);
 }
 
-.card {
+/* .card {
   width: 25%;
   text-align: center;
-}
+} */
 
 .error-text {
-  color: var(--error);
+  /* color: var(--error); */
 }
 
-@media screen and (max-width: 768px) {
+/* @media screen and (max-width: 768px) {
   .card {
     width: 100%;
   }
-}
+} */
