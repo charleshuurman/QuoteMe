@@ -313,16 +313,54 @@ const resolvers = {
       };
     },
 
-    likeQuote: async (parent, { quoteId }) => {
+    // TODO: likeQuote keeps adding likes indefinitely, while unlikeQuote removes everything all at once. Need to fix these behaviors.
+    likeQuote: async (parent, { quoteId }, context) => {
       console.log('likeQuote');
 
-      return await Quote.findByIdAndUpdate(quoteId, { "liked": true }, { new: true });
+      // Check if the user is logged in via the context
+      if (context.user) {
+
+        const quoteToUpdate = await Quote.findById(quoteId).populate('reactions').exec();
+
+        // Check if we found the quote specified by the Quote's _id
+        if (quoteToUpdate) {
+          console.log('Found quote to like:', quoteToUpdate);
+
+          const updatedQuote = await Quote.findByIdAndUpdate(quoteId,
+            { $addToSet: { reactions: { userName: context.user.userName, reactionBody: "like" } } },
+            { runValidators: true, new: true }).populate('reactions');
+          return updatedQuote;
+        } else {
+          console.log('Cannot like: No such quote _id exists');
+          throw QuoteNotFoundError;
+        }
+      } else {
+        throw AuthenticationError;
+      };
     },
 
-    unlikeQuote: async (parent, { quoteId }) => {
+    unlikeQuote: async (parent, { quoteId }, context) => {
       console.log('unlikeQuote');
 
-      return await Quote.findByIdAndUpdate(quoteId, { "liked": false }, { new: true });
+      // Check if the user is logged in via the context
+      if (context.user) {
+        const quoteToUpdate = await Quote.findById(quoteId);
+
+        // Check if we found the quote specified by the Quote's _id
+        if (quoteToUpdate) {
+          console.log('Found quote to unlike:', quoteToUpdate);
+
+          const updatedQuote = await Quote.findByIdAndUpdate(quoteId,
+            { $pull: { reactions: { userName: context.user.userName, reactionBody: "like" } } },
+            { runValidators: true, new: true });
+          return updatedQuote;
+        } else {
+          console.log('Cannot like: No such quote _id exists');
+          throw QuoteNotFoundError;
+        }
+      } else {
+        throw AuthenticationError;
+      };
     },
 
     createComment: async (parent, { quoteId, commentText }, context) => {

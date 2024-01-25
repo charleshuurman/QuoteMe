@@ -106,8 +106,6 @@ const typeDefs = `
   }
 `;
 
-// TODO: Add query and mutations required for the front-end
-
 // API Documentation
 
 // Quote section
@@ -212,6 +210,54 @@ const typeDefs = `
 // "liked": true,
 // }
 
+
+// likeQuote --- add a reaction to the quote with the userName and "like" as the reactionBody
+// - Example query
+// mutation mut004($likequoteId: ID!) {
+//   likeQuote(quoteId: $likequoteId) {
+//     _id
+//     content
+//     emotion
+//     isPrivate
+//     isGenerated
+//     liked
+//     createdAt
+//     userName
+//     reactions {
+//       userName
+//       reactionBody
+//     }
+//     comments {
+//       commentText
+//       commentAuthor
+//       createdAt
+//     }
+//   }
+// }
+
+// unlikeQuote --- deletes any reaction with "like" as the reactionBody from the logged in user from the quote
+// - Example query
+// mutation mut005($unlikequoteId: ID!) {
+//   unlikeQuote(quoteId: $unlikequoteId) {
+//     _id
+//     content
+//     emotion
+//     isPrivate
+//     isGenerated
+//     liked
+//     createdAt
+//     userName
+//     reactions {
+//       userName
+//       reactionBody
+//     }
+//     comments {
+//       commentText
+//       commentAuthor
+//       createdAt
+//     }
+//   }
+// }
 
 // Add mutations
 //   Add a Quote(post)
