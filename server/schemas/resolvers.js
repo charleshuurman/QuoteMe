@@ -1,5 +1,6 @@
 const { User, Product, Category, Order, Quote } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
+const { UserNotFoundError, QuoteNotFoundError } = require('../utils/errors.js');
 const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
 
 const resolvers = {
@@ -57,6 +58,7 @@ const resolvers = {
     },
 
     getMyQuotes: async (parent, args, context) => {
+      console.log("User ", context.user);
       if (context.user) {
         const user = await User.findById(context.user._id);
 
@@ -90,12 +92,9 @@ const resolvers = {
     user: async (parent, args, context) => {
       // console.log('User query', parent, args, context);
       if (context.user) {
-        const user = await User.findById(context.user._id).populate({
-          path: 'orders.products',
-          populate: 'category'
-        });
+        const user = await User.findById(context.user._id).populate(['quotes', 'friends']);
 
-        user.orders.sort((a, b) => b.purchaseDate - a.purchaseDate);
+        // user.orders.sort((a, b) => b.purchaseDate - a.purchaseDate);
 
         return user;
       }
@@ -221,9 +220,10 @@ const resolvers = {
 
     // TODO: populate  createQuote, deleteQuote, updateQuote, likeQuote, createComment
 
+    // Create a Quote
     createQuote: async (parent, args, context) => {
       console.log('createQuote', args);
-      console.log('usercontext', context.user);
+      // console.log('usercontext', context.user);
 
       const user = await User.findById(context.user._id);
 
@@ -242,23 +242,122 @@ const resolvers = {
       throw AuthenticationError;
     },
 
-    deleteQuote: async (parent, args, context) => {
-      console.log('deleteQuote');
-    },
-    updateQuote: async (parent, args, context) => {
-      console.log('updateQuote');
+    // Delete a Quote
+    deleteQuote: async (parent, { _id }, context) => {
+      console.log('deleteQuote', _id, context.user);
+
+      // Check if the user is logged in via the context
+      if (context.user) {
+
+        const quoteToDelete = await Quote.findById(_id);
+
+        // Check if we found the quote specified by the Quote's _id
+        if (quoteToDelete) {
+          quoteToDelete.userName = context.user.userName;
+          console.log('Found quotetodelete:', quoteToDelete);
+
+          // Check to see if the user logged in is the one that created the Quote object.
+          if (quoteToDelete.userName === context.user.userName) {
+            console.log('deleting ', quoteToDelete.toJSON());
+            const updatedUser = await User.findByIdAndUpdate(context.user._id,
+              { $pull: { quotes: quoteToDelete._id } },
+              { runValidators: true, new: true });
+            const deletedQuote = await Quote.deleteOne({ _id: _id });
+            return quoteToDelete;
+          } else {
+            console.log('Error: username is different from the user that is logged in');
+            throw UserNotFoundError;
+          }
+        } else {
+          console.log('Cannot delete: No such quote _id exists');
+          throw QuoteNotFoundError;
+        }
+      } else {
+        throw AuthenticationError;
+      }
     },
 
-    likeQuote: async (parent, { quoteId }) => {
+    // Update a Quote
+    updateQuote: async (parent, args, context) => {
+      console.log('updateQuote', args._id, context.user);
+
+      // Check if the user is logged in via the context
+      if (context.user) {
+
+        const quoteToUpdate = await Quote.findById(args._id);
+
+        // Check if we found the quote specified by the Quote's _id
+        if (quoteToUpdate) {
+          console.log('Found quotetoupdate:', quoteToUpdate);
+
+          // Check to see if the user logged in is the one that created the Quote object (everyone else is unauthorized to delete this)
+          if (quoteToUpdate.userName === context.user.userName) {
+            console.log('updating ', quoteToUpdate.toJSON());
+            const updatedQuote = await Quote.findByIdAndUpdate(args._id,
+              args,
+              { runValidators: true, new: true });
+            return updatedQuote;
+          } else {
+            console.log('Error: username is different from the user that is logged in');
+            throw UserNotFoundError;
+          }
+        } else {
+          console.log('Cannot delete: No such quote _id exists');
+          throw QuoteNotFoundError;
+        }
+      } else {
+        throw AuthenticationError;
+      };
+    },
+
+    // TODO: likeQuote keeps adding likes indefinitely, while unlikeQuote removes everything all at once. Need to fix these behaviors.
+    likeQuote: async (parent, { quoteId }, context) => {
       console.log('likeQuote');
 
-      return await Quote.findByIdAndUpdate(quoteId, { "liked": true }, { new: true });
+      // Check if the user is logged in via the context
+      if (context.user) {
+
+        const quoteToUpdate = await Quote.findById(quoteId).populate('reactions').exec();
+
+        // Check if we found the quote specified by the Quote's _id
+        if (quoteToUpdate) {
+          console.log('Found quote to like:', quoteToUpdate);
+
+          const updatedQuote = await Quote.findByIdAndUpdate(quoteId,
+            { $addToSet: { reactions: { userName: context.user.userName, reactionBody: "like" } } },
+            { runValidators: true, new: true }).populate('reactions');
+          return updatedQuote;
+        } else {
+          console.log('Cannot like: No such quote _id exists');
+          throw QuoteNotFoundError;
+        }
+      } else {
+        throw AuthenticationError;
+      };
     },
 
-    unlikeQuote: async (parent, { quoteId }) => {
+    unlikeQuote: async (parent, { quoteId }, context) => {
       console.log('unlikeQuote');
 
-      return await Quote.findByIdAndUpdate(quoteId, { "liked": false }, { new: true });
+      // Check if the user is logged in via the context
+      if (context.user) {
+        const quoteToUpdate = await Quote.findById(quoteId);
+
+        // Check if we found the quote specified by the Quote's _id
+        if (quoteToUpdate) {
+          console.log('Found quote to unlike:', quoteToUpdate);
+
+          const updatedQuote = await Quote.findByIdAndUpdate(quoteId,
+            { $pull: { reactions: { userName: context.user.userName, reactionBody: "like" } } },
+            { runValidators: true, new: true });
+          return updatedQuote;
+        } else {
+          console.log('Cannot like: No such quote _id exists');
+          throw QuoteNotFoundError;
+        }
+      } else {
+        throw AuthenticationError;
+      };
     },
 
     createComment: async (parent, { quoteId, commentText }, context) => {

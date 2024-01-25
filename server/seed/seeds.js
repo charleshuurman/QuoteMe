@@ -14,13 +14,9 @@ db.once('open', async () => {
   await cleanDB('User', 'users');
 
   const categories = await Category.insertMany([
-    { name: 'Food' },
-    { name: 'Household Supplies' },
-    { name: 'Electronics' },
-    { name: 'Books' },
-    { name: 'Toys' },
     { name: 'Subscription' },
-    { name: 'Donation' }
+    { name: 'Donation' },
+    { name: 'Promotional Materials' },
   ]);
 
   console.log('categories seeded');
@@ -31,7 +27,7 @@ db.once('open', async () => {
       description:
         'Bronze subscription.',
       image: 'bronze.png',
-      category: categories[5]._id,
+      category: categories[0]._id,
       price: 5.00,
       quantity: 99999
     },
@@ -40,7 +36,7 @@ db.once('open', async () => {
       description:
         'Silver subscription.',
       image: 'silver.png',
-      category: categories[5]._id,
+      category: categories[0]._id,
       price: 15.00,
       quantity: 99999
     },
@@ -49,7 +45,7 @@ db.once('open', async () => {
       description:
         'Gold subscription.',
       image: 'gold.png',
-      category: categories[5]._id,
+      category: categories[0]._id,
       price: 25.00,
       quantity: 99999
     },
@@ -58,7 +54,7 @@ db.once('open', async () => {
       description:
         'Donation.',
       image: 'gold.png',
-      category: categories[6]._id,
+      category: categories[1]._id,
       price: 10.00,
       quantity: 99999
     },
@@ -67,7 +63,7 @@ db.once('open', async () => {
       description:
         'Donation.',
       image: 'gold.png',
-      category: categories[6]._id,
+      category: categories[1]._id,
       price: 100.00,
       quantity: 99999
     },
@@ -229,21 +225,21 @@ db.once('open', async () => {
     orders: []
   });
 
-  console.log('creating users 1-10');
-  for (let i = 1; i <=10; i++) {
-    console.log(`  adding user ${i}`);
-    await User.create({
-      firstName: 'User',
-      lastName: `${i}`,
-      userName: `user${i}`,
-      email: `user${i}@hotmail.com`,
-      password: `user${i}`,
-      quotes: [],
-      // friends: []
-    });
-  };
+  // console.log('creating users 1-10');
+  // for (let i = 1; i <=10; i++) {
+  //   console.log(`  adding user ${i}`);
+  //   await User.create({
+  //     firstName: 'User',
+  //     lastName: `${i}`,
+  //     userName: `user${i}`,
+  //     email: `user${i}@hotmail.com`,
+  //     password: `user${i}`,
+  //     quotes: [],
+  //     // friends: []
+  //   });
+  // };
 
-  console.log('users seeded');
+  // console.log('users seeded');
 
   process.exit();
 });

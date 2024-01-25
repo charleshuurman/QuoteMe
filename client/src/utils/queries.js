@@ -51,9 +51,23 @@ export const QUERY_CATEGORIES = gql`
 export const QUERY_USER = gql`
   {
     user {
+      _id
       userName
       firstName
       lastName
+      email
+      tier
+      quotes {
+        _id
+        content
+        reactions {
+          reactionBody
+          userName
+        }
+      }
+      friends {
+        _id
+      }
       orders {
         _id
         purchaseDate
@@ -65,6 +79,23 @@ export const QUERY_USER = gql`
           quantity
           image
         }
+      }
+    } 
+  }
+`;
+
+export const QUERY_GET_MY_QUOTES = gql`
+  {
+    getMyQuotes {
+      _id
+      content
+      emotion
+      isPrivate
+      isGenerated
+      userName
+      reactions {
+        reactionBody
+        userName
       }
     }
   }

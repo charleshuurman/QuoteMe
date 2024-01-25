@@ -31,10 +31,17 @@ const userSchema = new Schema({
     required: true,
     minlength: 5
   },
+  tier: {
+    type: Number
+  },
   quotes: [{
     type: Schema.Types.ObjectId,
     ref: 'Quote',
   }],
+  isAdmin: {
+    type: Boolean,
+    default: false
+  },
   friends: [{
     type: Schema.Types.ObjectId,
     ref: 'User',

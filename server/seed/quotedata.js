@@ -160,7 +160,7 @@ const seed_reactions = [
   'joy',
   'delicious',
   'exceptional',
-  'satisfaction guaranteed',
+  'satisfaction',
   'easy',
   'unparalleled',
   'blissful',
@@ -208,7 +208,7 @@ const getRandomQuote = () => {
 
 // Generate random reaction strings
 const getRandomReaction = () => {
-  return `${getRandomArrItem(seed_reactions)} ${getRandomArrItem(seed_reactions)}`;
+  return `${getRandomArrItem(seed_reactions)}`;
 };
 
 // Export the functions for use in seed.js
