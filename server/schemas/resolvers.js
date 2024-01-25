@@ -52,8 +52,18 @@ const resolvers = {
       return await Quote.find({ isPrivate: false });
     },
 
-    privateQuotes: async () => {
+    privateQuotes: async (parent, args, context) => {
       return await Quote.find({ isPrivate: true });
+    },
+
+    getMyQuotes: async (parent, args, context) => {
+      if (context.user) {
+        const user = await User.findById(context.user._id);
+
+        return await Quote.find({ userName: user.userName });
+      }
+
+      throw AuthenticationError;
     },
 
     categories: async () => {
@@ -212,9 +222,26 @@ const resolvers = {
     // TODO: populate  createQuote, deleteQuote, updateQuote, likeQuote, createComment
 
     createQuote: async (parent, args, context) => {
-      console.log('createQuote');
-      return null;
+      console.log('createQuote', args);
+      console.log('usercontext', context.user);
+
+      const user = await User.findById(context.user._id);
+
+      if (context.user) {
+
+        args.userName = context.user.userName;
+        const createdQuote = await Quote.create(args);
+        // await createdThought.save();
+        const updatedUser = await User.findByIdAndUpdate(context.user._id,
+          { $addToSet: { quotes: createdQuote._id } },
+          { runValidators: true, new: true });
+
+        return updatedUser;
+      }
+
+      throw AuthenticationError;
     },
+
     deleteQuote: async (parent, args, context) => {
       console.log('deleteQuote');
     },
