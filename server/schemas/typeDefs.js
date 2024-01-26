@@ -21,7 +21,6 @@ const typeDefs = `
 
   type Reaction {
     _id: ID
-    content: String
     user: User
     reactionId: ID
     reactionBody: String

@@ -63,6 +63,8 @@ export const QUERY_USER = gql`
         reactions {
           reactionBody
           userName
+          reactionId
+          createdAt
         }
       }
       friends {
@@ -94,9 +96,12 @@ export const QUERY_GET_MY_QUOTES = gql`
       isGenerated
       userName
       imageUrl
+      createdAt
       reactions {
         reactionBody
         userName
+        reactionId
+        createdAt
       }
     }
   }
@@ -207,29 +212,12 @@ export const QUERY_GET_PRIVATE_QUOTES = gql`
         reactions {
           reactionBody
           userName
+          reactionId
+          createdAt
         }
     }
   }
 `;
-
-export const QUERY_GET_BULLETIN = gql`
-  {
-    getBulletin {
-        _id
-        content
-        createdAt
-        emotion
-        isPrivate
-        isGenerated
-        userName
-        reactions {
-          reactionBody
-          userName
-        }
-    }
-  }
-`;
-
 
 export const QUERY_SINGLE_USER_BY_NAME = gql`
 query singleUser($userName: String!) {
