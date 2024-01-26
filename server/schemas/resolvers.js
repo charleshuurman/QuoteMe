@@ -30,21 +30,6 @@ const resolvers = {
     //   }
     // },
 
-    // TODO: populate getQuote, getBulletins, getMyJournal!
-    // getQuote: async() => {
-    //   console.log('getQuote');
-    // },
-    // getBulletins: async() => {
-    //   console.log('getBulletins');
-    // },
-    // getMyJournal: async() => {
-    //   console.log('getMyJournal');
-    // },
-
-    // getBulletins: async () => {
-    //   return null;
-    // },
-
     listQuotes: async () => {
       return await Quote.find();
     },
@@ -55,10 +40,6 @@ const resolvers = {
 
     privateQuotes: async (parent, args, context) => {
       return await Quote.find({ isPrivate: true });
-    },
-
-    getBulletin: async () => {
-      return await Quote.find({ isPrivate: false });
     },
 
     getMyQuotes: async (parent, args, context) => {

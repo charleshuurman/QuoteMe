@@ -85,7 +85,6 @@ const typeDefs = `
     users: [User]
     publicQuotes: [Quote]
     privateQuotes: [Quote]
-    getBulletin: [Quote]
     singleUserByUsrName (userName: String!): User
     singleUserById (userId: ID!): User
     quotes (userName: String!): [Quote]
@@ -271,12 +270,8 @@ const typeDefs = `
 //   Add a Mood (?)
 //   Delete a Mood (?)
 
-// getQuote(_id: ID!): Quote
-// getMyJournal(): [Quote]
-// getBulletins(): [Quote]
-
 
 // API interface:
-// (getQuote, getBulletins, getMyJournal), then mutations (ie. createQuote, deleteQuote, updateQuote, likeQuote, createComment ).
+// (getQuote, getMyQuotes), then mutations (ie. createQuote, deleteQuote, updateQuote, likeQuote, createComment ).
 
 module.exports = typeDefs;
