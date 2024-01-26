@@ -93,6 +93,7 @@ export const QUERY_GET_MY_QUOTES = gql`
       isPrivate
       isGenerated
       userName
+      imageUrl
       reactions {
         reactionBody
         userName
@@ -184,6 +185,7 @@ export const QUERY_GET_PUBLIC_QUOTES = gql`
         isPrivate
         isGenerated
         userName
+        imageUrl
         reactions {
           reactionBody
           userName
