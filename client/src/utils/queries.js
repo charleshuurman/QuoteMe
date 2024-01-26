@@ -92,6 +92,7 @@ export const QUERY_GET_MY_QUOTES = gql`
       emotion
       isPrivate
       isGenerated
+      imageUrl
       userName
       reactions {
         reactionBody
