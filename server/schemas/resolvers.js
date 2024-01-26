@@ -105,9 +105,15 @@ const resolvers = {
 
       throw AuthenticationError;
     },
-    singleUser: async (parent, { userId }) => {
-      console.log("singleUser");
-      return User.findOne({ _id: userId });
+    
+    singleUserById: async (parent, { userId }) => {
+      console.log("singleUserById");
+      return User.findOne({ _id: userId }).populate('quotes');
+    },
+
+    singleUserByUsrName: async (parent, { userName }) => {
+      console.log("singleUserByUsrName");
+      return User.findOne({userName: userName }).populate('quotes');
     },
 
     users: async () => {
