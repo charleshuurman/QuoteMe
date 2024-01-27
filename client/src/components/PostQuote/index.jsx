@@ -7,7 +7,7 @@ const PostQuote = (props) => {
   const isJournal = props?.isJournal || false;
 
   const [quoteText, setQuoteText] = useState("");
-  const [createQuote] = useMutation(CREATE_QUOTE);
+  const [createQuote, { loading }] = useMutation(CREATE_QUOTE);
   const [createComment] = useMutation(CREATE_COMMENT);
   const [likeQuote] = useMutation(LIKE_QUOTE);
   const [posts, setPosts] = useState([]);
@@ -87,7 +87,7 @@ const PostQuote = (props) => {
             placeholder="Enter your quote"
           />
           <button type="submit" className="btn btn-primary">
-            Post Quote
+            {loading ? "Posting Quote..." : "Post Quote"}
           </button>
         </form>
         {/* Render the posts at the bottom of the page */}

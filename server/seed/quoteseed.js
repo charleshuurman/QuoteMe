@@ -82,7 +82,8 @@ connection.once('open', async () => {
       userName: getRandomArrItem(users).userName,
       emotion: moods[Math.floor(Math.random()*moods.length)],
       isPrivate: (Math.random() < 0.5)?true:false,
-      isGenerated: (Math.random() < 0.5)?true:false,
+      isGenerated: false,
+      // isGenerated: (Math.random() < 0.5)?true:false,
       imageUrl: `http://placekitten.com/${100+(Math.floor(Math.random()*10)*10)}/${100+(Math.floor(Math.random()*10)*10)}`,
       createdAt: generateRandomDate(new Date(2021, 0, 1), new Date())
     });

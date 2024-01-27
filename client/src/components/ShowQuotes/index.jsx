@@ -10,6 +10,8 @@ import { SET_PUBLIC, SET_PRIVATE, DELETE_QUOTE } from "../../utils/mutations";
  */
 
 const ShowQuotes = (props) => {
+  const userName = Auth.getProfile().data.userName;
+
   const [setPublic, { setPublicError }] = useMutation(SET_PUBLIC);
   const [setPrivate, { setPrivateError }] = useMutation(SET_PRIVATE);
   const [deleteQuote, { deleteQuoteError }] = useMutation(DELETE_QUOTE);
@@ -40,6 +42,7 @@ const ShowQuotes = (props) => {
         variables: { quoteId: event.target.dataset.id },
       });
       console.log("set to public:", data);
+      window.location.reload();
     } catch (err) {
       console.error(err);
     }
@@ -56,6 +59,7 @@ const ShowQuotes = (props) => {
         variables: { quoteId: event.target.dataset.id },
       });
       console.log("set to private:", data);
+      window.location.reload();
     } catch (err) {
       console.error(err);
     }
@@ -74,17 +78,15 @@ const ShowQuotes = (props) => {
 
   let quotesArrayLength = quotesArray.length;
 
-  const userName = Auth.getProfile().data.userName;
-
   return (
-    <div key={userName} className="border rounded-box">
+    <div className="border rounded-box">
       <h2 className="pt-5">
         {quotesArrayLength
           ? `Viewing ${quotesArrayLength} ${quotesArrayLength === 1 ? "quote" : "quotes"}:`
           : "There are no quotes to display"}
       </h2>
 
-      <ul className="menu menu-lg rounded-box bg-base-200 gap-2 p-2">
+      <ul className="menu rounded-box bg-base-200 gap-2 p-2">
         {quotesArray.map((elem) => {
           return (
             <li key={elem._id} className="card card-side m-2 shadow-xl" data-quoteid={elem._id}>
@@ -94,7 +96,11 @@ const ShowQuotes = (props) => {
                 </figure>
                 <div className="card-body w-[100%] flex flex-col bg-base-100 w-[75%] gap-2">
                   <h1 className="btn text-3xl p-1 btn-primary w-fit">{elem.emotion}</h1>
-                  <h3 className="badge text-2xl p-1 badge-info">{elem.userName}</h3>
+                  {elem.isGenerated === true ? (
+                    <h3 className="badge text-2xl p-1 badge-secondary">Generated</h3>
+                  ) : (
+                    <h3 className="badge text-2xl p-1 badge-info">{elem.userName}</h3>
+                  )}
                   <span className="text-xs">{elem.createdAt}</span>
                   <h3 className="text-2xl">{elem.content}</h3>
                   <div className="gap-2 flex flex-start">

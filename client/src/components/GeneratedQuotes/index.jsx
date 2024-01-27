@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import Auth from "../../utils/auth";
+import React, { useState, useEffect } from "react";
+import { useMutation } from "@apollo/client";
+import { CREATE_QUOTE } from "../../utils/mutations";
 
 // Predefined quotes for each emotion
 const quotesData = {
@@ -17,11 +20,11 @@ const quotesData = {
     "Success is what you want, happiness is what you get. - W.P. Kinsella",
     "They say a person needs just three things to be truly happy in this world: someone to love, something to do, and something to hope for. - Tom Bodett",
     "Happiness cannot be traveled to, owned, earned, worn or consumed. Happiness is the spiritual experience of living every minute with love, grace, and gratitude. - Denis Waitley",
-    "The biggest adventure you can ever take is to live the life of your dreams. - Oprah Winfrey", 
+    "The biggest adventure you can ever take is to live the life of your dreams. - Oprah Winfrey",
     "Optimism is a happiness magnet. If you stay positive, good things and good people will be drawn to you. - Mary Lou Retton",
     "Everything has its wonders, even darkness and silence, and I learn, whatever state I may be in, therein to be content. - Helen Keller",
     "Everyday is a new day. - Carrie Underwood",
-    "Beauty is everywhere. You only have to look to see it. - Bob Ross"
+    "Beauty is everywhere. You only have to look to see it. - Bob Ross",
   ],
   Sad: [
     "I allow myself to feel my feelings, but I also know they do not define me.",
@@ -43,7 +46,7 @@ const quotesData = {
     "I am resilient, and I can handle the challenges life throws at me.",
     "I give myself the gift of compassion and self-care today.",
     "I have the power to create change in my life and find happiness.",
-    "My heart is open to love, healing, and the light that new days bring."
+    "My heart is open to love, healing, and the light that new days bring.",
   ],
   Anxious: [
     "I am safe and in control, even when life feels uncertain.",
@@ -65,7 +68,7 @@ const quotesData = {
     "I am in charge of my breathing, and I can slow it down when I need to.",
     "I am finding it easier to relax and enjoy my life.",
     "My mind is clear, my body is relaxed, and my spirit is at peace.",
-    "I am centered, I am balanced, and I am at ease within myself."
+    "I am centered, I am balanced, and I am at ease within myself.",
   ],
   Angry: [
     "I choose to respond to anger with understanding and compassion.",
@@ -87,7 +90,7 @@ const quotesData = {
     "Anger is just a feeling, and like all feelings, it will pass.",
     "I am learning to transform my anger into understanding and empathy.",
     "Every calm breath I take reduces my anger and brings me peace.",
-    "I am in control of my emotions and choose harmony and balance."
+    "I am in control of my emotions and choose harmony and balance.",
   ],
   Stressed: [
     "I have the strength to manage my stress and keep my peace.",
@@ -109,7 +112,7 @@ const quotesData = {
     "I take things one step at a time and trust in the journey.",
     "I am surrounded by peace, and I carry this tranquility with me.",
     "I am in harmony with the rhythm of life and find ease in its flow.",
-    "Every challenge I face is an opportunity to grow stronger and more serene."
+    "Every challenge I face is an opportunity to grow stronger and more serene.",
   ],
   Lonely: [
     "I am at peace when I am alone and cherish this time with myself.",
@@ -131,7 +134,7 @@ const quotesData = {
     "I am building a life filled with love, starting with the love I have for myself.",
     "I use my feelings of loneliness as a catalyst to reach out and connect with others.",
     "I am a magnet for positive relationships and meaningful connections.",
-    "Being alone does not mean being lonely; it's an opportunity to discover who I truly am."
+    "Being alone does not mean being lonely; it's an opportunity to discover who I truly am.",
   ],
   Overwhelmed: [
     "I take one step at a time, knowing that progress is not always linear.",
@@ -153,7 +156,7 @@ const quotesData = {
     "I am confident in my ability to overcome any obstacle in my path.",
     "I am grounded in the present moment, where peace resides.",
     "I release the burden of overwhelm and embrace a sense of ease.",
-    "I am capable of navigating through life's complexities with grace and poise."
+    "I am capable of navigating through life's complexities with grace and poise.",
   ],
   Frustrated: [
     "I channel my frustration into positive, productive action.",
@@ -175,7 +178,7 @@ const quotesData = {
     "I choose to let go of frustrations and focus on the positives in my life.",
     "I am mastering the art of patience and understanding in the face of difficulties.",
     "Every challenge is a stepping stone towards my growth and success.",
-    "I am equipped with all I need to overcome hurdles and reach my goals."  
+    "I am equipped with all I need to overcome hurdles and reach my goals.",
   ],
   Disappointed: [
     "I accept that disappointment is part of life and I grow stronger from it.",
@@ -197,7 +200,7 @@ const quotesData = {
     "Every experience, good or bad, is a valuable part of my story.",
     "I allow myself to feel my emotions, but also to move beyond them.",
     "I am in charge of my happiness and choose to find joy every day.",
-    "Disappointments are just life's way of setting me up for something better."  
+    "Disappointments are just life's way of setting me up for something better.",
   ],
   Grateful: [
     "I am thankful for every moment and treasure the gifts life offers me.",
@@ -219,7 +222,7 @@ const quotesData = {
     "I am thankful for the people in my life who love and support me.",
     "Gratitude fills my mind with peace and my heart with warmth.",
     "I cherish the present and honor my past with gratitude.",
-    "Thankfulness leads me to a positive and fulfilling life."
+    "Thankfulness leads me to a positive and fulfilling life.",
   ],
   Exhausted: [
     "I give myself permission to rest and recharge without guilt.",
@@ -241,7 +244,7 @@ const quotesData = {
     "Rest is a gift I give myself, and I accept it with gratitude.",
     "I allow myself moments of stillness to restore my energy.",
     "Every restful moment is an investment in my future energy and productivity.",
-    "In resting, I am preparing myself for future success and happiness."
+    "In resting, I am preparing myself for future success and happiness.",
   ],
   Insecure: [
     "I am enough just as I am, and I embrace my true self with confidence.",
@@ -261,30 +264,30 @@ const quotesData = {
     "I am secure in my worth and unapologetically myself.",
     "I am confident in my path and trust that I am heading in the right direction.",
     "I embrace my journey, learning from each experience with a strong heart.",
-    "I am resilient, capable"
+    "I am resilient, capable",
   ],
   Nervous: [
-      "I am calm and centered, even in challenging situations.",
-      "I trust in my ability to handle what comes my way.",
-      "Every deep breath I take brings me peace and clarity.",
-      "I am stronger than my nervousness, and I can overcome it.",
-      "I choose to focus on the present and let go of anxiety about the future.",
-      "My fears do not control me; I control them.",
-      "I am prepared and capable of facing any challenge.",
-      "I replace my nervous thoughts with positive, reassuring ones.",
-      "I am relaxed, confident, and in control.",
-      "I embrace my experiences with calmness and confidence.",
-      "With each passing moment, my nerves are calming.",
-      "I am worthy of a peaceful and serene state of mind.",
-      "I am surrounded by an aura of calm and assurance.",
-      "Nervousness is just a feeling; it will pass, and I will be okay.",
-      "I am the master of my emotions, and I choose tranquility.",
-      "I trust in the journey of life and let go of fear and worry.",
-      "I am at peace and nothing can disturb my calm spirit.",
-      "I face uncertainty with courage and a positive outlook.",
-      "My inner strength is greater than any feeling of nervousness.",
-      "I am grounded in the present, where peace resides."
-    ],
+    "I am calm and centered, even in challenging situations.",
+    "I trust in my ability to handle what comes my way.",
+    "Every deep breath I take brings me peace and clarity.",
+    "I am stronger than my nervousness, and I can overcome it.",
+    "I choose to focus on the present and let go of anxiety about the future.",
+    "My fears do not control me; I control them.",
+    "I am prepared and capable of facing any challenge.",
+    "I replace my nervous thoughts with positive, reassuring ones.",
+    "I am relaxed, confident, and in control.",
+    "I embrace my experiences with calmness and confidence.",
+    "With each passing moment, my nerves are calming.",
+    "I am worthy of a peaceful and serene state of mind.",
+    "I am surrounded by an aura of calm and assurance.",
+    "Nervousness is just a feeling; it will pass, and I will be okay.",
+    "I am the master of my emotions, and I choose tranquility.",
+    "I trust in the journey of life and let go of fear and worry.",
+    "I am at peace and nothing can disturb my calm spirit.",
+    "I face uncertainty with courage and a positive outlook.",
+    "My inner strength is greater than any feeling of nervousness.",
+    "I am grounded in the present, where peace resides.",
+  ],
   Hopeless: [
     "I hold hope in my heart, even in the darkest moments.",
     "There is always a light at the end of the tunnel, and I am moving towards it.",
@@ -305,7 +308,7 @@ const quotesData = {
     "I am capable of rising above my circumstances and finding joy.",
     "My heart is filled with courage, hope, and the will to continue.",
     "I am a survivor, and my spirit is unbreakable.",
-    "Hope guides me through life's challenges towards a brighter tomorrow."
+    "Hope guides me through life's challenges towards a brighter tomorrow.",
   ],
   Jealous: [
     "I focus on my own journey and celebrate my unique path.",
@@ -327,7 +330,7 @@ const quotesData = {
     "My self-worth is independent of others' achievements.",
     "I am complete in myself and do not need to compare my life to others.",
     "Every person has their own journey, and I respect and honor mine.",
-    "I let go of jealousy and open my heart to genuine happiness for others."
+    "I let go of jealousy and open my heart to genuine happiness for others.",
   ],
   Lost: [
     "I trust the journey, even when I do not understand it.",
@@ -349,9 +352,49 @@ const quotesData = {
     "I am resilient and can handle life's twists and turns.",
     "I am confident in my decisions, even in uncertainty.",
     "I am not alone in my journey.",
-    "I find peace in knowing that everything will work out."
-  ]
+    "I find peace in knowing that everything will work out.",
+  ],
 };
+
+// Add function to render displayed quote and its save button
+// Note: This is a react component, if this file gets too big you can split this function into its separate file
+function SelectQuote({ quote, feeling, indexValue }) {
+  const [createQuote, { data, loading, error }] = useMutation(CREATE_QUOTE);
+
+  // Define handleSaveQuote handler inside SelectQuote react component
+  async function handleSaveQuote(event) {
+    event.preventDefault();
+    try {
+      await createQuote({
+        variables: {
+          content: quote,
+          emotion: feeling.toLowerCase(),
+          isPrivate: true,
+          isGenerated: true,
+          imageUrl: "http://placekitten.com/100/200",
+        },
+      });
+      console.log("Created quote: ", data, " loading: ", loading, " error: ", error);
+    } catch (err) {
+      console.log("Error: ", err);
+    }
+  }
+
+  return (
+    <div key={indexValue} className="bg-white p-4 shadow-md rounded-lg h-full">
+      <p className="text-lg">{quote}</p>
+      {Auth.loggedIn() ? (
+        <button onClick={handleSaveQuote} className="badge badge-primary text-xs">
+          {loading ? "Saving..." : "Save"}
+        </button>
+      ) : (
+        <a href="/Login" className="badge badge-primary text-xs">
+          Login to Save
+        </a>
+      )}
+    </div>
+  );
+}
 
 // Functional component to display generated quotes based on the selected feeling
 const GeneratedQuotes = ({ selectedFeeling }) => {
@@ -385,11 +428,14 @@ const GeneratedQuotes = ({ selectedFeeling }) => {
         <div>
           <h2 className="text-xl font-semibold mb-4">Quotes for {selectedFeeling}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {quotes.map((quote, index) => ( // Mapping over the quotes array to render each quote
-              <div key={index} className="bg-white p-4 shadow-md rounded-lg h-full">
-                <p className="text-lg">{quote}</p>
-              </div>
-            ))}
+            {quotes.map(
+              (
+                quote,
+                index // Mapping over the quotes array to render each quote
+              ) => (
+                <SelectQuote quote={quote} feeling={selectedFeeling} indexValue={index} />
+              )
+            )}
           </div>
         </div>
       )}

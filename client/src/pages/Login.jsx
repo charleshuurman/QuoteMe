@@ -6,7 +6,7 @@ import Auth from "../utils/auth";
 
 function Login(props) {
   const [formState, setFormState] = useState({ email: "", password: "" });
-  const [login, { error }] = useMutation(LOGIN);
+  const [login, { loading, error }] = useMutation(LOGIN);
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -64,7 +64,7 @@ function Login(props) {
         ) : null}
         <div className="flex flex-row flex-end">
           <button className="btn btn-primary" type="submit">
-            Submit
+            {loading ? "Logging in..." : "Submit"}
           </button>
         </div>
       </form>
