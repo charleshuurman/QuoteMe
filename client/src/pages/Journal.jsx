@@ -14,7 +14,7 @@ const Journal = () => {
 
   const { loading, data } = useQuery(QUERY_GET_MY_QUOTES, {
     // variables: { userId },
-    fetchPolicy: "no-cache",
+    // fetchPolicy: "no-cache",
   });
 
   // populate quoteData
@@ -27,10 +27,10 @@ const Journal = () => {
   if (quoteData) {
     // console.log("quoteData: ", quoteData);
     quoteDataLength = quoteData.length;
-  }
+  };
 
   // if data isn't here yet, say so
-  if (loading || !quoteDataLength) {
+  if (loading) {
     return (
       <>
         <h2>LOADING...</h2>

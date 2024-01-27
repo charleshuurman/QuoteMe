@@ -14,7 +14,7 @@ const DashBoard = () => {
 
   const { loading, data } = useQuery(QUERY_GET_PUBLIC_QUOTES, {
     // variables: { userId },
-    fetchPolicy: "no-cache",
+    // fetchPolicy: "no-cache",
   });
 
   // populate quoteData
@@ -30,7 +30,7 @@ const DashBoard = () => {
   }
 
   // if data isn't here yet, say so
-  if (loading || !quoteDataLength) {
+  if (loading) {
     return (
       <>
         <h2>LOADING...</h2>

@@ -97,3 +97,39 @@ export const DELETE_COMMENT = gql`
     }
   }
 `;
+
+export const SET_PUBLIC = gql`
+  mutation m00001($quoteId: ID!) {
+    setPublic(quoteId: $quoteId) {
+      _id
+      content
+      emotion
+      isPrivate
+      isGenerated
+      userName
+      reactions {
+        reactionId
+        reactionBody
+        userName
+      }
+    }
+  }
+`;
+
+export const SET_PRIVATE = gql`
+  mutation m00001($quoteId: ID!) {
+    setPrivate(quoteId: $quoteId) {
+      _id
+      content
+      emotion
+      isPrivate
+      isGenerated
+      userName
+      reactions {
+        reactionId
+        reactionBody
+        userName
+      }
+    }
+  }
+`;
