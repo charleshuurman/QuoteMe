@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useMutation } from '@apollo/client'; 
-import { SAVE_AFFIRMATION, UNSAVE_AFFIRMATION } from '../../utils/mutations'; 
+import { useMutation } from '@apollo/client';
+import { v4 as uuidv4 } from 'uuid';
+import { SAVE_AFFIRMATION, UNSAVE_AFFIRMATION } from '../../utils/mutations';
 
-// Predefined quotes for each emotion
-const quotesData = {
+const transformQuotesDataWithUUID = (data) => {
+  return Object.fromEntries(
+    Object.entries(data).map(([emotion, quotes]) => [
+      emotion,
+      quotes.map((quote) => ({ id: uuidv4(), content: quote }))
+    ])
+  );
+};
+
+const quotesData = transformQuotesDataWithUUID({
   Happy: [
     "The more you praise and celebrate your life, the more there is in life to celebrate. — Oprah Winfrey",
     "Happiness is not by chance, but by choice. — Jim Rohn",
@@ -19,7 +28,7 @@ const quotesData = {
     "Success is what you want, happiness is what you get. - W.P. Kinsella",
     "They say a person needs just three things to be truly happy in this world: someone to love, something to do, and something to hope for. - Tom Bodett",
     "Happiness cannot be traveled to, owned, earned, worn or consumed. Happiness is the spiritual experience of living every minute with love, grace, and gratitude. - Denis Waitley",
-    "The biggest adventure you can ever take is to live the life of your dreams. - Oprah Winfrey", 
+    "The biggest adventure you can ever take is to live the life of your dreams. - Oprah Winfrey",
     "Optimism is a happiness magnet. If you stay positive, good things and good people will be drawn to you. - Mary Lou Retton",
     "Everything has its wonders, even darkness and silence, and I learn, whatever state I may be in, therein to be content. - Helen Keller",
     "Everyday is a new day. - Carrie Underwood",
@@ -177,7 +186,7 @@ const quotesData = {
     "I choose to let go of frustrations and focus on the positives in my life.",
     "I am mastering the art of patience and understanding in the face of difficulties.",
     "Every challenge is a stepping stone towards my growth and success.",
-    "I am equipped with all I need to overcome hurdles and reach my goals."  
+    "I am equipped with all I need to overcome hurdles and reach my goals."
   ],
   Disappointed: [
     "I accept that disappointment is part of life and I grow stronger from it.",
@@ -199,7 +208,7 @@ const quotesData = {
     "Every experience, good or bad, is a valuable part of my story.",
     "I allow myself to feel my emotions, but also to move beyond them.",
     "I am in charge of my happiness and choose to find joy every day.",
-    "Disappointments are just life's way of setting me up for something better."  
+    "Disappointments are just life's way of setting me up for something better."
   ],
   Grateful: [
     "I am thankful for every moment and treasure the gifts life offers me.",
@@ -266,27 +275,27 @@ const quotesData = {
     "I am resilient, capable"
   ],
   Nervous: [
-      "I am calm and centered, even in challenging situations.",
-      "I trust in my ability to handle what comes my way.",
-      "Every deep breath I take brings me peace and clarity.",
-      "I am stronger than my nervousness, and I can overcome it.",
-      "I choose to focus on the present and let go of anxiety about the future.",
-      "My fears do not control me; I control them.",
-      "I am prepared and capable of facing any challenge.",
-      "I replace my nervous thoughts with positive, reassuring ones.",
-      "I am relaxed, confident, and in control.",
-      "I embrace my experiences with calmness and confidence.",
-      "With each passing moment, my nerves are calming.",
-      "I am worthy of a peaceful and serene state of mind.",
-      "I am surrounded by an aura of calm and assurance.",
-      "Nervousness is just a feeling; it will pass, and I will be okay.",
-      "I am the master of my emotions, and I choose tranquility.",
-      "I trust in the journey of life and let go of fear and worry.",
-      "I am at peace and nothing can disturb my calm spirit.",
-      "I face uncertainty with courage and a positive outlook.",
-      "My inner strength is greater than any feeling of nervousness.",
-      "I am grounded in the present, where peace resides."
-    ],
+    "I am calm and centered, even in challenging situations.",
+    "I trust in my ability to handle what comes my way.",
+    "Every deep breath I take brings me peace and clarity.",
+    "I am stronger than my nervousness, and I can overcome it.",
+    "I choose to focus on the present and let go of anxiety about the future.",
+    "My fears do not control me; I control them.",
+    "I am prepared and capable of facing any challenge.",
+    "I replace my nervous thoughts with positive, reassuring ones.",
+    "I am relaxed, confident, and in control.",
+    "I embrace my experiences with calmness and confidence.",
+    "With each passing moment, my nerves are calming.",
+    "I am worthy of a peaceful and serene state of mind.",
+    "I am surrounded by an aura of calm and assurance.",
+    "Nervousness is just a feeling; it will pass, and I will be okay.",
+    "I am the master of my emotions, and I choose tranquility.",
+    "I trust in the journey of life and let go of fear and worry.",
+    "I am at peace and nothing can disturb my calm spirit.",
+    "I face uncertainty with courage and a positive outlook.",
+    "My inner strength is greater than any feeling of nervousness.",
+    "I am grounded in the present, where peace resides."
+  ],
   Hopeless: [
     "I hold hope in my heart, even in the darkest moments.",
     "There is always a light at the end of the tunnel, and I am moving towards it.",
@@ -353,12 +362,13 @@ const quotesData = {
     "I am not alone in my journey.",
     "I find peace in knowing that everything will work out."
   ]
-};
+});
 
 
 const GeneratedQuotes = ({ selectedFeeling, user }) => {
+  console.log('User:', user);
   const [quotes, setQuotes] = useState([]);
-  const [savedAffirmations, setSavedAffirmations] = useState(user ? user.savedAffirmations : []);
+  const [savedAffirmations, setSavedAffirmations] = useState(user?.savedAffirmations || []);
   const [showSaved, setShowSaved] = useState(false);
 
   const [saveAffirmationMutation] = useMutation(SAVE_AFFIRMATION);
@@ -402,15 +412,15 @@ const GeneratedQuotes = ({ selectedFeeling, user }) => {
         <div>
           <h2 className="text-xl font-semibold mb-4">Affirmations for {selectedFeeling}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {quotes.map((quote, index) => (
-              <div key={index} className="bg-white p-4 shadow-md rounded-lg h-full">
-                <p className="text-lg">{quote}</p>
+            {quotes.map((quote) => (
+              <div key={quote.id} className="bg-white p-4 shadow-md rounded-lg h-full">
+                <p className="text-lg">{quote.content}</p>
                 {user && (
                   <button
-                    onClick={() => savedAffirmations.includes(quote._id) ? handleUnsave(quote._id) : handleSave(quote._id)}
+                    onClick={() => savedAffirmations.includes(quote.id) ? handleUnsave(quote.id) : handleSave(quote.id)}
                     className="mt-2 py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-300"
                   >
-                    {savedAffirmations.includes(quote._id) ? 'Unsave' : 'Save'}
+                    {savedAffirmations.includes(quote.id) ? 'Unsave' : 'Save'}
                   </button>
                 )}
               </div>
@@ -428,7 +438,7 @@ const GeneratedQuotes = ({ selectedFeeling, user }) => {
             <div key={index} className="bg-white p-4 shadow-md rounded-lg mt-4">
               <p className="text-lg">{quote.content}</p>
               <button
-                onClick={() => handleUnsave(quote._id)}
+                onClick={() => handleUnsave(quote.id)}
                 className="mt-2 py-2 px-4 bg-red-500 text-white rounded hover:bg-red-700 transition duration-300"
               >
                 Unsave

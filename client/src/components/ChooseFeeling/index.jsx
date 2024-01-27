@@ -1,7 +1,9 @@
 // Importing React with the useState hook
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // Importing the GeneratedQuotes component
 import GeneratedQuotes from '../GeneratedQuotes';
+
+import AuthService from '../../utils/auth';
 
 // Array of emotions with their corresponding names and emoji symbols
 const emotions = [
@@ -23,25 +25,28 @@ const emotions = [
   { name: 'Lost', emoji: '🤔' }
 ];
 
-// Defining the ChooseFeeling functional component
 const ChooseFeeling = () => {
-  // useState hook to manage the state of the selected emotion
   const [selectedEmotion, setSelectedEmotion] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
 
-  // Function to handle emotion selection
+  useEffect(() => {
+    // Fetch the current user on component mount if logged in
+    if (AuthService.loggedIn()) {
+      const user = AuthService.getProfile();
+      setCurrentUser(user);
+    }
+  }, []);
+
   const handleEmotionClick = (emotion) => {
     setSelectedEmotion(emotion);
   };
 
-  // Function to reset the emotion selection
   const handleChooseAgain = () => {
     setSelectedEmotion(null);
   };
 
-  // JSX to render the component UI
   return (
     <div className="flex flex-col items-center justify-center p-4 bg-gray-100">
-      {/* Conditional rendering based on whether an emotion is selected */}
       {selectedEmotion ? (
         <>
           <div className="w-full text-left">
@@ -52,20 +57,18 @@ const ChooseFeeling = () => {
               ← Choose Again
             </button>
           </div>
-          {/* Render GeneratedQuotes component with the selected emotion */}
-          <GeneratedQuotes selectedFeeling={selectedEmotion.name} />
+          <GeneratedQuotes selectedFeeling={selectedEmotion.name} user={currentUser} />
         </>
       ) : (
         <>
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">How are you feeling?</h2>
           <div className="flex flex-wrap justify-center gap-4">
-            {/* Map over emotions array to render each emotion as a button */}
             {emotions.map((emotion, index) => (
               <button
                 key={index}
                 className={`p-4 rounded-lg shadow-lg text-center transition-colors duration-300 ease-in-out ${emotion.name === selectedEmotion?.name ? 'bg-blue-300' : 'bg-white'} hover:bg-blue-200`}
                 style={{ fontSize: '2rem' }}
-                onClick={() => handleEmotionClick(emotion)} 
+                onClick={() => handleEmotionClick(emotion)}
               >
                 <span className="text-6xl">{emotion.emoji}</span>
                 <p className="mt-2 font-medium">{emotion.name}</p>
@@ -78,5 +81,4 @@ const ChooseFeeling = () => {
   );
 };
 
-// Export the ChooseFeeling component for use in other parts of the application
 export default ChooseFeeling;
