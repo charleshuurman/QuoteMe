@@ -61,6 +61,7 @@ export const CREATE_QUOTE = gql`
       isPrivate
       isGenerated
       userName
+      imageUrl
       reactions {
         reactionId
         reactionBody

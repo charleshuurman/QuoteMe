@@ -2,6 +2,7 @@ import Auth from "../../utils/auth";
 import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_QUOTE } from "../../utils/mutations";
+import API from '../../utils/API';
 
 // Predefined quotes for each emotion
 const quotesData = {
@@ -358,23 +359,28 @@ const quotesData = {
 
 // Add function to render displayed quote and its save button
 // Note: This is a react component, if this file gets too big you can split this function into its separate file
-function SelectQuote({ quote, feeling, indexValue }) {
+function SelectQuote({ quote, feeling, indexValue, image }) {
   const [createQuote, { data, loading, error }] = useMutation(CREATE_QUOTE);
 
   // Define handleSaveQuote handler inside SelectQuote react component
   async function handleSaveQuote(event) {
     event.preventDefault();
     try {
-      await createQuote({
+      console.log("createQuote request to server!");
+      console.log(quote);
+      console.log(feeling );
+      console.log(image);            
+
+      const response = await createQuote({
         variables: {
           content: quote,
           emotion: feeling.toLowerCase(),
           isPrivate: true,
           isGenerated: true,
-          imageUrl: "http://placekitten.com/100/200",
+          imageUrl: image,
         },
       });
-      console.log("Created quote: ", data, " loading: ", loading, " error: ", error);
+      console.log("Created quote: ", response.data, " loading: ", loading, " error: ", error);
     } catch (err) {
       console.log("Error: ", err);
     }
@@ -383,6 +389,9 @@ function SelectQuote({ quote, feeling, indexValue }) {
   return (
     <div key={indexValue} className="bg-white p-4 shadow-md rounded-lg h-full">
       <p className="text-lg">{quote}</p>
+      <figure className="min-h-full">
+        <img className="object-cover" src={image} alt="image"/>
+      </figure>
       {Auth.loggedIn() ? (
         <button onClick={handleSaveQuote} className="badge badge-primary text-xs">
           {loading ? "Saving..." : "Save"}
@@ -400,6 +409,7 @@ function SelectQuote({ quote, feeling, indexValue }) {
 const GeneratedQuotes = ({ selectedFeeling }) => {
   // State hook for storing quotes
   const [quotes, setQuotes] = useState([]);
+  var selectedImages = [];
 
   // Effect hook to fetch quotes when the selectedFeeling changes
   useEffect(() => {
@@ -410,15 +420,37 @@ const GeneratedQuotes = ({ selectedFeeling }) => {
 
   // Function to fetch and set quotes based on the feeling
   const fetchQuotes = (feeling) => {
-    // Retrieve the array of quotes for the selected feeling
-    const availableQuotes = quotesData[feeling] || [];
+    API.searchImage(feeling)
+    .then( (res) => {
+//      console.log(res);
 
-    // Randomize the quotes array and select the first 3 quotes
-    const shuffledQuotes = availableQuotes.sort(() => 0.5 - Math.random());
-    const selectedQuotes = shuffledQuotes.slice(0, 3);
+      const searchedImageArrays = res.data.hits.sort(() => 0.5 - Math.random());      
+//      console.log(searchedImageArrays);
+      const selectedImageArrays = searchedImageArrays.slice(0,3);
+      selectedImages[0] = selectedImageArrays[0].webformatURL;
+      selectedImages[1] = selectedImageArrays[1].webformatURL;
+      selectedImages[2] = selectedImageArrays[2].webformatURL;
+      console.log(selectedImages);
+    })
+    .then ( () => {
+      // Retrieve the array of quotes for the selected feeling
+      const availableQuotes = quotesData[feeling] || [];
+
+      // // Randomize the quotes array and select the first 3 quotes
+      const shuffledQuotes = availableQuotes.sort(() => 0.5 - Math.random());
+      const SelectedQuoteContent = shuffledQuotes.slice(0, 3);
+      const selectedQuotes = [
+        {content: SelectedQuoteContent[0], image: selectedImages[0]},
+        {content: SelectedQuoteContent[1], image: selectedImages[1]},
+        {content: SelectedQuoteContent[2], image: selectedImages[2]},            
+      ];
+
+      console.log(selectedQuotes);
 
     // Update the state with the selected quotes
-    setQuotes(selectedQuotes);
+      setQuotes(selectedQuotes);      
+    })
+    .catch((err) => console.log(err));
   };
 
   // JSX to render the quotes UI
@@ -433,7 +465,7 @@ const GeneratedQuotes = ({ selectedFeeling }) => {
                 quote,
                 index // Mapping over the quotes array to render each quote
               ) => (
-                <SelectQuote quote={quote} feeling={selectedFeeling} indexValue={index} />
+                <SelectQuote key={index} quote={quote.content} feeling={selectedFeeling} indexValue={index} image={quote.image}/>
               )
             )}
           </div>
