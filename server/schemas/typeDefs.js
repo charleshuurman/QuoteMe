@@ -21,7 +21,6 @@ const typeDefs = `
 
   type Reaction {
     _id: ID
-    content: String
     user: User
     reactionId: ID
     reactionBody: String
@@ -75,20 +74,20 @@ const typeDefs = `
     categories: [Category]
     products(category: ID, name: String): [Product]
     product(_id: ID!): Product
-    user: User
     order(_id: ID!): Order
     checkout(products: [ID]!): Checkout
-    getQuote(_id: ID!): Quote
+
+    user: User
     getMyQuotes: [Quote]
+    allquotes: [Quote]
     listQuotes: [Quote]
     users: [User]
-    quotes (userId: ID!): [Quote]
-    quote (quoteId: ID!): Quote
-    allquotes: [Quote]
-    singleUser (userId: ID!): User
     publicQuotes: [Quote]
     privateQuotes: [Quote]
-    getBulletin: [Quote]
+    singleUserByUsrName (userName: String!): User
+    singleUserById (userId: ID!): User
+    quotes (userName: String!): [Quote]
+    quote (quoteId: ID!): Quote
   }
 
   type Mutation {
@@ -272,12 +271,8 @@ const typeDefs = `
 //   Add a Mood (?)
 //   Delete a Mood (?)
 
-// getQuote(_id: ID!): Quote
-// getMyJournal(): [Quote]
-// getBulletins(): [Quote]
-
 
 // API interface:
-// (getQuote, getBulletins, getMyJournal), then mutations (ie. createQuote, deleteQuote, updateQuote, likeQuote, createComment ).
+// (getQuote, getMyQuotes), then mutations (ie. createQuote, deleteQuote, updateQuote, likeQuote, createComment ).
 
 module.exports = typeDefs;

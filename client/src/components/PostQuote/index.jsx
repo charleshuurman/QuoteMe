@@ -66,20 +66,20 @@ const PostQuote = () => {
 
   return (
     <>
-    <div>
-    <h1>DashBoard</h1>
+    <div className="rounded-box bg-base-200 p-2">
     <p>Post Your Quote!</p>
       <form onSubmit={handlePostQuote}>
         <input
+          className="input input-bordered"
           type="text"
           value={quoteText}
           onChange={handleInputChange}
           placeholder="Enter your quote"
         />
-        <button type="submit">Post Quote</button>
+        <button type="submit" className="btn btn-primary">Post Quote</button>
       </form>
       {/* Render the posts at the bottom of the page */}
-       
+
       {posts.map((post) => (
           <div key={post.id}>
             <p>{post.text}</p>
@@ -98,5 +98,3 @@ const PostQuote = () => {
 };
 
 export default PostQuote;
-
-
