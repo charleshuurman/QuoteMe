@@ -221,6 +221,45 @@ const resolvers = {
 
       return { token, user };
     },
+// Resolver to save an affirmation
+async saveAffirmation(parent, { userId, affirmationId }, context) {
+  // Check if the user is logged in
+  if (!context.user || context.user._id !== userId) {
+    throw new Error('Not authenticated or unauthorized action');
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  // Check if the affirmation is already saved
+  if (!user.savedAffirmations.includes(affirmationId)) {
+    user.savedAffirmations.push(affirmationId);
+    await user.save();
+  }
+
+  return user;
+},
+
+// Resolver to unsave an affirmation
+async unsaveAffirmation(parent, { userId, affirmationId }, context) {
+  // Check if the user is logged in
+  if (!context.user || context.user._id !== userId) {
+    throw new Error('Not authenticated or unauthorized action');
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  // Remove the affirmation ID from savedAffirmations
+  user.savedAffirmations = user.savedAffirmations.filter(id => id.toString() !== affirmationId);
+  await user.save();
+
+  return user;
+},
 
     // TODO: populate  createQuote, deleteQuote, updateQuote, likeQuote, createComment
 

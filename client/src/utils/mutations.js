@@ -20,8 +20,7 @@ export const SAVE_AFFIRMATION = gql`
       savedAffirmations {
         _id
         content
-        emotion  // Including the emotion associated with each affirmation
-        // Include any other fields you need, such as imageUrl
+        emotion 
       }
     }
   }
@@ -35,8 +34,7 @@ export const UNSAVE_AFFIRMATION = gql`
       savedAffirmations {
         _id
         content
-        emotion  // Including the emotion associated with each affirmation
-        // Include any other fields you need
+        emotion 
       }
     }
   }
