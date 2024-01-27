@@ -1,0 +1,278 @@
+Query queryMyQuotes {
+  getMyQuotes {
+    _id
+    content
+    emotion
+    isPrivate
+    isGenerated
+    userName
+    reactions {
+      reactionBody
+      userName
+    }
+  }
+}
+
+query Query001 {
+  categories {
+    name
+  }
+}
+
+query Query002 {
+  user {
+    _id
+    userName
+    firstName
+    lastName
+    email
+    tier
+    quotes {
+      _id
+      content
+      reactions {
+        reactionBody
+        userName
+      }
+    }
+    friends {
+      _id
+    }
+    orders {
+      _id
+      purchaseDate
+      products {
+        _id
+        name
+        description
+        price
+        quantity
+        image
+      }
+    }
+  } 
+}
+
+query Query003($id: ID!) {
+  product(_id: $id) {
+    _id
+    category {
+      name
+    }
+    description
+    name
+    price
+    quantity
+  }
+}
+
+Query allusers {
+  users {
+      userName
+      firstName
+      lastName
+      email
+      tier
+      quotes {
+        _id
+        isPrivate
+        isGenerated
+        imageUrl
+      }
+      friends {
+        _id
+      }
+    }
+}
+
+Query listQuotes {
+  allquotes {
+    _id
+    content
+    emotion
+    isPrivate
+    isGenerated
+    userName
+    reactions {
+      reactionBody
+      userName
+    }
+  }
+}
+
+Query privateQuotes {
+  getMyQuotes {
+    _id
+    content
+    emotion
+    isPrivate
+    isGenerated
+    userName
+    reactions {
+      reactionBody
+      userName
+    }
+  }
+}
+
+mutation mut001($content: String!, $emotion: String!, $isPrivate: Boolean!, $isGenerated: Boolean!, $imageUrl: String!) {
+  createQuote(content: $content, emotion: $emotion, isPrivate: $isPrivate, isGenerated: $isGenerated, imageUrl: $imageUrl) {
+    _id
+    content
+    emotion
+    isPrivate
+    isGenerated
+    imageUrl
+    createdAt
+    userName
+  }
+}
+
+mutation mut002($deleteQuoteId: ID!) {
+  deleteQuote(_id: $deleteQuoteId) {
+    _id
+    content
+    emotion
+    isPrivate
+    isGenerated
+    imageUrl
+    createdAt
+    userName
+    reactions {
+      _id
+      content
+    }
+    comments {
+      commentText
+      commentAuthor
+      createdAt
+    }
+  }
+}
+
+mutation mut003($updateQuoteId: ID!, $content: String!, $emotion: String!, $isPrivate: Boolean!, $isGenerated: Boolean!, $imageUrl: String!) {
+  updateQuote(_id: $updateQuoteId, content: $content, emotion: $emotion, isPrivate: $isPrivate, isGenerated: $isGenerated, imageUrl: $imageUrl) {
+    _id
+    content
+    emotion
+    isPrivate
+    isGenerated
+    imageUrl
+  }
+}
+
+mutation mut004($likequoteId: ID!) {
+  likeQuote(quoteId: $likequoteId) {
+    _id
+    content
+    emotion
+    isPrivate
+    isGenerated
+    imageUrl
+    createdAt
+    userName
+    reactions {
+      userName
+      reactionBody
+    }
+    comments {
+      commentText
+      commentAuthor
+      createdAt
+    }
+  }
+}
+
+mutation mut005($unlikequoteId: ID!) {
+  unlikeQuote(quoteId: $unlikequoteId) {
+    _id
+    content
+    emotion
+    isPrivate
+    isGenerated
+    imageUrl
+    createdAt
+    userName
+    reactions {
+      userName
+      reactionBody
+    }
+    comments {
+      commentText
+      commentAuthor
+      createdAt
+    }
+  }
+}
+
+query q00001 {
+  allquotes {
+    _id
+    content
+  }
+}
+
+mutation m00001($setPrivateQuoteId: ID!) {
+  setPrivate(quoteId: $setPrivateQuoteId) {
+    _id
+    content
+    emotion
+    isPrivate
+    isGenerated
+    userName
+    reactions {
+      reactionId
+      reactionBody
+      userName
+    }
+  }
+}
+
+mutation m00001($setPublicQuoteId: ID!) {
+  setPublic(quoteId: $setPublicQuoteId) {
+    _id
+    content
+    emotion
+    isPrivate
+    isGenerated
+    userName
+    reactions {
+      reactionId
+      reactionBody
+      userName
+    }
+  }
+}
+
+
+mutation m00002($createQuoteContent: String!, $createQuoteEmotion: String!, $createQuoteIsPrivate: Boolean!, $createQuoteIsGenerated: Boolean!, $createQuoteImageUrl: String!) {
+  createQuote(content: $createQuoteContent, emotion: $createQuoteEmotion, isPrivate: $createQuoteIsPrivate, isGenerated: $createQuoteIsGenerated, imageUrl: $createQuoteImageUrl) {
+    _id
+    content
+    emotion
+    isPrivate
+    isGenerated
+    userName
+    reactions {
+      reactionId
+      reactionBody
+      userName
+    }
+  }
+}
+
+mutation m00003($deleteQuoteId: ID!) {
+  deleteQuote(_id: $deleteQuoteId) {
+    _id
+    content
+    emotion
+    isPrivate
+    isGenerated
+    userName
+    reactions {
+      reactionId
+      reactionBody
+      userName
+    }
+  }
+}

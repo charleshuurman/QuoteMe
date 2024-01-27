@@ -52,12 +52,48 @@ export const ADD_USER = gql`
   }
 `;
 
+// export const CREATE_QUOTE = gql`
+//   mutation createQuote($text: String!, $author: String!) {
+//     createQuote(text: $text, author: $author) {
+//       _id
+//       text
+//       author
+//     }
+//   }
+// `;
+
 export const CREATE_QUOTE = gql`
-  mutation createQuote($text: String!, $author: String!) {
-    createQuote(text: $text, author: $author) {
+  mutation m00002($content: String!, $emotion: String!, $isPrivate: Boolean!, $isGenerated: Boolean!, $imageUrl: String!) {
+    createQuote(content: $content, emotion: $emotion, isPrivate: $isPrivate, isGenerated: $isGenerated, imageUrl: $imageUrl) {
       _id
-      text
-      author
+      content
+      emotion
+      isPrivate
+      isGenerated
+      userName
+      reactions {
+        reactionId
+        reactionBody
+        userName
+      }
+    }
+  }
+`;
+
+export const DELETE_QUOTE = gql`
+  mutation m00003($quoteId: ID!) {
+    deleteQuote(_id: $quoteId) {
+      _id
+      content
+      emotion
+      isPrivate
+      isGenerated
+      userName
+      reactions {
+        reactionId
+        reactionBody
+        userName
+      }
     }
   }
 `;

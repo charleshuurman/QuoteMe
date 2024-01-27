@@ -40,7 +40,7 @@ const Journal = () => {
 
   return (
     <div className="container border rounded-box">
-      <PostQuote />
+      <PostQuote isJournal={true} />
       <ShowQuotes quotesArray={quoteData} />
     </div>
   );

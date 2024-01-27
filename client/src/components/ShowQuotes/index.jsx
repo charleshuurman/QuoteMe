@@ -1,6 +1,6 @@
 import Auth from "../../utils/auth";
 import { useMutation } from "@apollo/client";
-import { SET_PUBLIC, SET_PRIVATE } from "../../utils/mutations";
+import { SET_PUBLIC, SET_PRIVATE, DELETE_QUOTE } from "../../utils/mutations";
 
 /**
  * ShowQuotes
@@ -12,9 +12,22 @@ import { SET_PUBLIC, SET_PRIVATE } from "../../utils/mutations";
 const ShowQuotes = (props) => {
   const [setPublic, { setPublicError }] = useMutation(SET_PUBLIC);
   const [setPrivate, { setPrivateError }] = useMutation(SET_PRIVATE);
+  const [deleteQuote, { deleteQuoteError }] = useMutation(DELETE_QUOTE);
 
-  const deleteButton = () => {
-    alert(`Delete button`);
+  const deleteButton = async (event) => {
+    event.preventDefault();
+    try {
+      console.log(`Deleting quote:`, event.target.dataset.id);
+
+      event.target.textContent = "Deleting...";
+      const { data } = await deleteQuote({
+        variables: { quoteId: event.target.dataset.id },
+      });
+      console.log("deleted quote:", data);
+      window.location.reload();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const setPublicButton = async (event) => {
@@ -27,7 +40,6 @@ const ShowQuotes = (props) => {
         variables: { quoteId: event.target.dataset.id },
       });
       console.log("set to public:", data);
-      // setSkill('');
     } catch (err) {
       console.error(err);
     }
@@ -44,7 +56,6 @@ const ShowQuotes = (props) => {
         variables: { quoteId: event.target.dataset.id },
       });
       console.log("set to private:", data);
-      // setSkill('');
     } catch (err) {
       console.error(err);
     }
