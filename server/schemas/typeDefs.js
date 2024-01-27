@@ -106,6 +106,8 @@ const typeDefs = `
     setPublic(quoteId: ID!): Quote
     createComment(quoteId: ID!, commentText: String!): Quote
     deleteComment(quoteId: ID!, commentId: ID!): Quote
+    saveAffirmation(userId: ID!, affirmationId: ID!): User
+    unsaveAffirmation(userId: ID!, affirmationId: ID!): User
   }
 `;
 

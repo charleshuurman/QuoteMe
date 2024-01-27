@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useMutation } from '@apollo/client'; 
+import { SAVE_AFFIRMATION, UNSAVE_AFFIRMATION } from '../../utils/mutations'; 
 
 // Predefined quotes for each emotion
 const quotesData = {
@@ -353,49 +355,89 @@ const quotesData = {
   ]
 };
 
-// Functional component to display generated quotes based on the selected feeling
-const GeneratedQuotes = ({ selectedFeeling }) => {
-  // State hook for storing quotes
-  const [quotes, setQuotes] = useState([]);
 
-  // Effect hook to fetch quotes when the selectedFeeling changes
+const GeneratedQuotes = ({ selectedFeeling, user }) => {
+  const [quotes, setQuotes] = useState([]);
+  const [savedAffirmations, setSavedAffirmations] = useState(user ? user.savedAffirmations : []);
+  const [showSaved, setShowSaved] = useState(false);
+
+  const [saveAffirmationMutation] = useMutation(SAVE_AFFIRMATION);
+  const [unsaveAffirmationMutation] = useMutation(UNSAVE_AFFIRMATION);
+
   useEffect(() => {
     if (selectedFeeling) {
       fetchQuotes(selectedFeeling);
     }
-  }, [selectedFeeling]); // Dependency array with selectedFeeling to re-run the effect when it changes
+  }, [selectedFeeling]);
 
-  // Function to fetch and set quotes based on the feeling
   const fetchQuotes = (feeling) => {
-    // Retrieve the array of quotes for the selected feeling
     const availableQuotes = quotesData[feeling] || [];
-
-    // Randomize the quotes array and select the first 3 quotes
     const shuffledQuotes = availableQuotes.sort(() => 0.5 - Math.random());
     const selectedQuotes = shuffledQuotes.slice(0, 3);
-
-    // Update the state with the selected quotes
     setQuotes(selectedQuotes);
   };
 
-  // JSX to render the quotes UI
+  const handleSave = async (quoteId) => {
+    try {
+      await saveAffirmationMutation({ variables: { userId: user._id, affirmationId: quoteId } });
+      setSavedAffirmations([...savedAffirmations, quoteId]);
+    } catch (error) {
+      console.error('Error saving affirmation:', error);
+    }
+  };
+
+  const handleUnsave = async (quoteId) => {
+    try {
+      await unsaveAffirmationMutation({ variables: { userId: user._id, affirmationId: quoteId } });
+      setSavedAffirmations(savedAffirmations.filter(id => id !== quoteId));
+    } catch (error) {
+      console.error('Error unsaving affirmation:', error);
+    }
+  };
+
   return (
     <div>
-      {quotes.length > 0 && ( // Conditional rendering based on the number of quotes
+      {quotes.length > 0 && (
         <div>
-          <h2 className="text-xl font-semibold mb-4">Quotes for {selectedFeeling}</h2>
+          <h2 className="text-xl font-semibold mb-4">Affirmations for {selectedFeeling}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {quotes.map((quote, index) => ( // Mapping over the quotes array to render each quote
+            {quotes.map((quote, index) => (
               <div key={index} className="bg-white p-4 shadow-md rounded-lg h-full">
-                <p className="text-lg">{quote}</p>
+                <p className="text-lg">{quote.content}</p>
+                {user && (
+                  <button
+                    onClick={() => savedAffirmations.includes(quote._id) ? handleUnsave(quote._id) : handleSave(quote._id)}
+                    className="mt-2 py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-300"
+                  >
+                    {savedAffirmations.includes(quote._id) ? 'Unsave' : 'Save'}
+                  </button>
+                )}
               </div>
             ))}
           </div>
+          {user && (
+            <button
+              onClick={() => setShowSaved(!showSaved)}
+              className="mt-4 py-2 px-4 bg-green-500 text-white rounded hover:bg-green-700 transition duration-300"
+            >
+              {showSaved ? 'Hide Saved Affirmations' : 'Show Saved Affirmations'}
+            </button>
+          )}
+          {showSaved && savedAffirmations.map((quote, index) => (
+            <div key={index} className="bg-white p-4 shadow-md rounded-lg mt-4">
+              <p className="text-lg">{quote.content}</p>
+              <button
+                onClick={() => handleUnsave(quote._id)}
+                className="mt-2 py-2 px-4 bg-red-500 text-white rounded hover:bg-red-700 transition duration-300"
+              >
+                Unsave
+              </button>
+            </div>
+          ))}
         </div>
       )}
     </div>
   );
 };
 
-// Export the GeneratedQuotes component for use in other parts of the application
 export default GeneratedQuotes;
