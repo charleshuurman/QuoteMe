@@ -357,9 +357,11 @@ const quotesData = {
 };
 
 // Add function to render displayed quote and its save button
+// Note: This is a react component, if this file gets too big you can split this function into its separate file
 function SelectQuote({ quote, feeling, indexValue }) {
   const [createQuote, { data, loading, error }] = useMutation(CREATE_QUOTE);
 
+  // Define handleSaveQuote handler inside SelectQuote react component
   async function handleSaveQuote(event) {
     event.preventDefault();
     try {
