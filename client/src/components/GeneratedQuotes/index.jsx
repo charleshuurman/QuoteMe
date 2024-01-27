@@ -372,6 +372,7 @@ const GeneratedQuotes = ({ selectedFeeling, user }) => {
 
   const fetchQuotes = (feeling) => {
     const availableQuotes = quotesData[feeling] || [];
+    console.log('Fetched Quotes:', availableQuotes);
     const shuffledQuotes = availableQuotes.sort(() => 0.5 - Math.random());
     const selectedQuotes = shuffledQuotes.slice(0, 3);
     setQuotes(selectedQuotes);
@@ -403,7 +404,7 @@ const GeneratedQuotes = ({ selectedFeeling, user }) => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {quotes.map((quote, index) => (
               <div key={index} className="bg-white p-4 shadow-md rounded-lg h-full">
-                <p className="text-lg">{quote.content}</p>
+                <p className="text-lg">{quote}</p>
                 {user && (
                   <button
                     onClick={() => savedAffirmations.includes(quote._id) ? handleUnsave(quote._id) : handleSave(quote._id)}
