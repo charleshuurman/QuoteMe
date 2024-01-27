@@ -25,7 +25,7 @@ const Journal = () => {
 
   let quoteDataLength;
   if (quoteData) {
-    // console.log("quoteData: ", quoteData);
+    console.log("journal quoteData: ", quoteData);
     quoteDataLength = quoteData.length;
   };
 
