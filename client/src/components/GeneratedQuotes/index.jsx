@@ -1310,6 +1310,11 @@ Lost: [
 ],
 };
 
+//script that will turn quotes data into the correct json file you need.
+//either gonna save it to .txt or console log the response
+// function that transforms each part of the quotesData into part of the json file.
+// scriptyoumade()
+
 const GeneratedQuotes = ({ selectedEmotion, user }) => {
   const [quotes, setQuotes] = useState([]);
   const [showSaved, setShowSaved] = useState(false);
@@ -1377,14 +1382,22 @@ const GeneratedQuotes = ({ selectedEmotion, user }) => {
           <h2 className="text-xl font-semibold mb-4">Affirmations for {selectedEmotion}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {quotes.map((quote) => (
-              <div key={quote.id} className="bg-white p-4 shadow-md rounded-lg h-full">
+              <div key={quote._id} className="bg-white p-4 shadow-md rounded-lg h-full">
                 <p className="text-lg">{quote.content}</p>
                 {user && (
                   <button
-                    onClick={() => savedAffirmations.includes(quote.id) ? handleUnsave(quote.id) : handleSave(quote.id)}
-                    className={`mt-2 py-2 px-4 text-white rounded transition duration-300 ${savedAffirmations.includes(quote.id) ? 'bg-red-500 hover:bg-red-700' : 'bg-blue-500 hover:bg-blue-700'}`}
+                  onClick={(quote) => {
+                    if (savedAffirmations.includes(quote._id)) {
+                      console.log("Unsaving quote with ID:", quote._id);
+                      handleUnsave(quote._id);
+                    } else {
+                      console.log("Saving quote with ID:", quote._id);
+                      handleSave(quote._id);
+                    }
+                  }}                  
+                    className={`mt-2 py-2 px-4 text-white rounded transition duration-300 ${savedAffirmations.includes(quote._id) ? 'bg-red-500 hover:bg-red-700' : 'bg-blue-500 hover:bg-blue-700'}`}
                   >
-                    {savedAffirmations.includes(quote.id) ? 'Unsave' : 'Save'}
+                    {savedAffirmations.includes(quote._id) ? 'Unsave' : 'Save'}
                   </button>
                 )}
               </div>

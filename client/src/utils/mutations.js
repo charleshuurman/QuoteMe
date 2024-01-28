@@ -20,7 +20,7 @@ export const SAVE_AFFIRMATION = gql`
       savedAffirmations {
         _id
         content
-        emotion 
+        emotion
       }
     }
   }
