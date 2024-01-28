@@ -257,7 +257,15 @@ const resolvers = {
         throw new Error('Error unsaving affirmation');
       }
     },
-    
+    async affirmationsByEmotion(parent, { emotion }, context) {
+      try {
+        const affirmations = await Affirmation.find({ emotion: emotion });
+        return affirmations;
+      } catch (error) {
+        console.error('Error fetching affirmations by emotion:', error);
+        throw new Error('Error fetching affirmations by emotion');
+      }
+    },    
     
 
     // TODO: populate  createQuote, deleteQuote, updateQuote, likeQuote, createComment

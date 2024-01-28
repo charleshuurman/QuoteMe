@@ -44,125 +44,76 @@ Make a seed called affirmations, populate that with affirmations.
 6. When trying to see the Saved Affirmations, or clicking the Show Saved Affirmations, then it should bring in the
 list of affirmation _id´s that were saved by the user and there should be a function to find the affirmations using that _id to then just show the actual "content of affirmation".
 */
-
 import React, { useState, useEffect } from "react";
-import { useMutation } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
+import { FETCH_AFFIRMATIONS_BY_EMOTION, FETCH_SAVED_AFFIRMATIONS } from "../../utils/queries";
 import { SAVE_AFFIRMATION, UNSAVE_AFFIRMATION } from "../../utils/mutations";
-import { v4 as uuidv4 } from 'uuid';
-
 
 const GeneratedQuotes = ({ selectedEmotion, user }) => {
-  const [quotes, setQuotes] = useState([]);
   const [showSaved, setShowSaved] = useState(false);
-  const [savedAffirmations, setSavedAffirmations] = useState(user?.savedAffirmations || []);
+  const [randomQuotes, setRandomQuotes] = useState([]); // Store 3 random quotes
 
-  const [saveAffirmationMutation] = useMutation(SAVE_AFFIRMATION);
-  const [unsaveAffirmationMutation] = useMutation(UNSAVE_AFFIRMATION);
+  // Fetch affirmations by emotion
+  const { loading, data } = useQuery(FETCH_AFFIRMATIONS_BY_EMOTION, {
+    variables: { emotion: selectedEmotion },
+    skip: !selectedEmotion,
+  });
+
+  const [saveAffirmation] = useMutation(SAVE_AFFIRMATION, {
+    refetchQueries: [{ query: FETCH_SAVED_AFFIRMATIONS }],
+  });
+
+  const [unsaveAffirmation] = useMutation(UNSAVE_AFFIRMATION, {
+    refetchQueries: [{ query: FETCH_SAVED_AFFIRMATIONS }],
+  });
+
+  const savedAffirmations = data?.savedAffirmations.map(a => a._id) || [];
 
   useEffect(() => {
-    if (selectedEmotion) {
-      fetchQuotes(selectedEmotion);
+    // Select 3 random affirmations whenever the fetched data changes
+    if (data?.affirmationsByEmotion) {
+      const shuffled = [...data.affirmationsByEmotion].sort(() => 0.5 - Math.random());
+      setRandomQuotes(shuffled.slice(0, 3));
     }
-  }, [selectedEmotion]);
+  }, [data]);
 
-  const fetchQuotes = (emotion) => {
-    console.log(quotesData);
-    // Simulate fetching and randomly selecting 3 quotes
-    const emotionQuotes = quotesData[emotion] || [];
-    const shuffledQuotes = emotionQuotes
-      .map(quote => ({ ...quote, id: uuidv4() })) // Assign a unique ID to each quote
-      .sort(() => 0.5 - Math.random()) // Shuffle array
-      .slice(0, 3); // Select first 3 elements
-    setQuotes(shuffledQuotes);
-  };
-
-  const handleSave = async (quoteId) => {
-    console.log({quoteId});
-    console.log({user});
-    console.log(user._id);
-    if (!user || !user._id) {
-      console.error('User not logged in');
-      return;
-    }
-
-    try {
-      await saveAffirmationMutation({
-        variables: { userId: user._id, affirmationId: quoteId },
-      });
-      setSavedAffirmations((prev) => [...prev, quoteId]);
-    } catch (error) {
-      console.error('Error saving affirmation:', error);
-    }
-  };
-
-  const handleUnsave = async (quoteId) => {
-    if (!user || !user._id) {
-      console.error('User not logged in');
-      return;
-    }
-
-    try {
-      await unsaveAffirmationMutation({
-        variables: { userId: user._id, affirmationId: quoteId },
-      });
-      setSavedAffirmations((prev) => prev.filter((id) => id !== quoteId));
-    } catch (error) {
-      console.error('Error unsaving affirmation:', error);
-    }
-  };
+  if (loading) return <div>Loading...</div>;
+  if (!selectedEmotion) return <div>Select an emotion to see affirmations.</div>;
 
   return (
     <div>
-      {quotes.length > 0 && (
-        <div>
-          <h2 className="text-xl font-semibold mb-4">Affirmations for {selectedEmotion}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {quotes.map((quote) => (
-              <div key={quote._id} className="bg-white p-4 shadow-md rounded-lg h-full">
-                <p className="text-lg">{quote.content}</p>
-                {user && (
-                  <button
-                  onClick={(quote) => {
-                    if (savedAffirmations.includes(quote._id)) {
-                      console.log("Unsaving quote with ID:", quote._id);
-                      handleUnsave(quote._id);
-                    } else {
-                      console.log("Saving quote with ID:", quote._id);
-                      handleSave(quote._id);
-                    }
-                  }}                  
-                    className={`mt-2 py-2 px-4 text-white rounded transition duration-300 ${savedAffirmations.includes(quote._id) ? 'bg-red-500 hover:bg-red-700' : 'bg-blue-500 hover:bg-blue-700'}`}
-                  >
-                    {savedAffirmations.includes(quote._id) ? 'Unsave' : 'Save'}
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
-          {user && (
+      <h2 className="text-xl font-semibold mb-4">Affirmations for {selectedEmotion}</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {quotes.map((quote) => (
+          <div key={quote._id} className="bg-white p-4 shadow-md rounded-lg h-full">
+            <p className="text-lg">{quote.content}</p>
             <button
-              onClick={() => setShowSaved(!showSaved)}
-              className="mt-4 py-2 px-4 bg-green-500 text-white rounded hover:bg-green-700 transition duration-300"
+              onClick={() => handleSaveUnsave(quote._id)}
+              className={`mt-2 py-2 px-4 text-white rounded transition duration-300 ${savedAffirmations.includes(quote._id) ? 'bg-red-500 hover:bg-red-700' : 'bg-blue-500 hover:bg-blue-700'}`}
             >
-              {showSaved ? 'Hide Saved Affirmations' : 'Show Saved Affirmations'}
+              {savedAffirmations.includes(quote._id) ? 'Unsave' : 'Save'}
             </button>
+          </div>
+        ))}
+      </div>
+      <button
+        onClick={() => setShowSaved(!showSaved)}
+        className="mt-4 py-2 px-4 bg-green-500 text-white rounded hover:bg-green-700 transition duration-300"
+      >
+        {showSaved ? 'Hide Saved Affirmations' : 'Show Saved Affirmations'}
+      </button>
+      {showSaved && (
+        <div className="mt-4">
+          <h3 className="text-lg font-semibold mb-2">Your Saved Affirmations:</h3>
+          {savedAffirmations.length > 0 ? (
+            quotes.filter(quote => savedAffirmations.includes(quote._id)).map((quote) => (
+              <div key={quote._id} className="bg-white p-4 shadow-md rounded-lg mt-4">
+                <p className="text-lg">{quote.content}</p>
+              </div>
+            ))
+          ) : (
+            <p>You have not saved any affirmations.</p>
           )}
-          {showSaved && savedAffirmations.map((id) => {
-            const savedQuote = quotes.find((q) => q.id === id);
-            return (
-              savedQuote && (
-                <div key={id} className="bg-white p-4 shadow-md rounded-lg mt-4">
-                  <p className="text-lg">{savedQuote.content}</p>
-                  <button
-                    onClick={() => handleUnsave(id)}
-                    className="mt-2 py-2 px-4 bg-red-500 text-white rounded hover:bg-red-700 transition duration-300"
-                  >
-                    Unsave
-                  </button>
-                </div>
-              )
-            );
-          })}
         </div>
       )}
     </div>

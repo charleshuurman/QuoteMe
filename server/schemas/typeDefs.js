@@ -84,6 +84,7 @@ const typeDefs = `
     checkout(products: [ID]!): Checkout
     emotions: [Emotion]!
     savedAffirmations: [Affirmation]
+    affirmationsByEmotion(emotion: String!): [Affirmation]
     user: User
     getMyQuotes: [Quote]
     allquotes: [Quote]

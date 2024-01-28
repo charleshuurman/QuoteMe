@@ -1,14 +1,21 @@
 import { gql } from '@apollo/client';
 
-export const GET_USER_SAVED_AFFIRMATIONS = gql`
-  query GetUserSavedAffirmations {
-    user {
+// Query to fetch affirmations by emotion
+export const FETCH_AFFIRMATIONS_BY_EMOTION = gql`
+  query AffirmationsByEmotion($emotion: String!) {
+    affirmationsByEmotion(emotion: $emotion) {
       _id
-      savedAffirmations {
-        _id
-        content
-        emotion
-      }
+      content
+    }
+  }
+`;
+
+// Query to fetch saved affirmations for the logged-in user
+export const FETCH_SAVED_AFFIRMATIONS = gql`
+  query SavedAffirmations {
+    savedAffirmations {
+      _id
+      content
     }
   }
 `;
