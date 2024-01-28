@@ -39,7 +39,7 @@ const ChooseFeeling = () => {
 
   const handleEmotionClick = (emotion) => {
     setSelectedEmotion(emotion);
-    console.log("user id:", user._id);
+    console.log("user id:", currentUser);
   };
 
   const handleChooseAgain = () => {
@@ -58,7 +58,7 @@ const ChooseFeeling = () => {
               ← Choose Again
             </button>
           </div>
-          <GeneratedQuotes selectedFeeling={selectedEmotion.name} user={currentUser} />
+          <GeneratedQuotes selectedEmotion={selectedEmotion.name} user={currentUser} />
         </>
       ) : (
         <>

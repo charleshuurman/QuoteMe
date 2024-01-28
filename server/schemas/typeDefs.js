@@ -5,7 +5,16 @@ const typeDefs = `
     commentAuthor: String
     createdAt: String
   }
-
+  type Emotion {
+    name: String!
+    affirmations: [Affirmation]!
+  }
+  
+  type Affirmation {
+    _id: ID!
+    content: String!
+    emotion: String!
+  }
   type Quote {
     _id: ID
     content: String
@@ -56,6 +65,7 @@ const typeDefs = `
     userName: String
     email: String
     quotes: [Quote]
+    savedAffirmations: [Affirmation]!
     friends: [User]
     tier: Int
     orders: [Order]
@@ -76,7 +86,8 @@ const typeDefs = `
     product(_id: ID!): Product
     order(_id: ID!): Order
     checkout(products: [ID]!): Checkout
-
+    emotions: [Emotion]!
+    affirmations(emotionName: String!): [Affirmation]!
     user: User
     getMyQuotes: [Quote]
     allquotes: [Quote]

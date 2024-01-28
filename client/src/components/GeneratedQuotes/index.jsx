@@ -1,9 +1,10 @@
-import Auth from "../../utils/auth";
+// import Auth from "../../utils/auth";
 import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { SAVE_AFFIRMATION, UNSAVE_AFFIRMATION } from "../../utils/mutations";
 import { v4 as uuidv4 } from 'uuid';
-import { CREATE_QUOTE } from "../../utils/mutations";
+// import { GET_USER_SAVED_AFFIRMATIONS } from '../graphql/queries';
+// import { CREATE_QUOTE } from "../../utils/mutations";
 
 // Predefined quotes for each emotion
 const quotesData = {
@@ -1309,85 +1310,83 @@ Lost: [
 ],
 };
 
-const GeneratedQuotes = ({ selectedFeeling, user }) => {
-  console.log(user);
+const GeneratedQuotes = ({ selectedEmotion, user }) => {
   const [quotes, setQuotes] = useState([]);
   const [showSaved, setShowSaved] = useState(false);
-
-  // This will initialize savedAffirmations state based on user prop which may not be immediately available
-  const [savedAffirmations, setSavedAffirmations] = useState([]);
+  const [savedAffirmations, setSavedAffirmations] = useState(user?.savedAffirmations || []);
 
   const [saveAffirmationMutation] = useMutation(SAVE_AFFIRMATION);
   const [unsaveAffirmationMutation] = useMutation(UNSAVE_AFFIRMATION);
 
   useEffect(() => {
-    if (selectedFeeling) {
-      fetchQuotes(selectedFeeling);
+    if (selectedEmotion) {
+      fetchQuotes(selectedEmotion);
     }
-    // Update savedAffirmations when user or user's savedAffirmations change
-    if (user && user.savedAffirmations) {
-      console.log(savedAffirmations);
-      setSavedAffirmations(user.savedAffirmations.map(aff => aff._id)); 
-    }
-  }, [selectedFeeling, user, user?.savedAffirmations]);
+  }, [selectedEmotion]);
 
-  const fetchQuotes = (feeling) => {
-    const availableQuotes = quotesData[feeling] || [];
-    const shuffledQuotes = availableQuotes.sort(() => 0.5 - Math.random());
-    const selectedQuotes = shuffledQuotes.slice(0, 3); // Ensure these quotes have an id property for key in list
-    setQuotes(selectedQuotes);
+  const fetchQuotes = (emotion) => {
+    console.log(quotesData);
+    // Simulate fetching and randomly selecting 3 quotes
+    const emotionQuotes = quotesData[emotion] || [];
+    const shuffledQuotes = emotionQuotes
+      .map(quote => ({ ...quote, id: uuidv4() })) // Assign a unique ID to each quote
+      .sort(() => 0.5 - Math.random()) // Shuffle array
+      .slice(0, 3); // Select first 3 elements
+    setQuotes(shuffledQuotes);
   };
 
   const handleSave = async (quoteId) => {
-    if (!user) {
+    console.log({quoteId});
+    console.log({user});
+    console.log(user._id);
+    if (!user || !user._id) {
       console.error('User not logged in');
       return;
     }
-  
+
     try {
-      const response = await saveAffirmationMutation({
+      await saveAffirmationMutation({
         variables: { userId: user._id, affirmationId: quoteId },
       });
-  
-      // Optionally check response to confirm save was successful before updating state
-      if (response.data.saveAffirmation) {
-        setSavedAffirmations(prev => [...prev, quoteId]);
-      }
+      setSavedAffirmations((prev) => [...prev, quoteId]);
     } catch (error) {
       console.error('Error saving affirmation:', error);
     }
   };
-  
+
   const handleUnsave = async (quoteId) => {
-    if (!user) {
+    if (!user || !user._id) {
       console.error('User not logged in');
       return;
     }
-  
+
     try {
-      const response = await unsaveAffirmationMutation({
+      await unsaveAffirmationMutation({
         variables: { userId: user._id, affirmationId: quoteId },
       });
-  
-      // Optionally check response to confirm unsave was successful before updating state
-      if (response.data.unsaveAffirmation) {
-        setSavedAffirmations(prev => prev.filter(id => id !== quoteId));
-      }
+      setSavedAffirmations((prev) => prev.filter((id) => id !== quoteId));
     } catch (error) {
       console.error('Error unsaving affirmation:', error);
     }
   };
-  
 
   return (
     <div>
       {quotes.length > 0 && (
         <div>
-          <h2 className="text-xl font-semibold mb-4">Affirmations for {selectedFeeling}</h2>
+          <h2 className="text-xl font-semibold mb-4">Affirmations for {selectedEmotion}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {quotes.map((quote, index) => ( // Mapping over the quotes array to render each quote
-              <div key={index} className="bg-white p-4 shadow-md rounded-lg h-full">
-                <p className="text-lg">{quote}</p>
+            {quotes.map((quote) => (
+              <div key={quote.id} className="bg-white p-4 shadow-md rounded-lg h-full">
+                <p className="text-lg">{quote.content}</p>
+                {user && (
+                  <button
+                    onClick={() => savedAffirmations.includes(quote.id) ? handleUnsave(quote.id) : handleSave(quote.id)}
+                    className={`mt-2 py-2 px-4 text-white rounded transition duration-300 ${savedAffirmations.includes(quote.id) ? 'bg-red-500 hover:bg-red-700' : 'bg-blue-500 hover:bg-blue-700'}`}
+                  >
+                    {savedAffirmations.includes(quote.id) ? 'Unsave' : 'Save'}
+                  </button>
+                )}
               </div>
             ))}
           </div>
@@ -1399,19 +1398,21 @@ const GeneratedQuotes = ({ selectedFeeling, user }) => {
               {showSaved ? 'Hide Saved Affirmations' : 'Show Saved Affirmations'}
             </button>
           )}
-          {showSaved && savedAffirmations.map((id, index) => {
-            const savedQuote = quotes.find(q => q.id === id);
-            return savedQuote ? (
-              <div key={id} className="bg-white p-4 shadow-md rounded-lg mt-4">
-                <p className="text-lg">{savedQuote.content}</p>
-                <button
-                  onClick={() => handleUnsave(id)}
-                  className="mt-2 py-2 px-4 bg-red-500 text-white rounded hover:bg-red-700 transition duration-300"
-                >
-                  Unsave
-                </button>
-              </div>
-            ) : null;
+          {showSaved && savedAffirmations.map((id) => {
+            const savedQuote = quotes.find((q) => q.id === id);
+            return (
+              savedQuote && (
+                <div key={id} className="bg-white p-4 shadow-md rounded-lg mt-4">
+                  <p className="text-lg">{savedQuote.content}</p>
+                  <button
+                    onClick={() => handleUnsave(id)}
+                    className="mt-2 py-2 px-4 bg-red-500 text-white rounded hover:bg-red-700 transition duration-300"
+                  >
+                    Unsave
+                  </button>
+                </div>
+              )
+            );
           })}
         </div>
       )}

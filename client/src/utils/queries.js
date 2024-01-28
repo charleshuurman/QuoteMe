@@ -1,5 +1,18 @@
 import { gql } from '@apollo/client';
 
+export const GET_USER_SAVED_AFFIRMATIONS = gql`
+  query GetUserSavedAffirmations {
+    user {
+      _id
+      savedAffirmations {
+        _id
+        content
+        emotion
+      }
+    }
+  }
+`;
+
 export const QUERY_PRODUCTS = gql`
   query getProducts($category: ID) {
     products(category: $category) {
