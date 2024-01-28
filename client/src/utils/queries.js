@@ -1,11 +1,13 @@
 import { gql } from '@apollo/client';
 
-// Query to fetch affirmations by emotion
 export const FETCH_AFFIRMATIONS_BY_EMOTION = gql`
   query AffirmationsByEmotion($emotion: String!) {
     affirmationsByEmotion(emotion: $emotion) {
       _id
       content
+      emotion
+      createdAt
+      updatedAt
     }
   }
 `;

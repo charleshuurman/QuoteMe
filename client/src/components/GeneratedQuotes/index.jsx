@@ -1,9 +1,9 @@
 // NEW PLAN OF ACTION! *tears of hope*
 
 /* 1. The affirmations need to live already in the database, they need to have an emotion associated to them.
-	There could be a similar affirmations generator like for the users but for the affirmations. 
-	It´s not required because we could seed the database in another way, but it´s an option.
-	Ccould also seed it from a json file containing all the pertinent, organized data
+  There could be a similar affirmations generator like for the users but for the affirmations. 
+  It´s not required because we could seed the database in another way, but it´s an option.
+  Ccould also seed it from a json file containing all the pertinent, organized data
 
   No way in heck I was about to re-write all those affirmations - however too unsure of impact on this app to try and restructure it here
   > I have a seperate local directory open that I am using to restructure this data...and it's worked!! Want to ensure graders can see what happened. 
@@ -54,7 +54,7 @@ const GeneratedQuotes = ({ selectedEmotion, user }) => {
   const [randomQuotes, setRandomQuotes] = useState([]); // Store 3 random quotes
 
   // Fetch affirmations by emotion
-  const { loading, data } = useQuery(FETCH_AFFIRMATIONS_BY_EMOTION, {
+  const { loading, error, data } = useQuery(FETCH_AFFIRMATIONS_BY_EMOTION, {
     variables: { emotion: selectedEmotion },
     skip: !selectedEmotion,
   });
@@ -74,8 +74,9 @@ const GeneratedQuotes = ({ selectedEmotion, user }) => {
     if (data?.affirmationsByEmotion) {
       const shuffled = [...data.affirmationsByEmotion].sort(() => 0.5 - Math.random());
       setRandomQuotes(shuffled.slice(0, 3));
+      console.log({data});
     }
-  }, [data]);
+}, [data]);
 
   if (loading) return <div>Loading...</div>;
   if (!selectedEmotion) return <div>Select an emotion to see affirmations.</div>;
@@ -84,7 +85,7 @@ const GeneratedQuotes = ({ selectedEmotion, user }) => {
     <div>
       <h2 className="text-xl font-semibold mb-4">Affirmations for {selectedEmotion}</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {quotes.map((quote) => (
+        {randomQuotes.map((quote) => ( 
           <div key={quote._id} className="bg-white p-4 shadow-md rounded-lg h-full">
             <p className="text-lg">{quote.content}</p>
             <button
@@ -106,7 +107,7 @@ const GeneratedQuotes = ({ selectedEmotion, user }) => {
         <div className="mt-4">
           <h3 className="text-lg font-semibold mb-2">Your Saved Affirmations:</h3>
           {savedAffirmations.length > 0 ? (
-            quotes.filter(quote => savedAffirmations.includes(quote._id)).map((quote) => (
+            randomQuotes.filter(quote => savedAffirmations.includes(quote._id)).map((quote) => (
               <div key={quote._id} className="bg-white p-4 shadow-md rounded-lg mt-4">
                 <p className="text-lg">{quote.content}</p>
               </div>

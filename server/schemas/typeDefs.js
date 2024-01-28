@@ -82,7 +82,6 @@ const typeDefs = `
     product(_id: ID!): Product
     order(_id: ID!): Order
     checkout(products: [ID]!): Checkout
-    emotions: [Emotion]!
     savedAffirmations: [Affirmation]
     affirmationsByEmotion(emotion: String!): [Affirmation]
     user: User
