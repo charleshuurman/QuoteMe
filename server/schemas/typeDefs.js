@@ -83,7 +83,7 @@ const typeDefs = `
     order(_id: ID!): Order
     checkout(products: [ID]!): Checkout
     emotions: [Emotion]!
-    affirmations(emotionName: String!): [Affirmation]!
+    savedAffirmations: [Affirmation]
     user: User
     getMyQuotes: [Quote]
     allquotes: [Quote]
@@ -112,8 +112,8 @@ const typeDefs = `
     setPublic(quoteId: ID!): Quote
     createComment(quoteId: ID!, commentText: String!): Quote
     deleteComment(quoteId: ID!, commentId: ID!): Quote
-    saveAffirmation(userId: ID!, affirmationId: ID!): User
-    unsaveAffirmation(userId: ID!, affirmationId: ID!): User
+    saveAffirmation(affirmationId: ID!): User
+    unsaveAffirmation(affirmationId: ID!): User
   }
 `;
 
