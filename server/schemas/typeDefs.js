@@ -5,10 +5,6 @@ const typeDefs = `
     commentAuthor: String
     createdAt: String
   }
-  type Emotion {
-    name: String!
-    affirmations: [Affirmation]!
-  }
   
   type Affirmation {
     _id: ID!

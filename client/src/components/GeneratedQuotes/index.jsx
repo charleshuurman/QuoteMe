@@ -1,3 +1,51 @@
+// NEW PLAN OF ACTION! *tears of hope*
+
+/* 1. The affirmations need to live already in the database, they need to have an emotion associated to them.
+	There could be a similar affirmations generator like for the users but for the affirmations. 
+	It´s not required because we could seed the database in another way, but it´s an option.
+	Ccould also seed it from a json file containing all the pertinent, organized data
+
+  No way in heck I was about to re-write all those affirmations - however too unsure of impact on this app to try and restructure it here
+  > I have a seperate local directory open that I am using to restructure this data...and it's worked!! Want to ensure graders can see what happened. 
+  What happened: 
+  - Manually erased all the 'uuidv4()'/id section for each affirmation (I did do manually but only took a couple mins)
+  -   const transformedData = [];
+
+  // Iterate through each emotion category in the quotesData
+  for (const [emotion, quotes] of Object.entries(quotesData)) {
+      quotes.forEach(quote => {
+          // Push a new object for each quote into the transformedData array
+          // without the _id field and with an added emotion field
+          transformedData.push({
+              content: quote.content,
+              emotion: emotion // Use the key from quotesData as the emotion
+          });
+      });
+  }
+  
+  // Output the transformed data to the console for copying
+  console.log(JSON.stringify(transformedData, null, 2));
+
+  ^ node cscript.js 
+
+  and BOOM - new data structure  😎
+
+Make a seed called affirmations, populate that with affirmations. 
+
+
+2. The app, when logged in, needs to retrieve the affirmations from the database, just like it´s doing with the users. When it retrives the affirmations from the database, it´s going to bring an object containing each affirmation and all the pertinent info about it, including emotion and id.
+
+3. Once the app has said affirmations, it should then display them.
+
+4. Once you try to save the affirmations, the _id for them should be the same as the _id that´s in the database. And that way, you don´t need to send the emotion when you save them because that´s already gonna be contained in the database.
+ 
+5. It shouldn´t be a UUID generated inside the app.
+
+6. When trying to see the Saved Affirmations, or clicking the Show Saved Affirmations, then it should bring in the
+list of affirmation _id´s that were saved by the user and there should be a function to find the affirmations using that _id to then just show the actual "content of affirmation".
+*/
+
+
 // import Auth from "../../utils/auth";
 import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
