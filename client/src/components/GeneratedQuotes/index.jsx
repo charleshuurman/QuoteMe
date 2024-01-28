@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { v4 as uuidv4 } from 'uuid';
+import AuthService from '../../utils/auth'
 import { SAVE_AFFIRMATION, UNSAVE_AFFIRMATION } from '../../utils/mutations';
 
 const transformQuotesDataWithUUID = (data) => {
@@ -366,10 +367,12 @@ const quotesData = transformQuotesDataWithUUID({
 
 
 const GeneratedQuotes = ({ selectedFeeling, user }) => {
-  console.log('User:', user);
+  console.log(user);
   const [quotes, setQuotes] = useState([]);
-  const [savedAffirmations, setSavedAffirmations] = useState(user?.savedAffirmations || []);
   const [showSaved, setShowSaved] = useState(false);
+
+  // This will initialize savedAffirmations state based on user prop which may not be immediately available
+  const [savedAffirmations, setSavedAffirmations] = useState([]);
 
   const [saveAffirmationMutation] = useMutation(SAVE_AFFIRMATION);
   const [unsaveAffirmationMutation] = useMutation(UNSAVE_AFFIRMATION);
@@ -378,33 +381,59 @@ const GeneratedQuotes = ({ selectedFeeling, user }) => {
     if (selectedFeeling) {
       fetchQuotes(selectedFeeling);
     }
-  }, [selectedFeeling]);
+    // Update savedAffirmations when user or user's savedAffirmations change
+    if (user && user.savedAffirmations) {
+      setSavedAffirmations(user.savedAffirmations.map(aff => aff._id)); // Assuming savedAffirmations structure
+    }
+  }, [selectedFeeling, user, user?.savedAffirmations]);
 
   const fetchQuotes = (feeling) => {
     const availableQuotes = quotesData[feeling] || [];
-    console.log('Fetched Quotes:', availableQuotes);
     const shuffledQuotes = availableQuotes.sort(() => 0.5 - Math.random());
-    const selectedQuotes = shuffledQuotes.slice(0, 3);
+    const selectedQuotes = shuffledQuotes.slice(0, 3); // Ensure these quotes have an id property for key in list
     setQuotes(selectedQuotes);
   };
 
   const handleSave = async (quoteId) => {
+    if (!user) {
+      console.error('User not logged in');
+      return;
+    }
+  
     try {
-      await saveAffirmationMutation({ variables: { userId: user._id, affirmationId: quoteId } });
-      setSavedAffirmations([...savedAffirmations, quoteId]);
+      const response = await saveAffirmationMutation({
+        variables: { userId: user._id, affirmationId: quoteId },
+      });
+  
+      // Optionally check response to confirm save was successful before updating state
+      if (response.data.saveAffirmation) {
+        setSavedAffirmations(prev => [...prev, quoteId]);
+      }
     } catch (error) {
       console.error('Error saving affirmation:', error);
     }
   };
-
+  
   const handleUnsave = async (quoteId) => {
+    if (!user) {
+      console.error('User not logged in');
+      return;
+    }
+  
     try {
-      await unsaveAffirmationMutation({ variables: { userId: user._id, affirmationId: quoteId } });
-      setSavedAffirmations(savedAffirmations.filter(id => id !== quoteId));
+      const response = await unsaveAffirmationMutation({
+        variables: { userId: user._id, affirmationId: quoteId },
+      });
+  
+      // Optionally check response to confirm unsave was successful before updating state
+      if (response.data.unsaveAffirmation) {
+        setSavedAffirmations(prev => prev.filter(id => id !== quoteId));
+      }
     } catch (error) {
       console.error('Error unsaving affirmation:', error);
     }
   };
+  
 
   return (
     <div>
@@ -412,8 +441,8 @@ const GeneratedQuotes = ({ selectedFeeling, user }) => {
         <div>
           <h2 className="text-xl font-semibold mb-4">Affirmations for {selectedFeeling}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {quotes.map((quote) => (
-              <div key={quote.id} className="bg-white p-4 shadow-md rounded-lg h-full">
+            {quotes.map((quote, index) => (
+              <div key={quote.id || index} className="bg-white p-4 shadow-md rounded-lg h-full"> {/* Ensure unique key */}
                 <p className="text-lg">{quote.content}</p>
                 {user && (
                   <button
@@ -434,17 +463,20 @@ const GeneratedQuotes = ({ selectedFeeling, user }) => {
               {showSaved ? 'Hide Saved Affirmations' : 'Show Saved Affirmations'}
             </button>
           )}
-          {showSaved && savedAffirmations.map((quote, index) => (
-            <div key={index} className="bg-white p-4 shadow-md rounded-lg mt-4">
-              <p className="text-lg">{quote.content}</p>
-              <button
-                onClick={() => handleUnsave(quote.id)}
-                className="mt-2 py-2 px-4 bg-red-500 text-white rounded hover:bg-red-700 transition duration-300"
-              >
-                Unsave
-              </button>
-            </div>
-          ))}
+          {showSaved && savedAffirmations.map((id, index) => {
+            const savedQuote = quotes.find(q => q.id === id);
+            return savedQuote ? (
+              <div key={id} className="bg-white p-4 shadow-md rounded-lg mt-4">
+                <p className="text-lg">{savedQuote.content}</p>
+                <button
+                  onClick={() => handleUnsave(id)}
+                  className="mt-2 py-2 px-4 bg-red-500 text-white rounded hover:bg-red-700 transition duration-300"
+                >
+                  Unsave
+                </button>
+              </div>
+            ) : null;
+          })}
         </div>
       )}
     </div>

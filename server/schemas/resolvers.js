@@ -211,7 +211,7 @@ const resolvers = {
 // Resolver to save an affirmation
 async saveAffirmation(parent, { userId, affirmationId }, context) {
   // Check if the user is logged in
-  if (!context.user || context.user._id !== userId) {
+  if (!context.user || context.user._id.toString() !== userId) {
     throw new Error('Not authenticated or unauthorized action');
   }
 
@@ -232,7 +232,7 @@ async saveAffirmation(parent, { userId, affirmationId }, context) {
 // Resolver to unsave an affirmation
 async unsaveAffirmation(parent, { userId, affirmationId }, context) {
   // Check if the user is logged in
-  if (!context.user || context.user._id !== userId) {
+  if (!context.user || context.user._id.toString() !== userId) {
     throw new Error('Not authenticated or unauthorized action');
   }
 

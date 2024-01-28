@@ -30,15 +30,16 @@ const ChooseFeeling = () => {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    // Fetch the current user on component mount if logged in
+    // Check if the user is logged in and fetch profile
     if (AuthService.loggedIn()) {
-      const user = AuthService.getProfile();
-      setCurrentUser(user);
+      const profile = AuthService.getProfile();
+      setCurrentUser(profile.data);
     }
   }, []);
 
   const handleEmotionClick = (emotion) => {
     setSelectedEmotion(emotion);
+    console.log("user id:", user._id);
   };
 
   const handleChooseAgain = () => {
