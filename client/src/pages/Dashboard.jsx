@@ -8,29 +8,18 @@ import { useMutation } from "@apollo/client";
 import { QUERY_GET_PUBLIC_QUOTES } from "../utils/queries";
 
 const DashBoard = () => {
-  let quoteData;
-
   const userName = Auth.getProfile().data.userName;
 
-  const { loading, data } = useQuery(QUERY_GET_PUBLIC_QUOTES, {
-    // variables: { userId },
-    fetchPolicy: "no-cache",
-  });
-
-  // populate quoteData
-  if (data) {
-    quoteData = data.publicQuotes;
-    // console.log("Journal quoteData:", quoteData);
-  }
+  const { loading, data } = useQuery(QUERY_GET_PUBLIC_QUOTES);
 
   let quoteDataLength;
-  if (quoteData) {
+  if (data && data.publicQuotes) {
     // console.log("quoteData: ", quoteData);
-    quoteDataLength = quoteData.length;
+    quoteDataLength = data.publicQuotes.length;
   }
 
   // if data isn't here yet, say so
-  if (loading || !quoteDataLength) {
+  if (loading) {
     return (
       <>
         <h2>LOADING...</h2>
@@ -42,7 +31,7 @@ const DashBoard = () => {
     <>
       <div className="container border rounded-box">
         <PostQuote />
-        <ShowQuotes quotesArray={quoteData}/>
+        <ShowQuotes quotesArray={data.publicQuotes}/>
       </div>
     </>
   );

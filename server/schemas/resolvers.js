@@ -86,7 +86,7 @@ const resolvers = {
 
       throw AuthenticationError;
     },
-    
+
     singleUserById: async (parent, { userId }) => {
       console.log("singleUserById");
       return User.findOne({ _id: userId }).populate('quotes');
@@ -94,7 +94,7 @@ const resolvers = {
 
     singleUserByUsrName: async (parent, { userName }) => {
       console.log("singleUserByUsrName");
-      return User.findOne({userName: userName }).populate('quotes');
+      return User.findOne({ userName: userName }).populate('quotes');
     },
 
     users: async () => {
@@ -390,18 +390,21 @@ async unsaveAffirmation(parent, { userId, affirmationId }, context) {
       };
     },
 
-    setPrivate: async (parent, {quoteId}) => {
-      console.log('setPrivate');      
-
-      return await Quote.findByIdAndUpdate(quoteId, { "isPrivate": true }, { new: true });
+    setPrivate: async (parent, { quoteId }, context) => {
+      console.log('setPrivate', quoteId);
+      if (context.user) {
+        return await Quote.findByIdAndUpdate(quoteId, { "isPrivate": true }, { new: true });
+      };
+      throw AuthenticationError;
     },
 
-    setPublic: async (parent, {quoteId}) => {
-      console.log('setPublic');      
-
-      return await Quote.findByIdAndUpdate(quoteId, { "isPrivate": false }, { new: true });
+    setPublic: async (parent, { quoteId }, context) => {
+      console.log('setPublic', quoteId);
+      if (context.user) {
+        return await Quote.findByIdAndUpdate(quoteId, { "isPrivate": false }, { new: true });
+      };
+      throw AuthenticationError;
     },
-
 
     createComment: async (parent, { quoteId, commentText }, context) => {
       console.log('createComment');
