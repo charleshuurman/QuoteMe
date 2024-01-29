@@ -296,7 +296,7 @@ const resolvers = {
           { $addToSet: { quotes: createdQuote._id } },
           { runValidators: true, new: true });
 
-        return updatedUser;
+        return createdQuote;
       }
 
       throw AuthenticationError;
