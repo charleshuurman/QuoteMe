@@ -21,6 +21,8 @@ export const SAVE_AFFIRMATION = gql`
         _id
         content
         emotion
+        createdAt
+        updatedAt
       }
     }
   }
@@ -34,7 +36,9 @@ export const UNSAVE_AFFIRMATION = gql`
       savedAffirmations {
         _id
         content
-        emotion 
+        emotion
+        createdAt
+        updatedAt 
       }
     }
   }

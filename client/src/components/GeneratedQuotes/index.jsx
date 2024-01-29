@@ -47,36 +47,57 @@ list of affirmation _id´s that were saved by the user and there should be a fun
 import React, { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import { FETCH_AFFIRMATIONS_BY_EMOTION, FETCH_SAVED_AFFIRMATIONS } from "../../utils/queries";
-import { SAVE_AFFIRMATION, UNSAVE_AFFIRMATION } from "../../utils/mutations";
+import { SAVE_AFFIRMATION, UNSAVE_AFFIRMATION } from '../../utils/mutations'
 
 const GeneratedQuotes = ({ selectedEmotion, user }) => {
   const [showSaved, setShowSaved] = useState(false);
-  const [randomQuotes, setRandomQuotes] = useState([]); // Store 3 random quotes
+  const [randomQuotes, setRandomQuotes] = useState([]);
+  const [savedAffirmations, setSavedAffirmations] = useState([]);
 
-  // Fetch affirmations by emotion
   const { loading, error, data } = useQuery(FETCH_AFFIRMATIONS_BY_EMOTION, {
     variables: { emotion: selectedEmotion },
     skip: !selectedEmotion,
   });
 
-  const [saveAffirmation] = useMutation(SAVE_AFFIRMATION, {
-    refetchQueries: [{ query: FETCH_SAVED_AFFIRMATIONS }],
+  const savedAffirmationsResult = useQuery(FETCH_SAVED_AFFIRMATIONS, {
+    skip: !user || !user._id, // Skip query if no user is logged in
   });
-
-  const [unsaveAffirmation] = useMutation(UNSAVE_AFFIRMATION, {
-    refetchQueries: [{ query: FETCH_SAVED_AFFIRMATIONS }],
-  });
-
-  const savedAffirmations = data?.savedAffirmations.map(a => a._id) || [];
 
   useEffect(() => {
-    // Select 3 random affirmations whenever the fetched data changes
     if (data?.affirmationsByEmotion) {
       const shuffled = [...data.affirmationsByEmotion].sort(() => 0.5 - Math.random());
       setRandomQuotes(shuffled.slice(0, 3));
-      console.log({data});
     }
-}, [data]);
+    if (savedAffirmationsResult.data?.savedAffirmations) {
+      setSavedAffirmations(savedAffirmationsResult.data.savedAffirmations);
+    }
+  }, [data, savedAffirmationsResult.data]);
+
+  const [saveAffirmationMutation] = useMutation(SAVE_AFFIRMATION, {
+    refetchQueries: [{ query: FETCH_SAVED_AFFIRMATIONS }],
+  });
+
+  const [unsaveAffirmationMutation] = useMutation(UNSAVE_AFFIRMATION, {
+    refetchQueries: [{ query: FETCH_SAVED_AFFIRMATIONS }],
+  });
+
+  const handleSaveUnsave = async (affirmationId) => {
+    const isSaved = savedAffirmations.some(a => a._id === affirmationId);
+
+    try {
+      if (isSaved) {
+        await unsaveAffirmationMutation({
+          variables: { userId: user._id, affirmationId },
+        });
+      } else {
+        await saveAffirmationMutation({
+          variables: { userId: user._id, affirmationId },
+        });
+      }
+    } catch (error) {
+      console.error('Error handling save/unsave affirmation:', error);
+    }
+  };
 
   if (loading) return <div>Loading...</div>;
   if (!selectedEmotion) return <div>Select an emotion to see affirmations.</div>;
@@ -85,7 +106,7 @@ const GeneratedQuotes = ({ selectedEmotion, user }) => {
     <div>
       <h2 className="text-xl font-semibold mb-4">Affirmations for {selectedEmotion}</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {randomQuotes.map((quote) => ( 
+        {randomQuotes.map((quote) => (
           <div key={quote._id} className="bg-white p-4 shadow-md rounded-lg h-full">
             <p className="text-lg">{quote.content}</p>
             <button
@@ -97,26 +118,10 @@ const GeneratedQuotes = ({ selectedEmotion, user }) => {
           </div>
         ))}
       </div>
-      <button
-        onClick={() => setShowSaved(!showSaved)}
-        className="mt-4 py-2 px-4 bg-green-500 text-white rounded hover:bg-green-700 transition duration-300"
-      >
+      <button onClick={() => setShowSaved(!showSaved)} className="mt-4 py-2 px-4 bg-green-500 text-white rounded hover:bg-green-700 transition duration-300">
         {showSaved ? 'Hide Saved Affirmations' : 'Show Saved Affirmations'}
       </button>
-      {showSaved && (
-        <div className="mt-4">
-          <h3 className="text-lg font-semibold mb-2">Your Saved Affirmations:</h3>
-          {savedAffirmations.length > 0 ? (
-            randomQuotes.filter(quote => savedAffirmations.includes(quote._id)).map((quote) => (
-              <div key={quote._id} className="bg-white p-4 shadow-md rounded-lg mt-4">
-                <p className="text-lg">{quote.content}</p>
-              </div>
-            ))
-          ) : (
-            <p>You have not saved any affirmations.</p>
-          )}
-        </div>
-      )}
+      {/* Implement display for saved affirmations */}
     </div>
   );
 };

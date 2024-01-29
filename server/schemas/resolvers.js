@@ -160,7 +160,7 @@ const resolvers = {
 
       return { session: session.id };
     },
-    async affirmationsByEmotion(parent, { emotion }, context) {
+    async affirmationsByEmotion(parent, { emotion }, context, info) {
       try {
         const affirmations = await Affirmation.find({ emotion: emotion });
         return affirmations;
@@ -168,7 +168,17 @@ const resolvers = {
         console.error('Error fetching affirmations by emotion:', error);
         throw new Error('Error fetching affirmations by emotion');
       }
-    }
+    },  
+    savedAffirmations: async (_, __, { user }) => {
+      if (!user) throw new Error("You must be logged in to see this.");
+
+      // Assuming 'User' is your user model and it has a 'savedAffirmations' field
+      const currentUser = await User.findById(user._id)
+        .populate('savedAffirmations') // Populate the savedAffirmations field
+        .exec();
+
+      return currentUser.savedAffirmations;
+    },  
   },
   Mutation: {
     addUser: async (parent, args) => {
