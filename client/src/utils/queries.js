@@ -1,5 +1,27 @@
 import { gql } from '@apollo/client';
 
+export const FETCH_AFFIRMATIONS_BY_EMOTION = gql`
+  query AffirmationsByEmotion($emotion: String!) {
+    affirmationsByEmotion(emotion: $emotion) {
+      _id
+      content
+      emotion
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+// Query to fetch saved affirmations for the logged-in user
+export const FETCH_SAVED_AFFIRMATIONS = gql`
+  query SavedAffirmations {
+    savedAffirmations {
+      _id
+      content
+    }
+  }
+`;
+
 export const QUERY_PRODUCTS = gql`
   query getProducts($category: ID) {
     products(category: $category) {

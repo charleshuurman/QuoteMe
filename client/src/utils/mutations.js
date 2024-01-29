@@ -11,6 +11,35 @@ export const LOGIN = gql`
   }
 `;
 
+
+// Mutation to save an affirmation
+export const SAVE_AFFIRMATION = gql`
+  mutation SaveAffirmation($userId: ID!, $affirmationId: ID!) {
+    saveAffirmation(userId: $userId, affirmationId: $affirmationId) {
+      _id
+      savedAffirmations {
+        _id
+        content
+        emotion
+      }
+    }
+  }
+`;
+
+// Mutation to unsave an affirmation
+export const UNSAVE_AFFIRMATION = gql`
+  mutation UnsaveAffirmation($userId: ID!, $affirmationId: ID!) {
+    unsaveAffirmation(userId: $userId, affirmationId: $affirmationId) {
+      _id
+      savedAffirmations {
+        _id
+        content
+        emotion 
+      }
+    }
+  }
+`;
+
 export const ADD_ORDER = gql`
   mutation addOrder($products: [ID]!) {
     addOrder(products: $products) {

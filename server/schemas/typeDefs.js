@@ -5,7 +5,12 @@ const typeDefs = `
     commentAuthor: String
     createdAt: String
   }
-
+  
+  type Affirmation {
+    _id: ID!
+    content: String!
+    emotion: String!
+  }
   type Quote {
     _id: ID
     content: String
@@ -56,6 +61,7 @@ const typeDefs = `
     userName: String
     email: String
     quotes: [Quote]
+    savedAffirmations: [Affirmation]!
     friends: [User]
     tier: Int
     orders: [Order]
@@ -76,7 +82,8 @@ const typeDefs = `
     product(_id: ID!): Product
     order(_id: ID!): Order
     checkout(products: [ID]!): Checkout
-
+    savedAffirmations: [Affirmation]
+    affirmationsByEmotion(emotion: String!): [Affirmation]
     user: User
     getMyQuotes: [Quote]
     allquotes: [Quote]
@@ -105,6 +112,8 @@ const typeDefs = `
     setPublic(quoteId: ID!): Quote
     createComment(quoteId: ID!, commentText: String!): Quote
     deleteComment(quoteId: ID!, commentId: ID!): Quote
+    saveAffirmation(affirmationId: ID!): User
+    unsaveAffirmation(affirmationId: ID!): User
   }
 `;
 

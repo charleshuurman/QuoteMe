@@ -46,6 +46,10 @@ const userSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
   }],
+  savedAffirmations: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Affirmation'
+  }],
   orders: [Order.schema]
 });
 

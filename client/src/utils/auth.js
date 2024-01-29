@@ -4,6 +4,18 @@ class AuthService {
   getProfile() {
     return decode(this.getToken());
   }
+  getUserId() {
+    const token = this.getToken();
+    if (!token) return null; // Return null if there's no token
+    
+    try {
+      const decoded = decode(token);
+      return decoded.user._id; // Adjust this path based on the actual structure of your token
+    } catch (err) {
+      console.error('Error decoding token:', err);
+      return null;
+    }
+  }
 
   loggedIn() {
     // Checks if there is a saved token and it's still valid

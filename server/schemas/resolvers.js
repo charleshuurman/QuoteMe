@@ -1,4 +1,4 @@
-const { User, Product, Category, Order, Quote } = require('../models');
+const { User, Product, Category, Order, Quote, Affirmation } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 const { UserNotFoundError, QuoteNotFoundError } = require('../utils/errors.js');
 const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
@@ -159,6 +159,15 @@ const resolvers = {
       });
 
       return { session: session.id };
+    },
+    async affirmationsByEmotion(parent, { emotion }, context) {
+      try {
+        const affirmations = await Affirmation.find({ emotion: emotion });
+        return affirmations;
+      } catch (error) {
+        console.error('Error fetching affirmations by emotion:', error);
+        throw new Error('Error fetching affirmations by emotion');
+      }
     }
   },
   Mutation: {
@@ -208,6 +217,56 @@ const resolvers = {
 
       return { token, user };
     },
+    async saveAffirmation(parent, { affirmationId }, context) {
+      if (!context.user) {
+        throw new Error('Not authenticated or unauthorized action');
+      }
+    
+      try {
+        const user = await User.findById(context.user._id);
+        if (!user) {
+          throw new Error('User not found');
+        }
+    
+        // Use $addToSet to avoid duplicates
+        const updatedUser = await User.findByIdAndUpdate(
+          context.user._id,
+          { $addToSet: { savedAffirmations: affirmationId } },
+          { new: true } // Return the updated document
+        );
+    
+        return updatedUser;
+      } catch (error) {
+        console.error('Error saving affirmation:', error);
+        throw new Error('Error saving affirmation');
+      }
+    },
+    
+    async unsaveAffirmation(parent, { affirmationId }, context) {
+      if (!context.user) {
+        throw new Error('Not authenticated or unauthorized action');
+      }
+    
+      try {
+        const user = await User.findById(context.user._id);
+        if (!user) {
+          throw new Error('User not found');
+        }
+    
+        // Use Mongoose update to pull the affirmation from savedAffirmations
+        const updatedUser = await User.findByIdAndUpdate(
+          context.user._id,
+          { $pull: { savedAffirmations: affirmationId } },
+          { new: true } // Return the updated document
+        );
+    
+        return updatedUser;
+      } catch (error) {
+        console.error('Error unsaving affirmation:', error);
+        throw new Error('Error unsaving affirmation');
+      }
+    },  
+    
 
     // TODO: populate  createQuote, deleteQuote, updateQuote, likeQuote, createComment
 
