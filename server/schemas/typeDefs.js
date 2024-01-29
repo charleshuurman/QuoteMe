@@ -110,6 +110,8 @@ const typeDefs = `
     deleteQuote(_id: ID!): Quote
     likeQuote(quoteId: ID!): Quote
     unlikeQuote(quoteId: ID!): Quote
+    addReaction(quoteId: ID!, reactionText: String!): Quote
+    delReaction(quoteId: ID!, reactionText: String!): Quote
     setPrivate(quoteId: ID!): Quote
     setPublic(quoteId: ID!): Quote
     createComment(quoteId: ID!, commentText: String!): Quote

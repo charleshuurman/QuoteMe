@@ -193,3 +193,51 @@ export const SET_PRIVATE = gql`
     }
   }
 `;
+
+export const ADD_REACTION = gql`
+  mutation mut0006($quoteId: ID!, $reactionText: String!) {
+    addReaction(quoteId: $quoteId, reactionText: $reactionText) {
+      _id
+      content
+      emotion
+      isPrivate
+      isGenerated
+      imageUrl
+      createdAt
+      userName
+      reactions {
+        userName
+        reactionBody
+      }
+      comments {
+        commentText
+        commentAuthor
+        createdAt
+      }
+    }
+  }
+`;
+
+export const DEL_REACTION = gql`
+  mutation mut0007($quoteId: ID!, $reactionText: String!) {
+    delReaction(quoteId: $quoteId, reactionText: $reactionText) {
+      _id
+      content
+      emotion
+      isPrivate
+      isGenerated
+      imageUrl
+      createdAt
+      userName
+      reactions {
+        userName
+        reactionBody
+      }
+      comments {
+        commentText
+        commentAuthor
+        createdAt
+      }
+    }
+  }
+`;

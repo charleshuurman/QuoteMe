@@ -11,4 +11,9 @@ module.exports = {
       code: 'QUOTENOTFOUND',
     },
   }),
+  UserNotOwnerError: new GraphQLError('User is not owner of quote.', {
+    extensions: {
+      code: 'NOTOWNER',
+    },
+  }),
 };
