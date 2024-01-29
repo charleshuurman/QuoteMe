@@ -7,9 +7,11 @@ const typeDefs = `
   }
   
   type Affirmation {
-    _id: ID!
-    content: String!
-    emotion: String!
+    _id: ID
+    content: String
+    emotion: String
+    createdAt: String
+    updatedAt: String
   }
   type Quote {
     _id: ID

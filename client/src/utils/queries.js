@@ -5,8 +5,8 @@ export const FETCH_AFFIRMATIONS_BY_EMOTION = gql`
     affirmationsByEmotion(emotion: $emotion) {
       _id
       content
-      emotion
       createdAt
+      emotion
       updatedAt
     }
   }
@@ -18,6 +18,9 @@ export const FETCH_SAVED_AFFIRMATIONS = gql`
     savedAffirmations {
       _id
       content
+      createdAt
+      emotion
+      updatedAt
     }
   }
 `;
