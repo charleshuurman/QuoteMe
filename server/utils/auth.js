@@ -4,6 +4,9 @@ const jwt = require('jsonwebtoken');
 const secret = 'project3group10secret';
 const expiration = '2h';
 
+// Note: the weakness of this JWT implementation is when the db is reseeded, the old user token seems to still be running in React.
+// There needs to be a faster way to force a user to relogin if the database is reseeded and users are shuffled, although this seems only important for development. In production users might want to keep their state information despite databases being reloaded.
+
 module.exports = {
   AuthenticationError: new GraphQLError('Could not authenticate user.', {
     extensions: {

@@ -224,25 +224,26 @@ export const QUERY_GET_PUBLIC_QUOTES = gql`
   }
 `;
 
-export const QUERY_GET_PRIVATE_QUOTES = gql`
-  {
-    privateQuotes {
-        _id
-        content
-        createdAt
-        emotion
-        isPrivate
-        isGenerated
-        userName
-        reactions {
-          reactionBody
-          userName
-          reactionId
-          createdAt
-        }
-    }
-  }
-`;
+// Disable getting private quotes.  Use getMyQuotes instead
+// export const QUERY_GET_PRIVATE_QUOTES = gql`
+//   {
+//     privateQuotes {
+//         _id
+//         content
+//         createdAt
+//         emotion
+//         isPrivate
+//         isGenerated
+//         userName
+//         reactions {
+//           reactionBody
+//           userName
+//           reactionId
+//           createdAt
+//         }
+//     }
+//   }
+// `;
 
 export const QUERY_SINGLE_USER_BY_NAME = gql`
 query singleUser($userName: String!) {

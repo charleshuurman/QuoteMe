@@ -1447,8 +1447,20 @@ db.once('open', async () => {
 
   console.log('products seeded');
 
+  console.log('creating smith');
+  await User.create({
+    firstName: 'smith',
+    lastName: 'smith',
+    userName: 'smith',
+    email: 'smith@hotmail.com',
+    password: 'smith',
+    friends: [],
+    quotes: [],
+    orders: []
+  });
+
   console.log('creating pamela');
-  let result = await User.create({
+  await User.create({
     firstName: 'Pamela',
     lastName: 'Washington',
     userName: 'p.washington',

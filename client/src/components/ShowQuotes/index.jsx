@@ -101,7 +101,7 @@ const ShowQuotes = (props) => {
       const { data } = await delReaction({
         variables: { quoteId: event.target.dataset.id, reactionText: event.target.dataset.reactiontext },
       });
-      console.log("deleted reaction:", data);
+      // console.log("deleted reaction:", data);
       window.location.reload();
     } catch (err) {
       console.error(err);

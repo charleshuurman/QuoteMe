@@ -2,6 +2,8 @@ const { User, Product, Category, Order, Quote, Affirmation } = require('../model
 const { signToken, AuthenticationError } = require('../utils/auth');
 const { UserNotFoundError, QuoteNotFoundError, UserNotOwnerError } = require('../utils/errors.js');
 const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+const { llmGetFriendResponse } = require ('../utils/llm.js');
+
 
 const resolvers = {
   Query: {
@@ -38,10 +40,18 @@ const resolvers = {
       return await Quote.find({ isPrivate: false });
     },
 
-    privateQuotes: async (parent, args, context) => {
-      return await Quote.find({ isPrivate: true });
-    },
+    // Comment out privateQuotes for security - other users should not be able to see private quotes. Use getMyQuotes instead.
+    // privateQuotes: async (parent, args, context) => {
+    //   return await Quote.find({ isPrivate: true });
+    // },
 
+    /**
+     * getMyQuotes - retrieve all quote objects for the logged-in user. User must have an active and valid token.
+     * @param {*} parent 
+     * @param {*} args 
+     * @param {*} context --- authentication context under user contains the token information (JWT)
+     * @returns 
+     */
     getMyQuotes: async (parent, args, context) => {
       console.log("User ", context.user);
       if (context.user) {
@@ -50,6 +60,47 @@ const resolvers = {
         return await Quote.find({ userName: user.userName });
       }
 
+      throw AuthenticationError;
+    },
+
+// Example LLM output:
+// Utils openai call return:  {
+//   index: 0,
+//   message: {
+//     role: 'assistant',
+//     content: `{"emotion": "amusement", "affirmation": "That sounds like a fun and interesting experience! It's always fascinating to observe unusual phenomena like 
+// zing bubbles. As for getting on the teacher's bad side, we all have our moments. Don't worry, it happens to everyone. Just keep being yourself and things will get better!"}`
+//   },
+//   logprobs: null,
+//   finish_reason: 'stop'
+// }
+
+    /**
+     * analyzeQuote - get an llm chatbot personality to respond to the user's Quote
+     * @param {*} parent 
+     * @param {*} param1 
+     * @param {*} context 
+     * @returns a Quote object, where the llm chatbot response is in the new quote object content
+     */
+    analyzeQuote: async (parent, { quoteId }, context) => {
+      console.log('analyzeQuote', quoteId);
+      if (context.user) {
+        const quoteToAnalyze = await Quote.findById(quoteId);
+        // Ensure only the onwer can update the quote
+        if (quoteToAnalyze.userName === context.user.userName) {
+          // console.log("getting analysis on:", quoteToAnalyze.content);
+          let result = await llmGetFriendResponse(quoteToAnalyze.content);
+          // console.log("llmGetFriendResponse result:", result.message.content);
+          quoteToAnalyze.isGenerated = true;
+          quoteToAnalyze.isPrivate = true;
+          quoteToAnalyze.emotion = JSON.parse(result.message.content).emotion;
+          quoteToAnalyze.content = JSON.parse(result.message.content).affirmation;
+          console.log("quoteToAnalyze:", quoteToAnalyze);
+          return quoteToAnalyze;
+        } else {
+          throw UserNotOwnerError;
+        };
+      };
       throw AuthenticationError;
     },
 
@@ -101,6 +152,8 @@ const resolvers = {
       console.log("users");
       return User.find().populate(['quotes', 'friends']);
     },
+
+    // TODO: Need to add Auth context guardrails for the following resolvers. As of now, just about anyone can grab the quotes in the database, including private ones.
     quotes: async (parent, { userName }) => {
       const params = userName ? { userName: userName } : {};
       return Quote.find(params).sort({ createdAt: -1 });
@@ -112,6 +165,7 @@ const resolvers = {
       return Quote.find().populate(['comments', 'reactions']);
     },
 
+    // The following is for the stripe shop implementation
     order: async (parent, { _id }, context) => {
       if (context.user) {
         const user = await User.findById(context.user._id).populate({
@@ -278,6 +332,8 @@ const resolvers = {
     },
 
 
+    // The following resolvers manage the Quote posts from the user.
+    // createQuote, deleteQuote works and tested
     // TODO: populate  updateQuote, likeQuote, createComment
 
     // Create a Quote
@@ -371,6 +427,7 @@ const resolvers = {
     },
 
     // TODO: likeQuote keeps adding likes indefinitely, while unlikeQuote removes everything all at once. Need to fix these behaviors.
+    // Kept here to be referenced by some ongoing code. Use addReaction instead to implement reactions to Quotes (including likes).
     likeQuote: async (parent, { quoteId }, context) => {
       console.log('likeQuote');
 
@@ -420,6 +477,7 @@ const resolvers = {
       };
     },
 
+    // addReaction will add reactions into a user's Quote object, and deleteReaction will delete it.
     // TODO: addReaction will keep adding likes indefinitely, while unlikeQuote removes everything all at once. Need to fix these behaviors.
     addReaction: async (parent, { quoteId, reactionText }, context) => {
       console.log('addReaction');
@@ -498,6 +556,7 @@ const resolvers = {
       throw AuthenticationError;
     },
 
+    // The following is an implementation of the comment system so users can initiate discussions in response to other users's Quotes
     createComment: async (parent, { quoteId, commentText }, context) => {
       console.log('createComment');
 

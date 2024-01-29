@@ -92,7 +92,7 @@ const typeDefs = `
     listQuotes: [Quote]
     users: [User]
     publicQuotes: [Quote]
-    privateQuotes: [Quote]
+    analyzeQuote(quoteId: ID!): Quote
     singleUserByUsrName (userName: String!): User
     singleUserById (userId: ID!): User
     quotes (userName: String!): [Quote]
