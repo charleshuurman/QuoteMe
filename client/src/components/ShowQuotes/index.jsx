@@ -1,6 +1,7 @@
 import Auth from "../../utils/auth";
 import { useMutation } from "@apollo/client";
-import { SET_PUBLIC, SET_PRIVATE, DELETE_QUOTE } from "../../utils/mutations";
+import { SET_PUBLIC, SET_PRIVATE, DELETE_QUOTE, ADD_REACTION, DEL_REACTION } from "../../utils/mutations";
+import { useEffect } from "react";
 
 /**
  * ShowQuotes
@@ -15,6 +16,9 @@ const ShowQuotes = (props) => {
   const [setPublic, { setPublicError }] = useMutation(SET_PUBLIC);
   const [setPrivate, { setPrivateError }] = useMutation(SET_PRIVATE);
   const [deleteQuote, { deleteQuoteError }] = useMutation(DELETE_QUOTE);
+
+  const [addReaction, { addReactionError }] = useMutation(ADD_REACTION);
+  const [delReaction, { delReactionError }] = useMutation(DEL_REACTION);
 
   const deleteButton = async (event) => {
     event.preventDefault();
@@ -65,6 +69,40 @@ const ShowQuotes = (props) => {
     }
   };
 
+  const addReactionButton = async (event) => {
+    event.preventDefault();
+    try {
+      console.log(`Adding reaction:`, event.target.dataset.id);
+
+      event.target.textContent = "Adding reaction...";
+
+      const { data } = await addReaction({
+        variables: { quoteId: event.target.dataset.id, reactionText: "like" },
+      });
+      console.log("added reaction:", data);
+      window.location.reload();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const delReactionButton = async (event) => {
+    event.preventDefault();
+    try {
+      console.log(`Deleting reaction:`, event.target.dataset.id);
+
+      event.target.textContent = "Deleting reaction...";
+
+      const { data } = await delReaction({
+        variables: { quoteId: event.target.dataset.id, reactionText: "like" },
+      });
+      console.log("deleted reaction:", data);
+      window.location.reload();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   // Check if React passes our prop or not
   // let quotesArray;
   // if (props.hasOwnProperty("quotesArray")) {
@@ -77,6 +115,35 @@ const ShowQuotes = (props) => {
   const quotesArray = props?.quotesArray || [];
 
   let quotesArrayLength = quotesArray.length;
+
+  // Render all reactions as a row of badges with the number of reactions listed on the side
+  // Convert straight reactions element to an object with reactions as keys and an array of users
+  // ie. { "like": [ "roxie", "kendrick", "alice" ],
+  //       "cry": [ "kendrick" ] }
+  function ReactionsList(prop) {
+    let x = {};
+    const userName = Auth.getProfile().data.userName;
+    prop.reactionsItem.forEach((elem) => {
+      if (!x.hasOwnProperty(elem.reactionBody)) {
+        x[elem.reactionBody] = [];
+      }
+      x[elem.reactionBody].push(` ${elem.userName} `);
+    });
+    let y = Object.keys(x);
+    return (
+      <>
+        {y.map((elem, index) => {
+          return (
+            <button key={index} className="badge badge-primary tooltip" onClick={delReactionButton} data-tip={x[elem]} data-reactionText={elem}>
+              {elem}
+              {/* render the number of each reaction if greater than one */}
+              <span className="text-xs">{x[elem].length > 1 ? ` (${x[elem].length})` : ""}</span>
+            </button>
+          );
+        })}
+      </>
+    );
+  }
 
   return (
     <div className="border rounded-box">
@@ -103,18 +170,13 @@ const ShowQuotes = (props) => {
                   )}
                   <span className="text-xs">{elem.createdAt}</span>
                   <h3 className="text-2xl">{elem.content}</h3>
-                  <div className="gap-2 flex flex-start">
-                    {elem.reactions.map((reactionelem) => {
-                      return (
-                        <div
-                          key={reactionelem.reactionId}
-                          className="border rounded-box tooltip text-xs font-bold p-1 badge badge-primary justify-end"
-                          data-tip={reactionelem.userName}
-                        >
-                          {reactionelem.reactionBody}
-                        </div>
-                      );
-                    })}
+                  <div className="flex flex-row justify-between">
+                    <div className="gap-2 flex flex-start">
+                      <ReactionsList reactionsItem={elem.reactions} />
+                    </div>
+                    <button className="badge badge-secondary" data-id={elem._id} onClick={addReactionButton}>
+                      like
+                    </button>
                   </div>
                   {/* render buttons on the user's own posts */}
                   {elem.userName === userName ? (

@@ -1,6 +1,6 @@
 const { User, Product, Category, Order, Quote, Affirmation } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
-const { UserNotFoundError, QuoteNotFoundError } = require('../utils/errors.js');
+const { UserNotFoundError, QuoteNotFoundError, UserNotOwnerError } = require('../utils/errors.js');
 const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
 
 const resolvers = {
@@ -231,52 +231,52 @@ const resolvers = {
       if (!context.user) {
         throw new Error('Not authenticated or unauthorized action');
       }
-    
+
       try {
         const user = await User.findById(context.user._id);
         if (!user) {
           throw new Error('User not found');
         }
-    
+
         // Use $addToSet to avoid duplicates
         const updatedUser = await User.findByIdAndUpdate(
           context.user._id,
           { $addToSet: { savedAffirmations: affirmationId } },
           { new: true } // Return the updated document
         );
-    
+
         return updatedUser;
       } catch (error) {
         console.error('Error saving affirmation:', error);
         throw new Error('Error saving affirmation');
       }
     },
-    
+
     async unsaveAffirmation(parent, { affirmationId }, context) {
       if (!context.user) {
         throw new Error('Not authenticated or unauthorized action');
       }
-    
+
       try {
         const user = await User.findById(context.user._id);
         if (!user) {
           throw new Error('User not found');
         }
-    
+
         // Use Mongoose update to pull the affirmation from savedAffirmations
         const updatedUser = await User.findByIdAndUpdate(
           context.user._id,
           { $pull: { savedAffirmations: affirmationId } },
           { new: true } // Return the updated document
         );
-    
+
         return updatedUser;
       } catch (error) {
         console.error('Error unsaving affirmation:', error);
         throw new Error('Error unsaving affirmation');
       }
-    },  
-    
+    },
+
 
     // TODO: populate  createQuote, deleteQuote, updateQuote, likeQuote, createComment
 
@@ -420,10 +420,66 @@ const resolvers = {
       };
     },
 
+    // TODO: addReaction will keep adding likes indefinitely, while unlikeQuote removes everything all at once. Need to fix these behaviors.
+    addReaction: async (parent, { quoteId, reactionText }, context) => {
+      console.log('addReaction');
+
+      // Check if the user is logged in via the context
+      if (context.user) {
+
+        const quoteToUpdate = await Quote.findById(quoteId).populate('reactions').exec();
+
+        // Check if we found the quote specified by the Quote's _id
+        if (quoteToUpdate) {
+          console.log('Found quote to add a reaction to:', quoteToUpdate);
+
+          const updatedQuote = await Quote.findByIdAndUpdate(quoteId,
+            { $addToSet: { reactions: { userName: context.user.userName, reactionBody: reactionText } } },
+            { runValidators: true, new: true }).populate('reactions');
+          return updatedQuote;
+        } else {
+          console.log('Cannot like: No such quote _id exists');
+          throw QuoteNotFoundError;
+        }
+      } else {
+        throw AuthenticationError;
+      };
+    },
+
+    delReaction: async (parent, { quoteId, reactionText }, context) => {
+      console.log('delete reaction');
+
+      // Check if the user is logged in via the context
+      if (context.user) {
+        const quoteToUpdate = await Quote.findById(quoteId);
+
+        // Check if we found the quote specified by the Quote's _id
+        if (quoteToUpdate) {
+          console.log('Found quote to delete reaction from:', quoteToUpdate);
+
+          const updatedQuote = await Quote.findByIdAndUpdate(quoteId,
+            { $pull: { reactions: { userName: context.user.userName, reactionBody: reactionText } } },
+            { runValidators: true, new: true });
+          return updatedQuote;
+        } else {
+          console.log('Cannot like: No such quote _id exists');
+          throw QuoteNotFoundError;
+        }
+      } else {
+        throw AuthenticationError;
+      };
+    },
+
     setPrivate: async (parent, { quoteId }, context) => {
       console.log('setPrivate', quoteId);
       if (context.user) {
-        return await Quote.findByIdAndUpdate(quoteId, { "isPrivate": true }, { new: true });
+        const quoteToUpdate = await Quote.findById(quoteId);
+        // Ensure only the onwer can update the quote
+        if (quoteToUpdate.userName === context.user.userName) {
+          return await Quote.findByIdAndUpdate(quoteId, { "isPrivate": true }, { new: true });
+        } else {
+          throw UserNotOwnerError;
+        };
       };
       throw AuthenticationError;
     },
@@ -431,7 +487,13 @@ const resolvers = {
     setPublic: async (parent, { quoteId }, context) => {
       console.log('setPublic', quoteId);
       if (context.user) {
-        return await Quote.findByIdAndUpdate(quoteId, { "isPrivate": false }, { new: true });
+        const quoteToUpdate = await Quote.findById(quoteId);
+        // Ensure only the onwer can update the quote
+        if (quoteToUpdate.userName === context.user.userName) {
+          return await Quote.findByIdAndUpdate(quoteId, { "isPrivate": false }, { new: true });
+        } else {
+          throw UserNotOwnerError;
+        };
       };
       throw AuthenticationError;
     },
