@@ -1,6 +1,7 @@
 import Auth from "../../utils/auth";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery, useLazyQuery } from "@apollo/client";
 import { SET_PUBLIC, SET_PRIVATE, DELETE_QUOTE, ADD_REACTION, DEL_REACTION } from "../../utils/mutations";
+import { QUERY_ANALYZE_QUOTE } from "../../utils/queries";
 import { useEffect } from "react";
 
 /**
@@ -19,6 +20,29 @@ const ShowQuotes = (props) => {
 
   const [addReaction, { addReactionError }] = useMutation(ADD_REACTION);
   const [delReaction, { delReactionError }] = useMutation(DEL_REACTION);
+
+  //========
+  function QuoteAnalyzer(props) {
+    const [analyzeQuote, { loading, error, data }] = useLazyQuery(QUERY_ANALYZE_QUOTE, {
+      variables: { quoteId: props.quoteId },
+    });
+    if (loading) return <p>Loading ...</p>;
+    if (error) return `Error! ${error}`;
+    return (
+      <div>
+        {data?.analyzeQuote && (
+          <div class="chat chat-start">
+            <div className="badge">{data.analyzeQuote.emotion}</div>
+            <div className="chat-bubble">{data.analyzeQuote.content}</div>
+          </div>
+        )}
+        <button className="btn btn-primary" onClick={() => analyzeQuote({ variables: { quoteId: props.quoteId } })}>
+          seek feedback
+        </button>
+      </div>
+    );
+  }
+  //=======
 
   const deleteButton = async (event) => {
     event.preventDefault();
@@ -101,7 +125,7 @@ const ShowQuotes = (props) => {
       const { data } = await delReaction({
         variables: { quoteId: event.target.dataset.id, reactionText: event.target.dataset.reactiontext },
       });
-      console.log("deleted reaction:", data);
+      // console.log("deleted reaction:", data);
       window.location.reload();
     } catch (err) {
       console.error(err);
@@ -197,42 +221,47 @@ const ShowQuotes = (props) => {
                     <div className="gap-2 flex flex-start">
                       <ReactionsList reactionsItem={elem.reactions} quoteId={elem._id} />
                     </div>
-                    <button className="badge badge-secondary" data-id={elem._id} onClick={addReactionButton}>
-                      like
-                    </button>
+                    <div>
+                      <button className="badge badge-secondary" data-id={elem._id} onClick={addReactionButton}>
+                        like
+                      </button>
+                    </div>
                   </div>
                   {/* render buttons on the user's own posts */}
                   {elem.userName === userName ? (
-                    <div className="gap-2 flex flex-end justify-end">
-                      {/* if the quote is private, give the option to set it to public, and vice versa */}
-                      {elem.isPrivate ? (
+                    <>
+                      <div className="gap-2 flex flex-end justify-end">
+                        {/* if the quote is private, give the option to set it to public, and vice versa */}
+                        {elem.isPrivate ? (
+                          <button
+                            onClick={(event) => setPublicButton(event)}
+                            className="btn btn-warning tooltip"
+                            data-id={elem._id}
+                            data-tip="Turn this quote to public"
+                          >
+                            Share to Public
+                          </button>
+                        ) : (
+                          <button
+                            onClick={setPrivateButton}
+                            className="btn btn-warning tooltip"
+                            data-id={elem._id}
+                            data-tip="Turn this quote to private"
+                          >
+                            Set to Private
+                          </button>
+                        )}
                         <button
-                          onClick={(event) => setPublicButton(event)}
+                          onClick={deleteButton}
                           className="btn btn-warning tooltip"
                           data-id={elem._id}
-                          data-tip="Turn this quote to public"
+                          data-tip="Delete this quote"
                         >
-                          Share to Public
+                          🗑️
                         </button>
-                      ) : (
-                        <button
-                          onClick={setPrivateButton}
-                          className="btn btn-warning tooltip"
-                          data-id={elem._id}
-                          data-tip="Turn this quote to private"
-                        >
-                          Set to Private
-                        </button>
-                      )}
-                      <button
-                        onClick={deleteButton}
-                        className="btn btn-warning tooltip"
-                        data-id={elem._id}
-                        data-tip="Delete this quote"
-                      >
-                        🗑️
-                      </button>
-                    </div>
+                      </div>
+                      <QuoteAnalyzer quoteId={elem._id} />
+                    </>
                   ) : (
                     <></>
                   )}
