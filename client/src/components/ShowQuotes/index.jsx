@@ -89,12 +89,17 @@ const ShowQuotes = (props) => {
   const delReactionButton = async (event) => {
     event.preventDefault();
     try {
-      console.log(`Deleting reaction:`, event.target.dataset.id);
+      console.log(
+        `Deleting reaction:`,
+        event.target.dataset,
+        event.target.dataset.id,
+        event.target.dataset.reactiontext
+      );
 
       event.target.textContent = "Deleting reaction...";
 
       const { data } = await delReaction({
-        variables: { quoteId: event.target.dataset.id, reactionText: "like" },
+        variables: { quoteId: event.target.dataset.id, reactionText: event.target.dataset.reactiontext },
       });
       console.log("deleted reaction:", data);
       window.location.reload();
@@ -134,11 +139,29 @@ const ShowQuotes = (props) => {
       <>
         {y.map((elem, index) => {
           return (
-            <button key={index} className="badge badge-primary tooltip" onClick={delReactionButton} data-tip={x[elem]} data-reactionText={elem}>
-              {elem}
-              {/* render the number of each reaction if greater than one */}
-              <span className="text-xs">{x[elem].length > 1 ? ` (${x[elem].length})` : ""}</span>
-            </button>
+            <>
+              {/* Get an onclick listener to delete the reaction if any of it is from our user */}
+              {x[elem].includes(` ${userName} `) ? (
+                <button
+                  key={index}
+                  className="badge badge-primary tooltip"
+                  data-tip={x[elem]}
+                  data-id={prop.quoteId}
+                  data-reactiontext={elem}
+                  onClick={delReactionButton}
+                >
+                  {elem}
+                  {/* render the number of each reaction if greater than one */}
+                  <span className="text-xs">{x[elem].length > 1 ? ` (${x[elem].length})` : ""}</span>
+                </button>
+              ) : (
+                <button key={index} className="badge badge-primary tooltip" data-tip={x[elem]}>
+                  {elem}
+                  {/* render the number of each reaction if greater than one */}
+                  <span className="text-xs">{x[elem].length > 1 ? ` (${x[elem].length})` : ""}</span>
+                </button>
+              )}
+            </>
           );
         })}
       </>
@@ -172,7 +195,7 @@ const ShowQuotes = (props) => {
                   <h3 className="text-2xl">{elem.content}</h3>
                   <div className="flex flex-row justify-between">
                     <div className="gap-2 flex flex-start">
-                      <ReactionsList reactionsItem={elem.reactions} />
+                      <ReactionsList reactionsItem={elem.reactions} quoteId={elem._id} />
                     </div>
                     <button className="badge badge-secondary" data-id={elem._id} onClick={addReactionButton}>
                       like

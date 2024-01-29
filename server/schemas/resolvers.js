@@ -278,7 +278,7 @@ const resolvers = {
     },
 
 
-    // TODO: populate  createQuote, deleteQuote, updateQuote, likeQuote, createComment
+    // TODO: populate  updateQuote, likeQuote, createComment
 
     // Create a Quote
     createQuote: async (parent, args, context) => {
