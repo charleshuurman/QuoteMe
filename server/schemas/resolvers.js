@@ -95,7 +95,8 @@ const resolvers = {
           quoteToAnalyze.isPrivate = true;
           quoteToAnalyze.emotion = JSON.parse(result.message.content).emotion;
           quoteToAnalyze.content = JSON.parse(result.message.content).affirmation;
-          console.log("quoteToAnalyze:", quoteToAnalyze);
+          quoteToAnalyze.createdAt = Date.now;
+          console.log("result:", quoteToAnalyze);
           return quoteToAnalyze;
         } else {
           throw UserNotOwnerError;
