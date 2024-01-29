@@ -14,8 +14,8 @@ export const LOGIN = gql`
 
 // Mutation to save an affirmation
 export const SAVE_AFFIRMATION = gql`
-  mutation SaveAffirmation($userId: ID!, $affirmationId: ID!) {
-    saveAffirmation(userId: $userId, affirmationId: $affirmationId) {
+  mutation SaveAffirmation($affirmationId: ID!) {
+    saveAffirmation(affirmationId: $affirmationId) {
       _id
       savedAffirmations {
         _id
@@ -27,6 +27,7 @@ export const SAVE_AFFIRMATION = gql`
     }
   }
 `;
+
 
 // Mutation to unsave an affirmation
 export const UNSAVE_AFFIRMATION = gql`
