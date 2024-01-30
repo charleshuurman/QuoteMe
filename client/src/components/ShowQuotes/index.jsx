@@ -101,6 +101,14 @@ const ShowQuotes = (props) => {
     );
   }
 
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return `Error! ${error.message}`;
+
+  // return (
+  //   <div>
+  //     {data?.analyzeQuote && (
+  if (!props?.quotesArray) return <p> Loading... </p>;
+
   // Start of the JSX returned by the component
   return (
     <div className="border rounded-box">
@@ -120,7 +128,7 @@ const ShowQuotes = (props) => {
               <h3 className="text-lg font-bold">{quote.emotion}</h3>
               <p className="mb-2">{quote.content}</p>
               {/* Other elements like reactions, buttons, etc. */}
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center gap-2">
                 <ReactionsList reactionsItem={quote.reactions} quoteId={quote._id} />
                 <button className="btn btn-primary" data-id={quote._id} onClick={addReactionButton}>
                   Like
@@ -155,6 +163,8 @@ const ShowQuotes = (props) => {
                   </div>
                 )}
               </div>
+              {/* Quote Analyzer asks an AI to relate as a friend to the user's post */}
+              {quote.userName === userName && ( <QuoteAnalyzer quoteId={quote._id} /> )}
             </div>
           </li>
         ))}
