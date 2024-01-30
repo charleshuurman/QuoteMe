@@ -28,7 +28,7 @@ function Nav() {
     if (Auth.loggedIn()) {
       // Logged in navigation items
       return (
-        <ul className="primary bg-base-200 flex flex-row menu menu-horizontal lg:menu-horizontal rounded-box">
+        <ul className="primary bg-base-200 max-lg:text-lg flex flex-row menu menu-horizontal lg:menu-horizontal rounded-box">
           <li>
             <Link to="/">
               <svg
@@ -111,84 +111,6 @@ function Nav() {
           </li>
           <li>
             <ThemeList />
-            {/* <details>
-              <summary>
-                <a className="mx-1 flex">
-                  <svg
-                    className="w-6 h-6 text-gray-800 dark:text-white"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 5V3m0 18v-2M7 7 5.7 5.7m12.8 12.8L17 17M5 12H3m18 0h-2M7 17l-1.4 1.4M18.4 5.6 17 7.1M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"
-                    />
-                  </svg>{" "}
-                  Theme
-                </a>
-              </summary>
-              <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow-2xl bg-base-300 rounded-box w-52">
-                <li>
-                  <input
-                    type="radio"
-                    name="theme-dropdown"
-                    className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-                    aria-label="Default"
-                    value="default"
-                  />
-                </li>
-                <li>
-                  <input
-                    type="radio"
-                    name="theme-dropdown"
-                    className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-                    aria-label="Dark"
-                    value="dark"
-                  />
-                </li>
-                <li>
-                  <input
-                    type="radio"
-                    name="theme-dropdown"
-                    className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-                    aria-label="Retro"
-                    value="retro"
-                  />
-                </li>
-                <li>
-                  <input
-                    type="radio"
-                    name="theme-dropdown"
-                    className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-                    aria-label="Cyberpunk"
-                    value="cyberpunk"
-                  />
-                </li>
-                <li>
-                  <input
-                    type="radio"
-                    name="theme-dropdown"
-                    className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-                    aria-label="Valentine"
-                    value="valentine"
-                  />
-                </li>
-                <li>
-                  <input
-                    type="radio"
-                    name="theme-dropdown"
-                    className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-                    aria-label="Aqua"
-                    value="aqua"
-                  />
-                </li>
-              </ul>
-            </details> */}
           </li>
           <li className="mx-1">
             {/* this is not using the Link component to logout or user and then refresh the application to the start */}
@@ -216,7 +138,10 @@ function Nav() {
     } else {
       // Logged out navigation items
       return (
-        <ul className="primary flex flex-row menu menu-vertical lg:menu-horizontal rounded-box">
+        <ul className="primary flex flex-row max-lg:text-lg menu menu-vertical lg:menu-horizontal rounded-box">
+          <li>
+            <ThemeList />
+          </li>
           <li>
             <Link to="/signup">Signup</Link>
           </li>
@@ -236,12 +161,12 @@ function Nav() {
         </Link>
         <button className="text-3xl md:hidden z-30" onClick={toggleMobileMenu}>
           {/* Hamburger Icon */}
-          <span className="block w-6 h-px bg-black mb-1"></span>
-          <span className="block w-6 h-px bg-black mb-1"></span>
-          <span className="block w-6 h-px bg-black"></span>
+          <span className="block w-6 h-px bg-primary mb-1"></span>
+          <span className="block w-6 h-px bg-primary mb-1"></span>
+          <span className="block w-6 h-px bg-primary"></span>
         </button>
         <nav className={`${isMobileMenuOpen ? 'flex' : 'hidden'
-          } md:flex flex-col md:flex-row items-center fixed md:static inset-x-0 top-0 p-8 md:p-0 bg-white md:bg-transparent bg-opacity-50 md:bg-opacity-100 z-20 transition-transform transform md:transform-none`}>
+          } md:flex flex-col md:flex-row items-center fixed md:static inset-x-0 top-0 p-8 md:p-0 bg-primary md:bg-transparent bg-opacity-50 md:bg-opacity-100 z-20 transition-transform transform md:transform-none`}>
           <ul className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8">
             {showNavigation()}
           </ul>
