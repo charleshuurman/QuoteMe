@@ -98,10 +98,6 @@ const PostQuote = (props) => {
             <button onClick={() => handleLikeQuote(post.id)}>Like</button>
             <button onClick={() => handlePostComment(post.id, "New comment")}>Comment</button>
             <ul>
-              {/* commented out comments for now and changed it to reactions
-                {post.comments.map((comment) => (
-                <li key={comment.id}>{comment.text}</li>
-              ))} */}
               {post.reactions ? (
                 post.reactions.map((reaction) => (
                   <li key={reaction.reactionId}>

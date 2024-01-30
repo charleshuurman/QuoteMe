@@ -238,9 +238,8 @@ function Nav() {
           <span className="block w-6 h-px bg-black mb-1"></span>
           <span className="block w-6 h-px bg-black"></span>
         </button>
-        <nav className={`${
-          isMobileMenuOpen ? 'flex' : 'hidden'
-        } md:flex flex-col md:flex-row items-center fixed md:static inset-x-0 top-0 p-8 md:p-0 bg-white md:bg-transparent bg-opacity-50 md:bg-opacity-100 z-20 transition-transform transform md:transform-none`}>
+        <nav className={`${isMobileMenuOpen ? 'flex' : 'hidden'
+          } md:flex flex-col md:flex-row items-center fixed md:static inset-x-0 top-0 p-8 md:p-0 bg-white md:bg-transparent bg-opacity-50 md:bg-opacity-100 z-20 transition-transform transform md:transform-none`}>
           <ul className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8">
             {showNavigation()}
           </ul>
