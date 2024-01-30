@@ -83,6 +83,10 @@ a:hover {
   text-decoration: underline;
 }
 
+.main-content {
+  padding-top: 70px; /* Adjust this value based on the height of your nav bar */
+}
+
 /* header {
   background: var(--primary);
 }
