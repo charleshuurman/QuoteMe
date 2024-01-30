@@ -22,7 +22,7 @@ const ShowQuotes = (props) => {
     if (error) return `Error! ${error.message}`;
 
     return (
-      <div>
+      <div className="flex max-lg:w-full max-lg:justify-center">
         {data?.analyzeQuote && (
           <div className="chat chat-start">
             <div className="badge">{data.analyzeQuote.emotion}</div>
@@ -85,7 +85,7 @@ const ShowQuotes = (props) => {
     }, {});
 
     return (
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 max-lg:my-3 max-lg:w-full max-lg:justify-center">
         {Object.entries(reactionCounts).map(([reaction, count]) => (
           <button
             key={reaction}

@@ -1,9 +1,9 @@
 function ThemeList() {
   // DaisyUI built-in themes from https://daisyui.com/docs/themes/
   const themes = [
+    "cupcake",
     "light",
     "dark",
-    "cupcake",
     "bumblebee",
     "emerald",
     "corporate",
