@@ -12,15 +12,11 @@ const Journal = () => {
 
   const userId = Auth.getProfile().data._id;
 
-  const { loading, data } = useQuery(QUERY_GET_MY_QUOTES, {
-    // variables: { userId },
-    // fetchPolicy: "no-cache",
-  });
+  const { loading, data } = useQuery(QUERY_GET_MY_QUOTES, {});
 
   // populate quoteData
   if (data) {
     quoteData = data.getMyQuotes;
-    // console.log("Journal quoteData:", quoteData);
   }
 
   let quoteDataLength;
