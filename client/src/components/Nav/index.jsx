@@ -154,7 +154,7 @@ function Nav() {
   }
 
   return (
-    <header className="bg-base-100 w-full">
+    <header className="bg-base-100 w-full fixed top-0 left-0 z-30">
       <div className="max-w-6xl mx-auto px-4 py-2 flex justify-between items-center">
         <Link to="/" className="text-2xl md:text-4xl font-bold">
           😀 QuoteMe

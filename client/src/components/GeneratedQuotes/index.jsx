@@ -6,19 +6,12 @@ import { useMutation } from "@apollo/client";
 import { CREATE_QUOTE } from "../../utils/mutations";
 import API from '../../utils/API';
 // import { SAVE_AFFIRMATION, UNSAVE_AFFIRMATION } from "../../utils/mutations";
-
 function SelectQuote({ quote, feeling, indexValue, image }) {
   const [createQuote, { data, loading, error }] = useMutation(CREATE_QUOTE);
 
-  // Define handleSaveQuote handler inside SelectQuote react component
   async function handleSaveQuote(event) {
     event.preventDefault();
     try {
-      console.log("createQuote request to server!");
-      console.log(quote);
-      console.log(feeling);
-      console.log(image);
-
       const response = await createQuote({
         variables: {
           content: quote,
@@ -28,30 +21,30 @@ function SelectQuote({ quote, feeling, indexValue, image }) {
           imageUrl: image,
         },
       });
-      console.log("Created quote: ", response.data, " loading: ", loading, " error: ", error);
     } catch (err) {
-      console.log("Error: ", err);
+      console.error("Error: ", err);
     }
   }
 
   return (
-    <div key={indexValue} className="bg-white p-4 shadow-md rounded-lg h-full">
-      <p className="text-lg">{quote}</p>
-      <figure className="min-h-full">
-        <img className="object-cover" src={image} alt="image" />
+    <div key={indexValue} className="bg-white p-4 shadow-md rounded-lg flex flex-col justify-between">
+      <p className="text-lg mb-4">{quote}</p>
+      <figure>
+        <img className="object-cover w-full h-32 md:h-48" src={image} alt="image" />
       </figure>
       {Auth.loggedIn() ? (
-        <button onClick={handleSaveQuote} className="badge badge-primary text-xs">
+        <button onClick={handleSaveQuote} className="badge badge-primary text-xs mt-4 self-end">
           {loading ? "Saving..." : "Save"}
         </button>
       ) : (
-        <a href="/Login" className="badge badge-primary text-xs">
+        <a href="/Login" className="badge badge-primary text-xs mt-4 self-end">
           Login to Save
         </a>
       )}
     </div>
   );
 }
+
 
 const GeneratedQuotes = ({ selectedEmotion, onBack }) => {
   const [randomQuotes, setRandomQuotes] = useState([]);
