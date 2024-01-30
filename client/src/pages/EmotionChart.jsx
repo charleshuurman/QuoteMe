@@ -152,7 +152,7 @@ function getSevenDayEmotion2(quoteData)
     const words = quote.createdAt.split(', ');
     const createdDate = words[0];
      const quoteDate = new Date(createdDate);
-//     console.log(i, quoteDate);
+     console.log(i, quoteDate);
 
      if (quoteDate <= sevenDayBefore)
      {
@@ -206,13 +206,13 @@ function trimEmptyData()
 
       if (isAllZero == true)
       {
-        console.log(i, arr, EmotionData[i].name);
+//        console.log(i, arr, EmotionData[i].name);
 
         EmotionData.splice(i, 1);        
       }
       else
       {
-        console.log(i, arr, EmotionData[i].name);        
+//        console.log(i, arr, EmotionData[i].name);        
       }
   }
 
@@ -273,7 +273,7 @@ const ChartOptions = {
 
 const EmotionChart = () => {
 
-  initializeEmotionData();
+//  initializeEmotionData();
 
   var quoteData;
 
@@ -288,17 +288,20 @@ const EmotionChart = () => {
 
   let quoteDataLength;
   if (quoteData) {
-//    console.log("EmotionChart quoteData: ", quoteData);
+    console.log("EmotionChart quoteData: ", quoteData);
     quoteDataLength = quoteData.length;
 
     getSevenDayEmotion2(quoteData);    
+    console.log(EmotionData);
+
+    buildLineChartData();
+  
   }
 
-  trimEmptyData();
+//  trimEmptyData();
 
-  console.log(EmotionData);
 
-  buildLineChartData();
+  
 
   // if data isn't here yet, say so
   if (loading) {

@@ -158,14 +158,40 @@ connection.once('open', async () => {
   // Get some random quote objects using a helper function that we imported from ./data
   let quotes = [];
   for (let i = 1; i <= 35; i++) {
+    const emotion = Chartmoods[Math.floor(Math.random()*Chartmoods.length)];
+    let image, selectedImage;
+  
+    switch (emotion)
+    {
+      case 'happy':
+        image = happyImages.sort(() => 0.5 - Math.random());
+        break;
+      case 'sad':
+        image = sadImages.sort(() => 0.5 - Math.random());
+        break;
+      case 'anxious':
+        image = anxiousImages.sort(() => 0.5 - Math.random());
+        break;
+      case 'angry':
+        image = angryImages.sort(() => 0.5 - Math.random());
+        break;
+      case 'stressed':
+        image = stressedImages.sort(() => 0.5 - Math.random());
+        break;        
+    }
+  
+    selectedImage = image[0];
+
+
     quotes.push({
       content: getRandomQuote(),
       userName: getRandomArrItem(users).userName,
-      emotion: moods[Math.floor(Math.random()*moods.length)],
+      emotion: emotion,
       isPrivate: (Math.random() < 0.5)?true:false,
       isGenerated: false,
       // isGenerated: (Math.random() < 0.5)?true:false,
-      imageUrl: `http://placekitten.com/${100+(Math.floor(Math.random()*10)*10)}/${100+(Math.floor(Math.random()*10)*10)}`,
+//      imageUrl: `http://placekitten.com/${100+(Math.floor(Math.random()*10)*10)}/${100+(Math.floor(Math.random()*10)*10)}`,
+      imageUrl: selectedImage,
       createdAt: generateRandomDate(new Date(2021, 0, 1), new Date())
     });
   };
