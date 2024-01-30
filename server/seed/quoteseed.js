@@ -1,3 +1,4 @@
+require('dotenv').config();
 const connection = require('../config/connection');
 const { User, Quote } = require('../models');
 const { getRandomName, getRandomNames, getRandomQuote, getRandomReaction, getRandomArrItem, generateRandomDate } = require('./quotedata');
@@ -139,5 +140,6 @@ connection.once('open', async () => {
   console.table(quotes);
 
   console.info('Seeding complete! 🌱');
+  console.log("MONGO URI", process.env.MONGODB_URI);
   process.exit(0);
 });

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const db = require('../config/connection');
 const { User, Product, Category, Affirmation } = require('../models');
 const cleanDB = require('../config/cleanDB');
