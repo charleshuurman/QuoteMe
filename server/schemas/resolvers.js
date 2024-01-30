@@ -7,30 +7,6 @@ const { llmGetFriendResponse } = require ('../utils/llm.js');
 
 const resolvers = {
   Query: {
-    //   getQuotes: async (_, { emotions }) => {
-    //     try {
-    //       const prompt = `You are an affirmations generator. When provided a user's emotions, please respond with only 3 quotes to uplift that person. The user's answers, when asked how they are feeling right now, are: ${emotions.join(", ")}`;
-
-    //       const options = {
-    //         method: 'POST',
-    //         url: process.env.RAPIDAPI_URL, // OpenAI URL
-    //         headers: {
-    //           'Content-Type': 'application/json',
-    //           'X-RapidAPI-Key': process.env.RAPIDAPI_KEY,
-    //           'X-RapidAPI-Host': process.env.RAPIDAPI_HOST,
-    //         },
-    //         data: { prompt: prompt },
-    //       };
-
-    //       const response = await axios.request(options);
-
-    //       return response.data.choices.map(choice => ({ text: choice }));
-    //     } catch (error) {
-    //       console.error('Error in getQuotes:', error);
-    //       throw new Error('Error fetching quotes');
-    //     }
-    //   }
-    // },
 
     listQuotes: async () => {
       return await Quote.find();
@@ -39,11 +15,6 @@ const resolvers = {
     publicQuotes: async () => {
       return await Quote.find({ isPrivate: false });
     },
-
-    // Comment out privateQuotes for security - other users should not be able to see private quotes. Use getMyQuotes instead.
-    // privateQuotes: async (parent, args, context) => {
-    //   return await Quote.find({ isPrivate: true });
-    // },
 
     /**
      * getMyQuotes - retrieve all quote objects for the logged-in user. User must have an active and valid token.
@@ -154,7 +125,6 @@ const resolvers = {
       return User.find().populate(['quotes', 'friends']);
     },
 
-    // TODO: Need to add Auth context guardrails for the following resolvers. As of now, just about anyone can grab the quotes in the database, including private ones.
     quotes: async (parent, { userName }) => {
       const params = userName ? { userName: userName } : {};
       return Quote.find(params).sort({ createdAt: -1 });
@@ -227,7 +197,6 @@ const resolvers = {
     savedAffirmations: async (_, __, { user }) => {
       if (!user) throw new Error("You must be logged in to see this.");
 
-      // Assuming 'User' is your user model and it has a 'savedAffirmations' field
       const currentUser = await User.findById(user._id)
         .populate('savedAffirmations') // Populate the savedAffirmations field
         .exec();
@@ -335,12 +304,10 @@ const resolvers = {
 
     // The following resolvers manage the Quote posts from the user.
     // createQuote, deleteQuote works and tested
-    // TODO: populate  updateQuote, likeQuote, createComment
 
     // Create a Quote
     createQuote: async (parent, args, context) => {
       console.log('createQuote', args);
-      // console.log('usercontext', context.user);
 
       const user = await User.findById(context.user._id);
 
@@ -348,7 +315,6 @@ const resolvers = {
 
         args.userName = context.user.userName;
         const createdQuote = await Quote.create(args);
-        // await createdThought.save();
         const updatedUser = await User.findByIdAndUpdate(context.user._id,
           { $addToSet: { quotes: createdQuote._id } },
           { runValidators: true, new: true });
@@ -479,7 +445,6 @@ const resolvers = {
     },
 
     // addReaction will add reactions into a user's Quote object, and deleteReaction will delete it.
-    // TODO: addReaction will keep adding likes indefinitely, while unlikeQuote removes everything all at once. Need to fix these behaviors.
     addReaction: async (parent, { quoteId, reactionText }, context) => {
       console.log('addReaction');
 

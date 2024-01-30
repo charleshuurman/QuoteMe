@@ -9,18 +9,7 @@ connection.on('error', (err) => err);
 connection.once('open', async () => {
   console.log('connected');
   // Use cleandb on prevoius .js file to delete the collections if they exist
-  // let quotesCheck = await connection.db.listCollections({ name: 'quotes' }).toArray();
-  // if (quotesCheck.length) {
-  //   await connection.dropCollection('quotes');
-  // };
-
-  // let usersCheck = await connection.db.listCollections({ name: 'users' }).toArray();
-  // if (usersCheck.length) {
-  //   await connection.dropCollection('users');
-  // };
-
-  // Seed users
-  // ==========
+  
   // Create empty array to hold users
   const users = [];
   // Loop 20 times -- add users to the users array
