@@ -14,6 +14,7 @@ import OrderHistory from './pages/OrderHistory';
 
 import Profile from './pages/Profile';
 import Journal from './pages/Journal';
+import EmotionChart from './pages/EmotionChart';
 import Dashboard from './pages/Dashboard';
 import CreateQuote from './pages/CreateQuote';
 
@@ -50,6 +51,9 @@ const router = createBrowserRouter([
       }, {
         path: '/dashboard',
         element: <Dashboard />
+      }, {
+        path: '/EmotionChart',
+        element: <EmotionChart />
       }, {
         path: '/profile',
         element: <Profile />
