@@ -10,7 +10,7 @@ module.exports = {
         const completion = await openai.chat.completions.create({
             messages: [{
                 role: "system",
-                // content: "You are a helpful friend. Your task is to describe the emotions perceived from the following paragraph in one to five words.\nI felt so frustrated yesterday because I did not have enough time to finish my work that I threw out my laptop.",
+            
                 content: `You are a helpful friend that gives affirmations to their emotions. You will look at the paragraph given to you and detect the emotion conveyed in the paragraph and offer words of encouragement.
             You must format your output as a JSON value that adheres to a given "JSON Schema" instance.
             

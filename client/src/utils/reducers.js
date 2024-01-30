@@ -10,12 +10,10 @@ import {
   TOGGLE_CART,
 } from './actions';
 
-// TODO: To get a better understand of how a reducer works - add comments to the various actions in the reducer
 // Defining a reducer accepting a new state and returns a new state based on action.type
 export const reducer = (state, action) => {
   switch (action.type) {
-    // TODO: Add a comment describing the functionality of the UPDATE_PRODUCTS case
-    // 
+
     // Returning the state with an updated "products:" object, containing the new action.products
     //  return{ key: "sometihng", products: [' ','a'], products: ['b','c']}
     case UPDATE_PRODUCTS:
@@ -36,7 +34,6 @@ export const reducer = (state, action) => {
         ...state,
         cart: [...state.cart, ...action.products],
       };
-    // TODO: Add a comment describing the functionality of the UPDATE_CART_QUANTITY case
     //  {action.purchaseQuantity}
     case UPDATE_CART_QUANTITY:
       return {
@@ -50,8 +47,6 @@ export const reducer = (state, action) => {
         }),
       };
 
-    // TODO: Add a comment describing the functionality of the REMOVE_FROM_CART case
-    // Your comment here
     case REMOVE_FROM_CART:
       let newState = state.cart.filter((product) => {
         return product._id !== action._id;
@@ -88,8 +83,6 @@ export const reducer = (state, action) => {
         currentCategory: action.currentCategory,
       };
 
-    // TODO: Add a comment describing what the default case is for
-    // Your comment here
     default:
       return state;
   }

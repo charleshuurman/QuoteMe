@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Auth from "../../utils/auth";
 import { Link } from "react-router-dom";
+import ThemeList from "../ThemeList";
 
 function Nav() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -109,7 +110,8 @@ function Nav() {
             </Link>
           </li>
           <li>
-            <details>
+            <ThemeList />
+            {/* <details>
               <summary>
                 <a className="mx-1 flex">
                   <svg
@@ -186,7 +188,7 @@ function Nav() {
                   />
                 </li>
               </ul>
-            </details>
+            </details> */}
           </li>
           <li className="mx-1">
             {/* this is not using the Link component to logout or user and then refresh the application to the start */}
@@ -238,9 +240,8 @@ function Nav() {
           <span className="block w-6 h-px bg-black mb-1"></span>
           <span className="block w-6 h-px bg-black"></span>
         </button>
-        <nav className={`${
-          isMobileMenuOpen ? 'flex' : 'hidden'
-        } md:flex flex-col md:flex-row items-center fixed md:static inset-x-0 top-0 p-8 md:p-0 bg-white md:bg-transparent bg-opacity-50 md:bg-opacity-100 z-20 transition-transform transform md:transform-none`}>
+        <nav className={`${isMobileMenuOpen ? 'flex' : 'hidden'
+          } md:flex flex-col md:flex-row items-center fixed md:static inset-x-0 top-0 p-8 md:p-0 bg-white md:bg-transparent bg-opacity-50 md:bg-opacity-100 z-20 transition-transform transform md:transform-none`}>
           <ul className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8">
             {showNavigation()}
           </ul>
