@@ -46,7 +46,7 @@ function Nav() {
                   d="m4 12 8-8 8 8M6 10.5V19c0 .6.4 1 1 1h3v-3c0-.6.4-1 1-1h2c.6 0 1 .4 1 1v3h3c.6 0 1-.4 1-1v-8.5"
                 />
               </svg>{" "}
-              Home
+              {/* Home */}
             </Link>
           </li>
           <li>
@@ -109,6 +109,10 @@ function Nav() {
               EmotionChart
             </Link>
           </li>
+         
+          <li>
+            <ThemeList />
+          </li>
           <li className="mx-1">
             <Link to="/Profile">
               <svg
@@ -126,11 +130,8 @@ function Nav() {
                   d="M10 19H5a1 1 0 0 1-1-1v-1a3 3 0 0 1 3-3h2m10 1a3 3 0 0 1-3 3m3-3a3 3 0 0 0-3-3m3 3h1m-4 3a3 3 0 0 1-3-3m3 3v1m-3-4a3 3 0 0 1 3-3m-3 3h-1m4-3v-1m-2.1 1.9-.7-.7m5.6 5.6-.7-.7m-4.2 0-.7.7m5.6-5.6-.7.7M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
                 />
               </svg>{" "}
-              Settings
+              {/* Settings */}
             </Link>
-          </li>
-          <li>
-            <ThemeList />
           </li>
           <li className="mx-1">
             {/* this is not using the Link component to logout or user and then refresh the application to the start */}
@@ -150,7 +151,7 @@ function Nav() {
                   d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2"
                 />
               </svg>{" "}
-              Logout
+              {/* Logout */}
             </a>
           </li>
         </ul>
