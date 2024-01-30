@@ -137,6 +137,7 @@ const ShowQuotes = (props) => {
                 <h3 className="text-lg font-bold">{quote.emotion}</h3>
                 <p className="mb-2">{quote.content}</p>
                 {/* Other elements like reactions, buttons, etc. */}
+                <div className="badge badge-outline text-xs">{quote.isGenerated?quote.userName+' (generated)':quote.userName}</div>
                 <div className="flex flex-wrap justify-between max-lg:justify-center gap-2">
                   <ReactionsList reactionsItem={quote.reactions} quoteId={quote._id} />
                   <div className="flex space-x-2">

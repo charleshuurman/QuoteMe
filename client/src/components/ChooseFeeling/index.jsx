@@ -62,7 +62,7 @@ const ChooseFeeling = () => {
         </>
       ) : (
         <>
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">How are you feeling?</h2>
+          <h2 className="text-2xl font-semibold text-base-800 mb-4">How are you feeling?</h2>
           <div className="flex flex-wrap justify-center gap-4">
             {emotions.map((emotion, index) => (
               <button
