@@ -30,7 +30,7 @@ const ShowQuotes = (props) => {
           </div>
         )}
         <button className="btn btn-primary" onClick={() => analyzeQuote()}>
-          Seek Feedback
+          Seek Affirmation
         </button>
       </div>
     );
@@ -120,7 +120,7 @@ const ShowQuotes = (props) => {
 
       <ul className="menu rounded-box bg-base-200 gap-2 p-2">
         {props.quotesArray.map((quote) => (
-          <li key={quote._id} className="card flex flex-col md:flex-row bg-white m-2 shadow-xl rounded-lg overflow-hidden" data-quoteid={quote._id}>
+          <li key={quote._id} className="card flex flex-col md:flex-row bg-base-100 m-2 shadow-xl rounded-lg overflow-hidden" data-quoteid={quote._id}>
             <div className="md:flex-shrink-0">
               <img className="h-48 w-full object-cover md:w-48" src={quote.imageUrl} alt="Quote visual representation" />
             </div>
