@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Auth from "../../utils/auth";
 import { Link } from "react-router-dom";
+import ThemeList from "../ThemeList";
 
 function Nav() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -109,7 +110,8 @@ function Nav() {
             </Link>
           </li>
           <li>
-            <details>
+            <ThemeList />
+            {/* <details>
               <summary>
                 <a className="mx-1 flex">
                   <svg
@@ -186,7 +188,7 @@ function Nav() {
                   />
                 </li>
               </ul>
-            </details>
+            </details> */}
           </li>
           <li className="mx-1">
             {/* this is not using the Link component to logout or user and then refresh the application to the start */}

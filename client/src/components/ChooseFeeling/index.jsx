@@ -47,7 +47,7 @@ const ChooseFeeling = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 bg-gray-100">
+    <div className="flex flex-col items-center justify-center p-4 bg-base-200">
       {selectedEmotion ? (
         <>
           <div className="w-full text-left">

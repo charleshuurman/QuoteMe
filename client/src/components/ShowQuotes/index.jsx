@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import Auth from "../../utils/auth";
 import { useMutation, useLazyQuery } from "@apollo/client";
 import { SET_PUBLIC, SET_PRIVATE, DELETE_QUOTE, ADD_REACTION, DEL_REACTION } from "../../utils/mutations";
@@ -22,7 +22,7 @@ const ShowQuotes = (props) => {
     if (error) return `Error! ${error.message}`;
 
     return (
-      <div>
+      <div className="flex max-lg:w-full max-lg:justify-center">
         {data?.analyzeQuote && (
           <div className="chat chat-start">
             <div className="badge">{data.analyzeQuote.emotion}</div>
@@ -30,7 +30,7 @@ const ShowQuotes = (props) => {
           </div>
         )}
         <button className="btn btn-primary" onClick={() => analyzeQuote()}>
-          Seek Feedback
+          Seek Affirmation
         </button>
       </div>
     );
@@ -39,7 +39,7 @@ const ShowQuotes = (props) => {
   // Delete Button Implementation
   const deleteButton = async (event) => {
     event.preventDefault();
-    const quoteId = event.target.getAttribute('data-id');
+    const quoteId = event.target.getAttribute("data-id");
     await deleteQuote({ variables: { quoteId } });
     window.location.reload();
   };
@@ -47,7 +47,7 @@ const ShowQuotes = (props) => {
   // Set Public Button Implementation
   const setPublicButton = async (event) => {
     event.preventDefault();
-    const quoteId = event.target.getAttribute('data-id');
+    const quoteId = event.target.getAttribute("data-id");
     await setPublic({ variables: { quoteId } });
     window.location.reload();
   };
@@ -55,7 +55,7 @@ const ShowQuotes = (props) => {
   // Set Private Button Implementation
   const setPrivateButton = async (event) => {
     event.preventDefault();
-    const quoteId = event.target.getAttribute('data-id');
+    const quoteId = event.target.getAttribute("data-id");
     await setPrivate({ variables: { quoteId } });
     window.location.reload();
   };
@@ -63,7 +63,7 @@ const ShowQuotes = (props) => {
   // Add Reaction Button Implementation
   const addReactionButton = async (event) => {
     event.preventDefault();
-    const quoteId = event.target.getAttribute('data-id');
+    const quoteId = event.target.getAttribute("data-id");
     await addReaction({ variables: { quoteId, reactionText: "like" } });
     window.location.reload();
   };
@@ -71,8 +71,8 @@ const ShowQuotes = (props) => {
   // Delete Reaction Button Implementation
   const delReactionButton = async (event) => {
     event.preventDefault();
-    const quoteId = event.target.getAttribute('data-id');
-    const reactionText = event.target.getAttribute('data-reactiontext');
+    const quoteId = event.target.getAttribute("data-id");
+    const reactionText = event.target.getAttribute("data-reactiontext");
     await delReaction({ variables: { quoteId, reactionText } });
     window.location.reload();
   };
@@ -85,7 +85,7 @@ const ShowQuotes = (props) => {
     }, {});
 
     return (
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2 max-lg:my-3 max-lg:w-full max-lg:justify-center">
         {Object.entries(reactionCounts).map(([reaction, count]) => (
           <button
             key={reaction}
@@ -94,12 +94,20 @@ const ShowQuotes = (props) => {
             data-reactiontext={reaction}
             onClick={delReactionButton}
           >
-            {reaction} {count > 1 ? `(${count})` : ''}
+            {reaction} {count > 1 ? `(${count})` : ""}
           </button>
         ))}
       </div>
     );
   }
+
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return `Error! ${error.message}`;
+
+  // return (
+  //   <div>
+  //     {data?.analyzeQuote && (
+  if (!props?.quotesArray) return <p> Loading... </p>;
 
   // Start of the JSX returned by the component
   return (
@@ -112,48 +120,54 @@ const ShowQuotes = (props) => {
 
       <ul className="menu rounded-box bg-base-200 gap-2 p-2">
         {props.quotesArray.map((quote) => (
-          <li key={quote._id} className="card flex flex-col md:flex-row bg-white m-2 shadow-xl rounded-lg overflow-hidden" data-quoteid={quote._id}>
-            <div className="md:flex-shrink-0">
-              <img className="h-48 w-full object-cover md:w-48" src={quote.imageUrl} alt="Quote visual representation" />
-            </div>
-            <div className="p-4 flex flex-col justify-between">
-              <h3 className="text-lg font-bold">{quote.emotion}</h3>
-              <p className="mb-2">{quote.content}</p>
-              {/* Other elements like reactions, buttons, etc. */}
-              <div className="flex justify-between items-center">
-                <ReactionsList reactionsItem={quote.reactions} quoteId={quote._id} />
-                <button className="btn btn-primary" data-id={quote._id} onClick={addReactionButton}>
-                  Like
-                </button>
-                {/* Conditionally rendered buttons based on quote ownership and privacy status */}
-                {quote.userName === userName && (
+          <li
+            key={quote._id}
+            className="card flex flex-col md:flex-row bg-base-100 m-2 shadow-xl rounded-lg overflow-hidden"
+            data-quoteid={quote._id}
+          >
+            <div className="w-full flex flex-wrap">
+              <div className="md:flex-shrink-0">
+                <img
+                  className="h-48 w-full object-cover md:w-48"
+                  src={quote.imageUrl}
+                  alt="Quote visual representation"
+                />
+              </div>
+              <div className="p-4 flex flex-col gap-2 justify-between">
+                <h3 className="text-lg font-bold">{quote.emotion}</h3>
+                <p className="mb-2">{quote.content}</p>
+                {/* Other elements like reactions, buttons, etc. */}
+                <div className="flex flex-wrap justify-between max-lg:justify-center gap-2">
+                  <ReactionsList reactionsItem={quote.reactions} quoteId={quote._id} />
                   <div className="flex space-x-2">
-                    {quote.isPrivate ? (
-                      <button
-                        className="btn btn-secondary"
-                        onClick={(event) => setPublicButton(event)}
-                        data-id={quote._id}
-                      >
-                        Share to Public
-                      </button>
-                    ) : (
-                      <button
-                        className="btn btn-secondary"
-                        onClick={setPrivateButton}
-                        data-id={quote._id}
-                      >
-                        Set to Private
-                      </button>
-                    )}
-                    <button
-                      className="btn btn-error"
-                      onClick={deleteButton}
-                      data-id={quote._id}
-                    >
-                      Delete
+                    <button className="btn btn-primary" data-id={quote._id} onClick={addReactionButton}>
+                      Like
                     </button>
+                    {/* Conditionally rendered buttons based on quote ownership and privacy status */}
+                    {quote.userName === userName && (
+                      <>
+                        {quote.isPrivate ? (
+                          <button
+                            className="btn btn-secondary"
+                            onClick={(event) => setPublicButton(event)}
+                            data-id={quote._id}
+                          >
+                            Share to Public
+                          </button>
+                        ) : (
+                          <button className="btn btn-secondary" onClick={setPrivateButton} data-id={quote._id}>
+                            Set to Private
+                          </button>
+                        )}
+                        <button className="btn btn-error" onClick={deleteButton} data-id={quote._id}>
+                          Delete
+                        </button>{" "}
+                      </>
+                    )}
                   </div>
-                )}
+                </div>
+                {/* Quote Analyzer asks an AI to relate as a friend to the user's post */}
+                {quote.userName === userName && <QuoteAnalyzer quoteId={quote._id} />}
               </div>
             </div>
           </li>
