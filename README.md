@@ -14,6 +14,8 @@ QuoteMe is a web application designed to enhance emotional well-being through pe
 - [Features](#features)
 - [Contribution](#how-to-contribute)
 - [Tests](#tests)
+- [Credits](#credits)
+- [Dependencies](#dependencies)
 - [License](#license)
 
 ## Installation
@@ -89,6 +91,17 @@ Developed by a dedicated team, special thanks to:
 - [Devon Rooks](https://github.com/diffwentstrokes)
 - [Megan Wright](https://github.com/mmw18)
 - [Charles Huurman](https://github.com/charleshuurman)
+- Materials provided by the University of Texas for Project 26 in the MERN Stack curriculum.
+
+## Dependencies
+
+This project uses the following direct dependencies:
+
+- `express`: Fast, unopinionated, minimalist web framework for node.
+- `mongoose`: MongoDB object modeling designed to work in an asynchronous environment.
+- `react`: A JavaScript library for building user interfaces.
+- `@apollo/client`: A comprehensive state management library for JavaScript that enables you to manage both local and remote data with GraphQL.
+
 
 
 ## License
