@@ -27,17 +27,25 @@ To install QuoteMe:
 
 ## Usage
 
+Since it's deployed in Render, please follow the link: [QuoteMe App in Render](https://quoteme-1b7p.onrender.com/)
+
+You can also install the application locally by following the installation instructions above.
+
 After installation, the app will be accessible on your local server. Navigate through the app to:
 
 - Sign up and manage your profile.
 - Generate affirmations based on your current emotions.
 - Share and read stories on the mindfulness bulletin board.
 - Write and maintain a private journal.
+- Change the Theme to your liking from more than 10 color schemes.
+- See your Emotion Chart to see statistics of your feelings. 
+- Change your subscription plan to access the mindfulness bulletin board.
+- See your profile statistics.
 
 Screenshots of the application in use:
 
-![QuoteMe Home Page](assets/images/home-page.png)
-![QuoteMe Bulletin Board](assets/images/bulletin-board.png)
+![QuoteMe Home Page](client/src/assets/ScreenshotB.png)
+![QuoteMe Bulletin Board](client/src/assets/ScreenshotA.png)
 
 ## Features
 
@@ -45,6 +53,11 @@ Screenshots of the application in use:
 - Emotion-based affirmation generator.
 - Community bulletin board to share and like stories.
 - Private journal for personal reflections.
+- Write and maintain a private journal.
+- Change the Theme to your liking from more than 10 color schemes.
+- See your Emotion Chart to see statistics of your feelings. 
+- Change your subscription plan to access the mindfulness bulletin board.
+- See your profile statistics.
 - Responsive design for a seamless experience on various devices.
 
 ## How to Contribute
