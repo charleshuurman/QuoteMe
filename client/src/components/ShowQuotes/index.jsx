@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import Auth from "../../utils/auth";
 import { useMutation, useLazyQuery } from "@apollo/client";
 import { SET_PUBLIC, SET_PRIVATE, DELETE_QUOTE, ADD_REACTION, DEL_REACTION } from "../../utils/mutations";
@@ -6,30 +7,49 @@ import { QUERY_ANALYZE_QUOTE } from "../../utils/queries";
 
 const ShowQuotes = (props) => {
   const userName = Auth.getProfile().data.userName;
-  const [setPublic] = useMutation(SET_PUBLIC);
-  const [setPrivate] = useMutation(SET_PRIVATE);
-  const [deleteQuote] = useMutation(DELETE_QUOTE);
-  const [addReaction] = useMutation(ADD_REACTION);
-  const [delReaction] = useMutation(DEL_REACTION);
+  const [setPublic, setPublicState] = useMutation(SET_PUBLIC);
+  const [setPrivate, setPrivateState] = useMutation(SET_PRIVATE);
+  const [deleteQuote, deleteQuoteState] = useMutation(DELETE_QUOTE);
+  const [addReaction, addReactionState] = useMutation(ADD_REACTION);
+  const [delReaction, delReactionState] = useMutation(DEL_REACTION);
+
+  // Utilize React's useState to store a list of ai Quotes using the underlying Quote's _id as key
+  const [aiQuotes, setAiQuotes] = useState({});
 
   // QuoteAnalyzer Function Component
-  function QuoteAnalyzer({ quoteId }) {
-    const [analyzeQuote, { loading, error, data }] = useLazyQuery(QUERY_ANALYZE_QUOTE, {
+  function QuoteAnalyzer({ quoteToAnalyze }) {
+    let quoteId = quoteToAnalyze;
+    const [analyzeQuote, analyzeResponse] = useLazyQuery(QUERY_ANALYZE_QUOTE, {
       variables: { quoteId },
     });
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return `Error! ${error.message}`;
+    // Create a new event handler function so the AI query only happens when users click on Get Affirmations
+    const runAnalyzeQuote = async (quoteId, event) => {
+      event.preventDefault();
+      console.log("running analyze quote");
+
+      // Since Apollo Client returns a promise when getting data, we use the .then to retrieve the affirmation in our aiQuotes object
+      analyzeQuote().then((response) => {
+        let newAiQuotes = {};
+        let newAiQuote = { _id: null };
+        newAiQuote[response.data.analyzeQuote._id] = { content: response.data.analyzeQuote.content, emotion: response.data.analyzeQuote.emotion };
+        Object.assign(newAiQuotes, aiQuotes, newAiQuote);
+        setAiQuotes(newAiQuotes);
+      });
+    };
+
+    if (analyzeResponse.loading) return <p>Seeking Affirmation...</p>;
+    if (analyzeResponse.error) return `Error! ${analyzeResponse.error.message}`;
 
     return (
       <div className="flex max-lg:w-full max-lg:justify-center">
-        {data?.analyzeQuote && (
+        {aiQuotes && aiQuotes?.[quoteId] && (
           <div className="chat chat-start">
-            <div className="badge">{data.analyzeQuote.emotion}</div>
-            <div className="chat-bubble">{data.analyzeQuote.content}</div>
+            <div className="badge">{aiQuotes[quoteId].emotion}</div>
+            <div className="chat-bubble">{aiQuotes[quoteId].content}</div>
           </div>
         )}
-        <button className="btn btn-primary" onClick={() => analyzeQuote()}>
+        <button className="btn btn-primary" onClick={(event) => runAnalyzeQuote(quoteId, event)}>
           Seek Affirmation
         </button>
       </div>
@@ -37,44 +57,41 @@ const ShowQuotes = (props) => {
   }
 
   // Delete Button Implementation
-  const deleteButton = async (event) => {
+  const deleteButton = async (id, event) => {
     event.preventDefault();
-    const quoteId = event.target.getAttribute("data-id");
+    const quoteId = id; // event.target.getAttribute("data-id");
     await deleteQuote({ variables: { quoteId } });
-    window.location.reload();
   };
 
   // Set Public Button Implementation
-  const setPublicButton = async (event) => {
+  const setPublicButton = async (id, event) => {
+    console.log("setpublicbutton: ", id);
     event.preventDefault();
-    const quoteId = event.target.getAttribute("data-id");
+    const quoteId = id; //event.target.getAttribute("data-id");
     await setPublic({ variables: { quoteId } });
-    window.location.reload();
   };
 
   // Set Private Button Implementation
-  const setPrivateButton = async (event) => {
+  const setPrivateButton = async (id, event) => {
     event.preventDefault();
-    const quoteId = event.target.getAttribute("data-id");
+    console.log("setprivatebutton: ", id);
+    const quoteId = id; // event.target.getAttribute("data-id");
     await setPrivate({ variables: { quoteId } });
-    window.location.reload();
   };
 
   // Add Reaction Button Implementation
-  const addReactionButton = async (event) => {
+  const addReactionButton = async (id, event) => {
     event.preventDefault();
-    const quoteId = event.target.getAttribute("data-id");
+    const quoteId = id; // event.target.getAttribute("data-id");
     await addReaction({ variables: { quoteId, reactionText: "like" } });
-    window.location.reload();
   };
 
   // Delete Reaction Button Implementation
-  const delReactionButton = async (event) => {
+  const delReactionButton = async (id, reaction, event) => {
     event.preventDefault();
-    const quoteId = event.target.getAttribute("data-id");
-    const reactionText = event.target.getAttribute("data-reactiontext");
+    const quoteId = id; // event.target.getAttribute("data-id");
+    const reactionText = reaction; // event.target.getAttribute("data-reactiontext");
     await delReaction({ variables: { quoteId, reactionText } });
-    window.location.reload();
   };
 
   // ReactionsList Component
@@ -90,9 +107,7 @@ const ShowQuotes = (props) => {
           <button
             key={reaction}
             className="badge badge-primary"
-            data-id={quoteId}
-            data-reactiontext={reaction}
-            onClick={delReactionButton}
+            onClick={(event) => delReactionButton(quoteId, reaction, event)}
           >
             {reaction} {count > 1 ? `(${count})` : ""}
           </button>
@@ -101,12 +116,6 @@ const ShowQuotes = (props) => {
     );
   }
 
-  // if (loading) return <p>Loading...</p>;
-  // if (error) return `Error! ${error.message}`;
-
-  // return (
-  //   <div>
-  //     {data?.analyzeQuote && (
   if (!props?.quotesArray) return <p> Loading... </p>;
 
   // Start of the JSX returned by the component
@@ -137,38 +146,40 @@ const ShowQuotes = (props) => {
                 <h3 className="text-lg font-bold">{quote.emotion}</h3>
                 <p className="mb-2">{quote.content}</p>
                 {/* Other elements like reactions, buttons, etc. */}
-                <div className="badge badge-outline text-xs">{quote.isGenerated?quote.userName+' (generated)':quote.userName}</div>
+                <div className="badge badge-outline text-xs">
+                  {quote.isGenerated ? quote.userName + " (generated)" : quote.userName}
+                </div>
                 <div className="flex flex-wrap justify-between max-lg:justify-center gap-2">
                   <ReactionsList reactionsItem={quote.reactions} quoteId={quote._id} />
                   <div className="flex space-x-2">
-                    <button className="btn btn-primary" data-id={quote._id} onClick={addReactionButton}>
-                      Like
+                    <button
+                      className="btn btn-primary"
+                      data-id={quote._id}
+                      onClick={(event) => addReactionButton(quote._id, event)}
+                    >
+                      {addReactionState.loading ? "Liking..." : "Like"}
                     </button>
                     {/* Conditionally rendered buttons based on quote ownership and privacy status */}
                     {quote.userName === userName && (
                       <>
                         {quote.isPrivate ? (
-                          <button
-                            className="btn btn-secondary"
-                            onClick={(event) => setPublicButton(event)}
-                            data-id={quote._id}
-                          >
-                            Share to Public
+                          <button className="btn btn-secondary" onClick={(event) => setPublicButton(quote._id, event)}>
+                            {setPublicState.loading ? "Sharing to Public..." : "Share to Public"}
                           </button>
                         ) : (
-                          <button className="btn btn-secondary" onClick={setPrivateButton} data-id={quote._id}>
-                            Set to Private
+                          <button className="btn btn-secondary" onClick={(event) => setPrivateButton(quote._id, event)}>
+                            {setPrivateState.loading ? "Setting to Private..." : "Set to Private"}
                           </button>
                         )}
-                        <button className="btn btn-error" onClick={deleteButton} data-id={quote._id}>
-                          Delete
+                        <button className="btn btn-error" onClick={(event) => deleteButton(quote._id, event)}>
+                          {deleteQuoteState.loading ? "Deleting..." : "Delete"}
                         </button>{" "}
                       </>
                     )}
                   </div>
                 </div>
                 {/* Quote Analyzer asks an AI to relate as a friend to the user's post */}
-                {quote.userName === userName && <QuoteAnalyzer quoteId={quote._id} />}
+                {quote.userName === userName && <QuoteAnalyzer quoteToAnalyze={quote._id} />}
               </div>
             </div>
           </li>

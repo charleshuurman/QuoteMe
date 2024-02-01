@@ -51,7 +51,7 @@ const resolvers = {
      * @param {*} parent 
      * @param {*} param1 
      * @param {*} context 
-     * @returns a Quote object, where the llm chatbot response is in the new quote object content
+     * @returns an AiAffirmation object, where the llm chatbot response is in the new quote object content
      */
     analyzeQuote: async (parent, { quoteId }, context) => {
       console.log('analyzeQuote', quoteId);
@@ -62,13 +62,17 @@ const resolvers = {
           // console.log("getting analysis on:", quoteToAnalyze.content);
           let result = await llmGetFriendResponse(quoteToAnalyze.content);
           // console.log("llmGetFriendResponse result:", result.message.content);
-          quoteToAnalyze.isGenerated = true;
-          quoteToAnalyze.isPrivate = true;
-          quoteToAnalyze.emotion = JSON.parse(result.message.content).emotion;
-          quoteToAnalyze.content = JSON.parse(result.message.content).affirmation;
-          quoteToAnalyze.createdAt = Date.now;
-          console.log("result:", quoteToAnalyze);
-          return quoteToAnalyze;
+          let emotioncontent = JSON.parse(result.message.content);
+          const aiResponse = {
+            isGenerated: true,
+            isPrivate: true,
+            emotion: emotioncontent.emotion,
+            content: emotioncontent.affirmation,
+            createdAt: Date.now,
+            _id: quoteId,
+          };
+          console.log("result:", aiResponse);
+          return aiResponse;
         } else {
           throw UserNotOwnerError;
         };

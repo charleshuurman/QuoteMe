@@ -13,6 +13,14 @@ const typeDefs = `
     createdAt: String
     updatedAt: String
   }
+
+  type AiAffirmation {
+    _id: ID
+    content: String
+    emotion: String
+    createdAt: String
+  }
+
   type Quote {
     _id: ID
     content: String
@@ -92,7 +100,7 @@ const typeDefs = `
     listQuotes: [Quote]
     users: [User]
     publicQuotes: [Quote]
-    analyzeQuote(quoteId: ID!): Quote
+    analyzeQuote(quoteId: ID!): AiAffirmation
     singleUserByUsrName (userName: String!): User
     singleUserById (userId: ID!): User
     quotes (userName: String!): [Quote]

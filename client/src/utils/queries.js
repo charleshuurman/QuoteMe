@@ -138,20 +138,7 @@ query q000081($quoteId: ID!) {
     _id
     content
     emotion
-    isPrivate
-    isGenerated
-    imageUrl
     createdAt
-    userName
-    reactions {
-      userName
-      reactionBody
-    }
-    comments {
-      commentText
-      commentAuthor
-      createdAt
-    }
   }
 }
 `;

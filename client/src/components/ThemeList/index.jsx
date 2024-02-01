@@ -58,9 +58,9 @@ function ThemeList() {
         </a>
       </summary>
       <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow-2xl bg-base-300 rounded-box w-52">
-        {themes.map((themename) => {
+        {themes.map((themename, index) => {
           return (
-            <li>
+            <li key={index}>
               <input
                 type="radio"
                 name="theme-dropdown"
