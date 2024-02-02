@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useState } from "react";
+import { createContext, useContext, useReducer } from "react";
 import { reducer } from './reducers'
 
 const StoreContext = createContext();
@@ -27,4 +27,26 @@ const useThemeContext = () => {
   return useContext(ThemeContext);
 }
 
-export { StoreProvider, useStoreContext, ThemeContext, useThemeContext };
+// Define pre-selected emotions
+// Array of emotions with their corresponding names and emoji symbols
+const emotions = [
+  { name: 'Happy', emoji: '😊' },
+  { name: 'Sad', emoji: '😢' },
+  { name: 'Anxious', emoji: '😰' },
+  { name: 'Angry', emoji: '😠' },
+  { name: 'Stressed', emoji: '😥' },
+  { name: 'Lonely', emoji: '🙍‍♂️' },
+  { name: 'Overwhelmed', emoji: '😵' },
+  { name: 'Frustrated', emoji: '😤' },
+  { name: 'Disappointed', emoji: '😞' },
+  { name: 'Grateful', emoji: '🙏' },
+  { name: 'Exhausted', emoji: '😩' },
+  { name: 'Insecure', emoji: '🙇‍♂️' },
+  { name: 'Nervous', emoji: '😟' },
+  { name: 'Hopeless', emoji: '😔' },
+  { name: 'Jealous', emoji: '😒' },
+  { name: 'Lost', emoji: '🤔' }
+];
+
+
+export { StoreProvider, useStoreContext, ThemeContext, useThemeContext, emotions };
