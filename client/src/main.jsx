@@ -1,3 +1,14 @@
+/**
+ * This file is the entry point for the React application. It sets up the client-side routing using 
+ * React Router's createBrowserRouter and RouterProvider components, defining routes for the application 
+ * and associating them with their respective React components. The routing configuration includes 
+ * paths for the homepage, shop, product details, user authentication (login and signup), order 
+ * success page, order history, user profile, journal, dashboard, emotion chart, and quote creation.
+ * 
+ * The application's global CSS is also imported here, and the entire app is rendered into the DOM 
+ * at the 'root' div, enabling the structured and navigable user interface driven by defined routes.
+ */
+
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';

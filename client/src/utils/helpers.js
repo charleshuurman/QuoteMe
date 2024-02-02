@@ -1,3 +1,7 @@
+/**
+ * - pluralize(name, count): A utility function for appending an 's' to a string based on a count, 
+ *   useful for handling pluralization in UI texts.
+ */
 export function pluralize(name, count) {
   if (count === 1) {
     return name;
@@ -5,6 +9,13 @@ export function pluralize(name, count) {
   return name + 's';
 }
 
+/**
+ * - idbPromise(storeName, method, object): A function that wraps IndexedDB operations in a 
+ *   Promise, facilitating asynchronous interactions with the client-side database. It supports 
+ *   'put', 'get', and 'delete' operations across different object stores ('products', 'categories', 
+ *   'cart') within the IndexedDB. This function is crucial for enabling offline data management 
+ *   and synchronization in the application.
+ */
 export function idbPromise(storeName, method, object) {
   return new Promise((resolve, reject) => {
     const request = window.indexedDB.open('shop-shop', 1);
@@ -54,3 +65,6 @@ export function idbPromise(storeName, method, object) {
     };
   });
 }
+
+// These utilities enhance the application's functionality by providing essential
+// data management capabilities and improving user interface responsiveness.

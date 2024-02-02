@@ -1,3 +1,13 @@
+/**
+ * This file encapsulates GraphQL query definitions used for retrieving data from the backend. It covers a wide 
+ * range of data fetching requirements, including queries for products, user information, quotes, categories, 
+ * and more. These queries are instrumental in providing the data needed to render various components and pages 
+ * within the application, ensuring a dynamic and responsive user experience.
+ * 
+ * These queries are executed using Apollo Client's useQuery hook within React components, providing a seamless 
+ * integration with the application's frontend.
+ */
+
 import { gql } from '@apollo/client';
 
 export const FETCH_AFFIRMATIONS_BY_EMOTION = gql`

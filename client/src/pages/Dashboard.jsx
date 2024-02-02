@@ -1,3 +1,10 @@
+/**
+ * The DashBoard component serves as the main hub for users to interact with public quotes. It displays
+ * a collection of quotes that have been marked as public by users, allowing for broader engagement
+ * within the community. The component uses GraphQL to query these public quotes and renders them
+ * using the ShowQuotes component. Additionally, users can post new quotes through the PostQuote
+ * component accessible from the dashboard.
+ */
 import Auth from "../utils/auth";
 import PostQuote from "../components/PostQuote";
 import ShowQuotes from "../components/ShowQuotes";
@@ -8,17 +15,21 @@ import { useMutation } from "@apollo/client";
 import { QUERY_GET_PUBLIC_QUOTES } from "../utils/queries";
 
 const DashBoard = () => {
+  // Retrieving the username from the logged-in user's profile
   const userName = Auth.getProfile().data.userName;
 
+  // Execute the GraphQL query to fetch public quotes
   const { loading, data } = useQuery(QUERY_GET_PUBLIC_QUOTES);
 
+  // Initialize variable for the length of the fetched quotes data
   let quoteDataLength;
   if (data && data.publicQuotes) {
+    // Uncomment below to log quote data for debugging
     // console.log("quoteData: ", quoteData);
-    quoteDataLength = data.publicQuotes.length;
+    quoteDataLength = data.publicQuotes.length; // Determine the number of public quotes fetched
   }
 
-  // if data isn't here yet, say so
+  // Display loading message while data is being fetched
   if (loading) {
     return (
       <>
@@ -27,6 +38,7 @@ const DashBoard = () => {
     );
   }
 
+  // Render the dashboard with PostQuote and ShowQuotes components
   return (
     <>
       <div className="container border rounded-box">

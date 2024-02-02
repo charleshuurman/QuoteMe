@@ -1,3 +1,10 @@
+/**
+  * The Journal component serves as a personalized space for users to write and review their quotes. 
+ * It leverages GraphQL to fetch quotes specific to the logged-in user, allowing for a private, 
+ * reflective experience. Through the integration of the PostQuote and ShowQuotes components, 
+ * users can not only submit new entries but also view their past submissions.
+ */
+
 import Auth from "../utils/auth";
 import PostQuote from "../components/PostQuote";
 import ShowQuotes from "../components/ShowQuotes";

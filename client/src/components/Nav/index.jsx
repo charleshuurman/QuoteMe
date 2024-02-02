@@ -1,5 +1,5 @@
-
-
+// This component renders the navigation bar for the application. It supports responsive behavior for mobile devices
+// by toggling a mobile menu and adapts the navigation items based on the user's authentication status.
 import React, { useState, useEffect } from 'react';
 import Auth from "../../utils/auth";
 import { Link } from "react-router-dom";
@@ -17,13 +17,16 @@ function Nav() {
     }
 
     window.addEventListener('resize', handleResize);
+    // Cleanup listener on component unmount
     return () => window.removeEventListener('resize', handleResize);
   }, [isMobileMenuOpen]);
 
+  // Toggles the visibility of the mobile menu
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  // Generates navigation items based on the user's authentification status
   const showNavigation = () => {
     if (Auth.loggedIn()) {
       // Logged in navigation items

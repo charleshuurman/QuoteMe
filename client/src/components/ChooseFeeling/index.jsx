@@ -1,3 +1,6 @@
+// Purpose: This component allows users to select how they are feeling from a list of emotions. Upon selection,
+// it displays quotes related to the chosen emotion. It integrates user authentication to personalize the experience.
+
 // Importing React with the useState hook
 import React, { useState, useEffect } from 'react';
 // Importing the GeneratedQuotes component
