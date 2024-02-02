@@ -20,11 +20,12 @@ QuoteMe is a web application designed to enhance emotional well-being through pe
 
 ## Installation
 
-To install QuoteMe:
+To install QuoteMe on your local computer:
 
-1. Clone the repository to your local machine.
-2. Navigate to the `server` directory and run `npm install` to install server dependencies.
-3. Navigate to the `client` directory and run `npm install` to install client dependencies.
+1. Clone the repository to your local machine.\
+   `git clone https://github.com/charleshuurman/QuoteMe`
+2. Run `npm install` to install package dependencies for both the client and server parts.
+3. run `npm run seed` to populate the database with seed data (optional).
 4. Start the application by running `npm run develop` from the root directory, which concurrently launches both the client and the server.
 
 ## Usage
@@ -74,13 +75,6 @@ Contributions to QuoteMe are always welcome! To contribute:
 
 Please adhere to the Contributor Covenant [Contributor Covenant](https://www.contributor-covenant.org/). code of conduct in your interactions with the project.
 
-## Tests
-
-To run tests:
-
-1. Navigate to the client directory.
-2. Run npm run test to execute the test suite.
-
 ## Credits
 
 Developed by a dedicated team, special thanks to:
@@ -100,9 +94,12 @@ This project uses the following direct dependencies:
 - `express`: Fast, unopinionated, minimalist web framework for node.
 - `mongoose`: MongoDB object modeling designed to work in an asynchronous environment.
 - `react`: A JavaScript library for building user interfaces.
-- `@apollo/client`: A comprehensive state management library for JavaScript that enables you to manage both local and remote data with GraphQL.
-
-
+- `graphql` : An API query middleware that allows flexibility and efficiency to building APIs
+- `@apollo/client/server`: A comprehensive state management library for JavaScript that enables you to manage both local and remote data with GraphQL.
+- `daisyUI + tailwindCSS`: A UI CSS framework that works with React for rapid styling
+- `bcrypt`: a library for hashing passwords
+- `jsonwebtoken`: tokens which store and encrypt authentication information and is stored on the browser, similar to cookies but isn't as restricted
+- `stripe`: a payment library to accept payment from credit cards and other methods
 
 ## License
 This project is released under the MIT License. See the [LICENSE](LICENSE.md) file for details

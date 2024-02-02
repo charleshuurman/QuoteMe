@@ -30,8 +30,14 @@ const DashBoard = () => {
   return (
     <>
       <div className="container border rounded-box">
+        <div className="rounded-box">
+          <h2>Public Dashboard</h2>
+          <p className="text-sm">
+            Shared quote posts from all users, including your own posts. You can like or delete likes on all posts. But you can only modify/delete your own posts. Any quotes you post here will be shared, but you can set them to private later.
+          </p>
+        </div>
         <PostQuote />
-        <ShowQuotes quotesArray={data.publicQuotes}/>
+        <ShowQuotes quotesArray={data.publicQuotes} />
       </div>
     </>
   );

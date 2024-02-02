@@ -3,17 +3,28 @@ import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_QUOTE, CREATE_COMMENT, LIKE_QUOTE } from "../../utils/mutations";
 
+// Import the emotions array
+import { emotions } from "../../utils/GlobalState";
+
 const PostQuote = (props) => {
   const isJournal = props?.isJournal || false;
 
   const [quoteText, setQuoteText] = useState("");
+  const [emotionText, setEmotionText] = useState("");
+  const [imageUrlText, setImageUrlText] = useState("http://placekitten.com/100/200");
   const [createQuote, { loading }] = useMutation(CREATE_QUOTE);
   const [createComment] = useMutation(CREATE_COMMENT);
   const [likeQuote] = useMutation(LIKE_QUOTE);
   const [posts, setPosts] = useState([]);
 
-  const handleInputChange = (event) => {
-    setQuoteText(event.target.value);
+  const handleInputChange = (name, event) => {
+    if (name === "postquote") {
+      setQuoteText(event.target.value);
+    } else if (name === "postemotion") {
+      setEmotionText(event.target.value.trim().split(" ")[0].toLowerCase());
+    } else if (name === "imageurl") {
+      setImageUrlText(event.target.value);
+    }
   };
 
   const handlePostQuote = (event) => {
@@ -21,10 +32,10 @@ const PostQuote = (props) => {
     createQuote({
       variables: {
         content: quoteText,
-        emotion: "Happy",
+        emotion: emotionText,
         isPrivate: isJournal,
         isGenerated: false,
-        imageUrl: "http://placekitten.com/100/200",
+        imageUrl: imageUrlText,
       },
     })
       .then((res) => {
@@ -76,15 +87,39 @@ const PostQuote = (props) => {
 
   return (
     <>
-      <div className="rounded-box bg-base-200 p-2">
-        <p>Post Your Quote!</p>
-        <form onSubmit={handlePostQuote}>
+      <div className="rounded-box bg-base-200 p-2 flex flex-wrap justify-center">
+        <p className="flex-1">Post Your Quote!</p>
+        <form onSubmit={handlePostQuote} className="flex flex-col w-3/4 gap-2">
           <input
             className="input input-bordered"
             type="text"
+            name="postquote"
             value={quoteText}
-            onChange={handleInputChange}
+            onChange={()=>handleInputChange("postquote",event)}
             placeholder="Enter your quote"
+          />
+          {/* emotion detector (TBD): {quoteText?(<button type="button" className="badge badge-secondary">detect emotion</button>):<div className="badge badge-outline">type in your post to detect its emotion</div>} */}
+          <input
+            className="input input-bordered"
+            type="text"
+            placeholder="How are you feeling today?"
+            value={emotionText}
+            name="postemotion"
+            onChange={()=>handleInputChange("postemotion",event)}
+            list="emotionlist"
+          />
+          <datalist id="emotionlist">
+            {emotions.map(({ name, emoji }, index) => {
+              return <option key={index} value={name + " " + emoji} />;
+            })}
+          </datalist>
+          <input
+            className="input input-bordered"
+            type="text"
+            placeholder="Enter an image URL to set a picture"
+            value={imageUrlText}
+            name="imageurl"
+            onChange={()=>handleInputChange("imageurl",event)}
           />
           <button type="submit" className="btn btn-primary">
             {loading ? "Posting Quote..." : "Post Quote"}
