@@ -1,4 +1,9 @@
+import { useThemeContext } from '../../utils/GlobalState';
+import { useEffect } from 'react';
+
 function ThemeList() {
+  const [theme, setTheme] = useThemeContext();
+  console.log("theme component:", theme);
   // DaisyUI built-in themes from https://daisyui.com/docs/themes/
   const themes = [
     "cupcake",
@@ -35,6 +40,16 @@ function ThemeList() {
     "sunset",
   ];
 
+  const handleThemeChange = (themeName, event) => {
+    event.preventDefault();
+    setTheme(themeName);
+    document.querySelector('html').setAttribute('data-theme', theme);
+  };
+
+  useEffect(() => {
+    localStorage.setItem('colorTheme', theme);
+  }, [theme]);
+
   return (
     <details>
       <summary>
@@ -67,6 +82,7 @@ function ThemeList() {
                 className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
                 aria-label={themename}
                 value={themename}
+                onChange={(event) => handleThemeChange(themename, event)}
               />
             </li>
           );

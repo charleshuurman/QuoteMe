@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useReducer, useState } from "react";
 import { reducer } from './reducers'
 
 const StoreContext = createContext();
@@ -20,4 +20,11 @@ const useStoreContext = () => {
   return useContext(StoreContext);
 };
 
-export { StoreProvider, useStoreContext };
+// Create context for theme that can be stored in local storage
+const ThemeContext = createContext(localStorage.getItem('colorTheme'));
+
+const useThemeContext = () => {
+  return useContext(ThemeContext);
+}
+
+export { StoreProvider, useStoreContext, ThemeContext, useThemeContext };
