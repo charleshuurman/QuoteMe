@@ -29,13 +29,25 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+import { useState, useEffect } from 'react';
+import { ThemeContext } from './utils/GlobalState';
+
 function App() {
+  const [theme, setTheme] = useState(localStorage.getItem('colorTheme'));
+
+  useEffect(() => {
+    document.querySelector('html').setAttribute('data-theme', theme);
+  }, [theme]);
+
   return (
     <ApolloProvider client={client}>
-      <StoreProvider>
-        <Nav />
-        <Outlet />
-      </StoreProvider>
+      <ThemeContext.Provider value={[theme, setTheme]}>
+        {console.log("top level:", theme)}
+        <StoreProvider>
+          <Nav />
+          <Outlet />
+        </StoreProvider>
+      </ThemeContext.Provider>
     </ApolloProvider>
   );
 }
