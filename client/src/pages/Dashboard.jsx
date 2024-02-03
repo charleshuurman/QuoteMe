@@ -9,10 +9,8 @@ import Auth from "../utils/auth";
 import PostQuote from "../components/PostQuote";
 import ShowQuotes from "../components/ShowQuotes";
 
-import { useState } from "react";
 // Apollo GraphQL queries
 import { useQuery } from "@apollo/client";
-import { useMutation } from "@apollo/client";
 import { QUERY_GET_PUBLIC_QUOTES } from "../utils/queries";
 
 const DashBoard = () => {

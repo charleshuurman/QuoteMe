@@ -11,7 +11,6 @@ import ShowQuotes from "../components/ShowQuotes";
 
 // Apollo GraphQL queries
 import { useQuery } from "@apollo/client";
-import { useMutation } from "@apollo/client";
 import { QUERY_GET_MY_QUOTES } from "../utils/queries";
 
 const Journal = () => {
