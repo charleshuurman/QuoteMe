@@ -1,3 +1,4 @@
+// Shopping cart courtesy of UT Austin Bootcamp materials, State - 26, Actions-Reducers
 import { useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { useLazyQuery } from '@apollo/client';
@@ -71,7 +72,7 @@ const Cart = () => {
   }
 
   return (
-    <div className="cart">
+    <div className="cart text-xl">
       <div className="close" onClick={toggleCart}>
         [close]
       </div>

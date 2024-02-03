@@ -45,7 +45,7 @@ function ProductList() {
 
   return (
     <div className="my-2">
-      <h2>Tiers Upgrades and Donations:</h2>
+      <h2 className="rounded-box bg-base-200 p-2">Tiers Upgrades and Donations:</h2>
       {state.products.length ? (
         <div className="flex flex-row gap-2">
           {filterProducts().map((product) => (
