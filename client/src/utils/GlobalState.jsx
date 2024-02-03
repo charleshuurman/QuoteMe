@@ -9,7 +9,8 @@
  * data and UI preferences are centrally managed and easily accessible throughout the application.
  */
 
-import { createContext, useContext, useReducer, useState } from "react";
+import { createContext, useContext, useReducer } from "react";
+
 import { reducer } from './reducers'
 
 const StoreContext = createContext();
@@ -38,8 +39,6 @@ const useThemeContext = () => {
   return useContext(ThemeContext);
 }
 
-export { StoreProvider, useStoreContext, ThemeContext, useThemeContext };
-
 /**
  * Exports:
  * - StoreProvider: A context provider component that wraps the application, providing global state to all child components.
@@ -47,3 +46,28 @@ export { StoreProvider, useStoreContext, ThemeContext, useThemeContext };
  * - ThemeContext: A context for managing and accessing the application's theme.
  * - useThemeContext: A custom hook for components to access and modify the theme.
  */
+
+// Define pre-selected emotions
+// Array of emotions with their corresponding names and emoji symbols
+const emotions = [
+  { name: 'Happy', emoji: '😊' },
+  { name: 'Sad', emoji: '😢' },
+  { name: 'Anxious', emoji: '😰' },
+  { name: 'Angry', emoji: '😠' },
+  { name: 'Stressed', emoji: '😥' },
+  { name: 'Lonely', emoji: '🙍‍♂️' },
+  { name: 'Overwhelmed', emoji: '😵' },
+  { name: 'Frustrated', emoji: '😤' },
+  { name: 'Disappointed', emoji: '😞' },
+  { name: 'Grateful', emoji: '🙏' },
+  { name: 'Exhausted', emoji: '😩' },
+  { name: 'Insecure', emoji: '🙇‍♂️' },
+  { name: 'Nervous', emoji: '😟' },
+  { name: 'Hopeless', emoji: '😔' },
+  { name: 'Jealous', emoji: '😒' },
+  { name: 'Lost', emoji: '🤔' }
+];
+
+
+export { StoreProvider, useStoreContext, ThemeContext, useThemeContext, emotions };
+

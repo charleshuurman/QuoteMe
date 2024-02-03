@@ -6,27 +6,10 @@ import React, { useState, useEffect } from 'react';
 // Importing the GeneratedQuotes component
 import GeneratedQuotes from '../GeneratedQuotes';
 
-import AuthService from '../../utils/auth';
+// Import the emotions array
+import { emotions } from '../../utils/GlobalState';
 
-// Array of emotions with their corresponding names and emoji symbols
-const emotions = [
-  { name: 'Happy', emoji: '😊' },
-  { name: 'Sad', emoji: '😢' },
-  { name: 'Anxious', emoji: '😰' },
-  { name: 'Angry', emoji: '😠' },
-  { name: 'Stressed', emoji: '😥' },
-  { name: 'Lonely', emoji: '🙍‍♂️' },
-  { name: 'Overwhelmed', emoji: '😵' },
-  { name: 'Frustrated', emoji: '😤' },
-  { name: 'Disappointed', emoji: '😞' },
-  { name: 'Grateful', emoji: '🙏' },
-  { name: 'Exhausted', emoji: '😩' },
-  { name: 'Insecure', emoji: '🙇‍♂️' },
-  { name: 'Nervous', emoji: '😟' },
-  { name: 'Hopeless', emoji: '😔' },
-  { name: 'Jealous', emoji: '😒' },
-  { name: 'Lost', emoji: '🤔' }
-];
+import AuthService from '../../utils/auth';
 
 const ChooseFeeling = () => {
   const [selectedEmotion, setSelectedEmotion] = useState(null);
