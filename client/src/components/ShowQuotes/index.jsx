@@ -9,7 +9,9 @@ const ShowQuotes = (props) => {
   const userName = Auth.getProfile().data.userName;
   const [setPublic, setPublicState] = useMutation(SET_PUBLIC);
   const [setPrivate, setPrivateState] = useMutation(SET_PRIVATE);
-  const [deleteQuote, deleteQuoteState] = useMutation(DELETE_QUOTE);
+  const [deleteQuote, deleteQuoteState] = useMutation(DELETE_QUOTE, {
+    refetchQueries: [{ query: props.quotesQuery }],
+  });
   const [addReaction, addReactionState] = useMutation(ADD_REACTION);
   const [delReaction, delReactionState] = useMutation(DEL_REACTION);
 
@@ -32,7 +34,10 @@ const ShowQuotes = (props) => {
       analyzeQuote().then((response) => {
         let newAiQuotes = {};
         let newAiQuote = { _id: null };
-        newAiQuote[response.data.analyzeQuote._id] = { content: response.data.analyzeQuote.content, emotion: response.data.analyzeQuote.emotion };
+        newAiQuote[response.data.analyzeQuote._id] = {
+          content: response.data.analyzeQuote.content,
+          emotion: response.data.analyzeQuote.emotion,
+        };
         Object.assign(newAiQuotes, aiQuotes, newAiQuote);
         setAiQuotes(newAiQuotes);
       });

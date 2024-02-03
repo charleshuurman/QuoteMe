@@ -14,7 +14,7 @@ connection.on('error', (err) => err);
 connection.once('open', async () => {
   console.log('connected');
   // Use cleandb on prevoius .js file to delete the collections if they exist
-  
+
   // Create empty array to hold users
   const users = [];
   // Loop 20 times -- add users to the users array
@@ -75,7 +75,7 @@ connection.once('open', async () => {
     "https://cdn.pixabay.com/photo/2016/11/29/11/45/children-1869265_1280.jpg",
     "https://cdn.pixabay.com/photo/2016/03/05/13/05/family-1237701_1280.jpg",
     "https://cdn.pixabay.com/photo/2016/11/18/14/40/balcony-1834990_1280.jpg",
-    "https://cdn.pixabay.com/photo/2015/06/22/08/37/children-817365_1280.jpg",                                
+    "https://cdn.pixabay.com/photo/2015/06/22/08/37/children-817365_1280.jpg",
   ]
 
   const sadImages = [
@@ -88,7 +88,7 @@ connection.once('open', async () => {
     "https://cdn.pixabay.com/photo/2017/02/08/13/43/woman-2048905_1280.jpg",
     "https://cdn.pixabay.com/photo/2020/04/07/04/17/desperate-5011953_1280.jpg",
     "https://cdn.pixabay.com/photo/2014/11/13/06/12/boy-529067_1280.jpg",
-    "https://cdn.pixabay.com/photo/2016/03/27/19/20/indian-1283789_1280.jpg",                                
+    "https://cdn.pixabay.com/photo/2016/03/27/19/20/indian-1283789_1280.jpg",
   ]
 
   const anxiousImages = [
@@ -101,7 +101,7 @@ connection.once('open', async () => {
     "https://cdn.pixabay.com/photo/2016/05/04/07/49/face-1370956_1280.jpg",
     "https://cdn.pixabay.com/photo/2020/01/01/21/52/cat-4734564_1280.jpg",
     "https://cdn.pixabay.com/photo/2021/06/18/14/03/woman-6346248_1280.jpg",
-    "https://cdn.pixabay.com/photo/2018/12/12/04/43/sad-3870115_1280.jpg",                                
+    "https://cdn.pixabay.com/photo/2018/12/12/04/43/sad-3870115_1280.jpg",
   ]
 
   const angryImages = [
@@ -114,7 +114,7 @@ connection.once('open', async () => {
     "https://cdn.pixabay.com/photo/2015/09/03/17/28/man-921004_1280.jpg",
     "https://cdn.pixabay.com/photo/2012/02/29/11/51/anger-18615_1280.jpg",
     "https://cdn.pixabay.com/photo/2013/07/12/16/39/angry-151332_1280.png",
-    "https://cdn.pixabay.com/photo/2017/05/04/14/19/warning-2284170_1280.jpg",                                
+    "https://cdn.pixabay.com/photo/2017/05/04/14/19/warning-2284170_1280.jpg",
   ]
 
   const stressedImages = [
@@ -127,47 +127,51 @@ connection.once('open', async () => {
     "https://cdn.pixabay.com/photo/2016/10/13/15/39/hustle-and-bustle-1738072_1280.jpg",
     "https://cdn.pixabay.com/photo/2017/05/15/00/37/mental-health-2313430_1280.jpg",
     "https://cdn.pixabay.com/photo/2017/05/31/16/24/cat-2360863_1280.jpg",
-    "https://cdn.pixabay.com/photo/2018/03/30/13/10/woman-3275328_1280.jpg",                                
+    "https://cdn.pixabay.com/photo/2018/03/30/13/10/woman-3275328_1280.jpg",
   ]
 
   const moods = [
-    'happy', 
-    'sad', 
-    'anxious', 
-    'angry', 
-    'stressed', 
-    'lonely', 
-    'overwhelmed', 
-    'frustrated', 
-    'disappointed', 
-    'grateful', 
-    'exhausted',     
-    'inseucure',         
+    'happy',
+    'sad',
+    'anxious',
+    'angry',
+    'stressed',
+    'lonely',
+    'overwhelmed',
+    'frustrated',
+    'disappointed',
+    'grateful',
+    'exhausted',
+    'inseucure',
     'nervous',
-    'hopeless',                 
-    'jealous',                 
-    'lost',    
+    'hopeless',
+    'jealous',
+    'lost',
   ];
 
   const Chartmoods = [
-    'happy', 
-    'sad', 
-    'anxious', 
-    'angry', 
-    'stressed', 
+    'happy',
+    'sad',
+    'anxious',
+    'angry',
+    'stressed',
   ];
 
 
   // Seed quotes & reactions
   // =========================
+
+  // Make most posts from last week to show something in the chart
+  const currentDate = new Date();
+  const lastWeekDate = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+
   // Get some random quote objects using a helper function that we imported from ./data
   let quotes = [];
-  for (let i = 1; i <= 35; i++) {
-    const emotion = Chartmoods[Math.floor(Math.random()*Chartmoods.length)];
+  for (let i = 1; i <= 185; i++) {
+    const emotion = Chartmoods[Math.floor(Math.random() * Chartmoods.length)];
     let image, selectedImage;
-  
-    switch (emotion)
-    {
+
+    switch (emotion) {
       case 'happy':
         image = happyImages.sort(() => 0.5 - Math.random());
         break;
@@ -182,9 +186,9 @@ connection.once('open', async () => {
         break;
       case 'stressed':
         image = stressedImages.sort(() => 0.5 - Math.random());
-        break;        
+        break;
     }
-  
+
     selectedImage = image[0];
 
 
@@ -192,55 +196,52 @@ connection.once('open', async () => {
       content: getRandomQuote(),
       userName: getRandomArrItem(users).userName,
       emotion: emotion,
-      isPrivate: (Math.random() < 0.5)?true:false,
+      isPrivate: (Math.random() < 0.5) ? true : false,
       isGenerated: false,
       // isGenerated: (Math.random() < 0.5)?true:false,
-//      imageUrl: `http://placekitten.com/${100+(Math.floor(Math.random()*10)*10)}/${100+(Math.floor(Math.random()*10)*10)}`,
+      //      imageUrl: `http://placekitten.com/${100+(Math.floor(Math.random()*10)*10)}/${100+(Math.floor(Math.random()*10)*10)}`,
       imageUrl: selectedImage,
-      createdAt: generateRandomDate(new Date(2021, 0, 1), new Date())
+      createdAt: generateRandomDate(lastWeekDate, currentDate)
     });
   };
 
-// add more quotes for EmotionChart
-const currentDate = new Date();
-const lastWeekDate = new Date(currentDate.getTime() - 7*24*60*60*1000);
+  // add additional quotes for on user[1] only for EmotionChart
 
-for (let i = 1; i <= 50; i++) {
-  const emotion = Chartmoods[Math.floor(Math.random()*Chartmoods.length)];
-  let image, selectedImage;
+  for (let i = 1; i <= 18; i++) {
+    const emotion = Chartmoods[Math.floor(Math.random() * Chartmoods.length)];
+    let image, selectedImage;
 
-  switch (emotion)
-  {
-    case 'happy':
-      image = happyImages.sort(() => 0.5 - Math.random());
-      break;
-    case 'sad':
-      image = sadImages.sort(() => 0.5 - Math.random());
-      break;
-    case 'anxious':
-      image = anxiousImages.sort(() => 0.5 - Math.random());
-      break;
-    case 'angry':
-      image = angryImages.sort(() => 0.5 - Math.random());
-      break;
-    case 'stressed':
-      image = stressedImages.sort(() => 0.5 - Math.random());
-      break;        
-  }
+    switch (emotion) {
+      case 'happy':
+        image = happyImages.sort(() => 0.5 - Math.random());
+        break;
+      case 'sad':
+        image = sadImages.sort(() => 0.5 - Math.random());
+        break;
+      case 'anxious':
+        image = anxiousImages.sort(() => 0.5 - Math.random());
+        break;
+      case 'angry':
+        image = angryImages.sort(() => 0.5 - Math.random());
+        break;
+      case 'stressed':
+        image = stressedImages.sort(() => 0.5 - Math.random());
+        break;
+    }
 
-  selectedImage = image[0];
+    selectedImage = image[0];
 
-  quotes.push({
-    content: getRandomQuote(),
-    userName: users[1].userName,      // push to user[1]
-    emotion: emotion,
-    isPrivate: (Math.random() < 0.5)?true:false,
-    isGenerated: false,
-    // isGenerated: (Math.random() < 0.5)?true:false,
-    imageUrl: selectedImage,
-    createdAt: generateRandomDate(lastWeekDate, currentDate)
-  });
-};
+    quotes.push({
+      content: getRandomQuote(),
+      userName: users[1].userName,      // push to user[1]
+      emotion: emotion,
+      isPrivate: (Math.random() < 0.5) ? true : false,
+      isGenerated: false,
+      // isGenerated: (Math.random() < 0.5)?true:false,
+      imageUrl: selectedImage,
+      createdAt: generateRandomDate(lastWeekDate, currentDate)
+    });
+  };
 
 
 
