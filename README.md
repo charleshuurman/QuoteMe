@@ -31,7 +31,9 @@ To install QuoteMe on your local computer:
 
 ## Usage
 
-Since it's deployed in Render, please follow the link: [QuoteMe App in Render](https://quoteme-1b7p.onrender.com/)
+Since it's deployed in Render, please click this link: [**QuoteMe App in Render**](https://quoteme-1b7p.onrender.com/)
+
+> **Testing:** For this demo, we have prepared 25 user e-mails for you to log in with pre-populated data.  You may login with user1@hotmail.com, user2@hotmail.com, ... user25@hotmail.com. The password is user1, user2 ... user25
 
 You can also install the application locally by following the installation instructions above.
 
