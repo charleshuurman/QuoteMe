@@ -18,6 +18,7 @@ QuoteMe is a web application designed to enhance emotional well-being through pe
 - [Dependencies](#dependencies)
 - [License](#license)
 
+
 ## Installation
 
 To install QuoteMe:
@@ -25,7 +26,8 @@ To install QuoteMe:
 1. Clone the repository to your local machine.
 2. Navigate to the `server` directory and run `npm install` to install server dependencies.
 3. Navigate to the `client` directory and run `npm install` to install client dependencies.
-4. Start the application by running `npm run develop` from the root directory, which concurrently launches both the client and the server.
+4. Seed the database by running `npm run seed` from the root directory, which will seed database with affirmations, quotes, users, and emotions.
+5. Start the application by running `npm run develop` from the root directory, which concurrently launches both the client and the server.
 
 ## Usage
 
