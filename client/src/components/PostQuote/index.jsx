@@ -33,25 +33,29 @@ const PostQuote = (props) => {
   // Handles posting a new Quote
   const handlePostQuote = (event) => {
     event.preventDefault();
-    createQuote({
-      variables: {
-        content: quoteText,
-        emotion: emotionText,
-        isPrivate: isJournal,
-        isGenerated: false,
-        imageUrl: imageUrlText,
-      },
-    })
-      .then((res) => {
-        console.log("Quote created:", res.data.createQuote);
-        window.location.reload();
-        setQuoteText(""); // Clear the input field after posting
-        // Adds the new quote to the list of quotes without reloading the page
-        setPosts((prevPosts) => [...prevPosts, res.data.createQuote]);
+    if (quoteText.length > 0 ) {
+      createQuote({
+        variables: {
+          content: quoteText,
+          emotion: emotionText,
+          isPrivate: isJournal,
+          isGenerated: false,
+          imageUrl: imageUrlText,
+        },
       })
-      .catch((error) => {
-        console.error("Error creating quote:", error);
-      });
+        .then((res) => {
+          console.log("Quote created:", res.data.createQuote);
+          window.location.reload();
+          setQuoteText(""); // Clear the input field after posting
+          // Adds the new quote to the list of quotes without reloading the page
+          setPosts((prevPosts) => [...prevPosts, res.data.createQuote]);
+        })
+        .catch((error) => {
+          console.error("Error creating quote:", error);
+        });
+    } else {
+      console.log("Quote is empty, cancelling post");
+    };
   };
 
   // Handles posting a new comment on a quote
@@ -105,7 +109,7 @@ const PostQuote = (props) => {
             type="text"
             name="postquote"
             value={quoteText}
-            onChange={()=>handleInputChange("postquote",event)}
+            onChange={() => handleInputChange("postquote", event)}
             placeholder="Enter your quote"
           />
           {/* emotion detector (TBD): {quoteText?(<button type="button" className="badge badge-secondary">detect emotion</button>):<div className="badge badge-outline">type in your post to detect its emotion</div>} */}
@@ -115,7 +119,7 @@ const PostQuote = (props) => {
             placeholder="How are you feeling today?"
             value={emotionText}
             name="postemotion"
-            onChange={()=>handleInputChange("postemotion",event)}
+            onChange={() => handleInputChange("postemotion", event)}
             list="emotionlist"
           />
           <datalist id="emotionlist">
@@ -129,7 +133,7 @@ const PostQuote = (props) => {
             placeholder="Enter an image URL to set a picture"
             value={imageUrlText}
             name="imageurl"
-            onChange={()=>handleInputChange("imageurl",event)}
+            onChange={() => handleInputChange("imageurl", event)}
           />
           <button type="submit" className="btn btn-primary">
             {loading ? "Posting Quote..." : "Post Quote"}

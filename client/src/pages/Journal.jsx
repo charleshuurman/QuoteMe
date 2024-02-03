@@ -19,7 +19,7 @@ const Journal = () => {
 
   const userId = Auth.getProfile().data._id;
 
-  const { loading, data } = useQuery(QUERY_GET_MY_QUOTES, {});
+  const { loading, data } = useQuery(QUERY_GET_MY_QUOTES);
 
   // populate quoteData
   if (data) {
@@ -43,12 +43,12 @@ const Journal = () => {
 
   return (
     <div className="container border rounded-box">
-      <div className="rounded-box">
+      <div className="rounded-box p-2">
         <h2>Private Journal</h2>
         <p className="text-sm">Your private journal lists all of your private posts to keep track of your emotional journey. You can share your posts to the public. You can also get an AI to generate an affirmation to your post. Any post you make here will be private, but you can share it to the public later.</p>
       </div>
       <PostQuote isJournal={true} />
-      <ShowQuotes quotesArray={quoteData} />
+      <ShowQuotes quotesArray={quoteData} quotesQuery={QUERY_GET_MY_QUOTES}/>
     </div>
   );
 };
