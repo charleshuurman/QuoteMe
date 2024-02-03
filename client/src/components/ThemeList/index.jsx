@@ -2,7 +2,7 @@ import { useThemeContext } from '../../utils/GlobalState';
 import { useEffect } from 'react';
 
 function ThemeList() {
-  const [theme, setTheme] = useThemeContext();
+  const [theme, setTheme] = useThemeContext(); // Access and modify the global theme state
   console.log("theme component:", theme);
   // DaisyUI built-in themes from https://daisyui.com/docs/themes/
   const themes = [
@@ -42,15 +42,18 @@ function ThemeList() {
 
   const handleThemeChange = (themeName, event) => {
     event.preventDefault();
-    setTheme(themeName);
-    document.querySelector('html').setAttribute('data-theme', theme);
+    setTheme(themeName); // Update the global theme state
+    document.querySelector('html').setAttribute('data-theme', theme); // Apply the theme to the document
   };
 
   useEffect(() => {
-    localStorage.setItem('colorTheme', theme);
+    localStorage.setItem('colorTheme', theme); // Persists the selected theme in local storage
   }, [theme]);
 
   return (
+    // Render a dropdown menu for theme selection
+    // Each theme option is represented as a radio button within the list
+    // The handleThemeChange function is attached to the onChange event of each radio button
     <details>
       <summary>
         <a className="mx-1 flex">

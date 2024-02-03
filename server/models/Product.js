@@ -1,3 +1,10 @@
+/**
+ * This module defines the Mongoose schema and model for products within the application. Products are central to the
+ * application's offerings, whether it's an e-commerce platform, a service catalog, or any system that involves item
+ * transactions. The schema captures essential details of products, including their name, description, image, pricing,
+ * available quantity, and associated category.
+ */
+
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;

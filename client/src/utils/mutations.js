@@ -1,3 +1,13 @@
+/**
+ * This file defines a collection of GraphQL mutations used throughout the application for interacting 
+ * with the backend API. These mutations cover a wide range of functionalities, including user 
+ * authentication, quote management, comment and reaction handling, and order processing.
+ * 
+ * These mutations enable the application to perform CRUD operations and more, facilitating interactive 
+ * and dynamic user experiences. They are utilized within the application through Apollo Client's useMutation 
+ * hook, allowing components to easily interact with the API.
+ */
+
 import { gql } from '@apollo/client';
 
 export const LOGIN = gql`

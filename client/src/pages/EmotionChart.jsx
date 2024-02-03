@@ -1,3 +1,10 @@
+/**
+ * This component is responsible for visualizing the user's emotional trends over the past week
+ * through a dynamic line chart. It fetches the user's quotes from a GraphQL API and categorizes
+ * them by emotion. The emotional intensity and frequency are then plotted on a line chart, 
+ * allowing users to visually track how their emotions have fluctuated over time.
+ */
+
 import Auth from "../utils/auth";
 import PostQuote from "../components/PostQuote";
 import ShowQuotes from "../components/ShowQuotes";
@@ -325,5 +332,10 @@ const EmotionChart = () => {
     </div>
   );
 };
-
+/**
+* This component is responsible for visualizing the user's emotional trends over the past week
+* through a dynamic line chart. It fetches the user's quotes from a GraphQL API and categorizes
+* them by emotion. The emotional intensity and frequency are then plotted on a line chart, 
+* allowing users to visually track how their emotions have fluctuated over time.
+*/
 export default EmotionChart;

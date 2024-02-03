@@ -1,3 +1,13 @@
+/**
+* This file defines the reducer function for the application's state management, 
+ * particularly handling actions related to products, shopping cart, and categories. 
+ * It takes the current state and an action as arguments and returns a new state 
+ * based on the action type. The reducer supports actions such as updating product 
+ * listings, adding items to the cart, updating cart quantities, removing items from 
+ * the cart, clearing the cart, toggling the cart's visibility, updating categories, 
+ * and setting the current category. This centralized handling of state transitions 
+ * ensures a predictable state evolution in response to user actions or events.
+ */
 import {
   UPDATE_PRODUCTS,
   ADD_TO_CART,

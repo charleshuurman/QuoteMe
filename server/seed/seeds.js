@@ -1,3 +1,9 @@
+/**
+ * This script initializes the MongoDB database with predefined data sets for the QuoteMe application. It leverages the 
+ * 'dotenv' package to manage environment variables and the custom 'cleanDB' utility to clear existing data from specified 
+ * collections before seeding new data. This ensures a fresh start for categories, products, quotes, users, and affirmations 
+ * collections every time the script is executed.
+ */
 require('dotenv').config();
 const db = require('../config/connection');
 const { User, Product, Category, Affirmation } = require('../models');

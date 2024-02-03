@@ -1,3 +1,10 @@
+/**
+ * This module defines the schema and model for user entities in the application using Mongoose. It captures essential 
+ * user information including names, username, email, password, and more. Unique constraints are applied to both 
+ * username and email to ensure no duplicates. The schema also includes references to other models such as 'Quote', 
+ * 'User' (for friends), and 'Affirmation', and embeds the 'Order' schema directly, demonstrating both referencing and 
+ * embedding techniques in document design.
+ */
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;

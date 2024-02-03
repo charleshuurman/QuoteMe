@@ -1,3 +1,8 @@
+/**
+ * This component renders a login form that allows users to authenticate and access their accounts. 
+ * It uses React's useState hook to manage form inputs and Apollo Client's useMutation hook to perform 
+ * the LOGIN mutation for user authentication.
+ */
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { Link } from "react-router-dom";
@@ -5,30 +10,37 @@ import { LOGIN } from "../utils/mutations";
 import Auth from "../utils/auth";
 
 function Login(props) {
+  // State to hold form inputs for email and password
   const [formState, setFormState] = useState({ email: "", password: "" });
+  // GraphQL mutation for logging in a user
   const [login, { loading, error }] = useMutation(LOGIN);
 
+  // Handles form submission
   const handleFormSubmit = async (event) => {
-    event.preventDefault();
+    event.preventDefault(); // Prevents the default form submission behavior
     try {
+      // Executes the login mutation using the email and password from the form state
       const mutationResponse = await login({
         variables: { email: formState.email, password: formState.password },
       });
+      // Extracts the token from the mutation response and logs the user in
       const token = mutationResponse.data.login.token;
-      Auth.login(token);
+      Auth.login(token); // Uses auth utility to set the token in local storage and authenticate the user
     } catch (e) {
-      console.log(e);
+      console.log(e); // Logs any errors to the console
     }
   };
 
+  // Update form state based on user input
   const handleChange = (event) => {
-    const { name, value } = event.target;
+    const { name, value } = event.target; // Destructures the name and value component from the event target
     setFormState({
-      ...formState,
-      [name]: value,
+      ...formState, // Spreads the existing form state
+      [name]: value, // Update the state with the new value for the named input
     });
   };
 
+  // Renders the login form
   return (
     <div className="container my-1 border rounded-box">
       <Link to="/signup">← Go to Signup</Link>

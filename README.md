@@ -18,6 +18,7 @@ QuoteMe is a web application designed to enhance emotional well-being through pe
 - [Dependencies](#dependencies)
 - [License](#license)
 
+
 ## Installation
 
 To install QuoteMe on your local computer:

@@ -1,3 +1,9 @@
+/**
+ * This file contains the GraphQL schema definitions for the QuoteMe application. It defines the structure
+ * of data types, queries, mutations, and relationships between data entities such as Users, Quotes, Comments,
+ * Affirmations, Products, Orders, and more. These definitions serve as the backbone for the GraphQL API, 
+ * dictating how data can be queried and manipulated through the API.
+ */
 const typeDefs = `
   type Comment {
     _id: ID

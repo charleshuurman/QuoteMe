@@ -1,3 +1,5 @@
+// Provides functions for interaction with external APIs, including image search and data fetching.
+
 import React, { useState, useEffect } from "react";
 import Auth from "../../utils/auth";
 import { useQuery } from "@apollo/client";
