@@ -1,3 +1,10 @@
+/**
+ * This file implements the resolvers required for executing the queries and mutations defined in the GraphQL schema. 
+ * Resolvers are functions that provide the instructions for turning a GraphQL operation (query or mutation) into data.
+ * They either return the same type of data specified in the schema or a promise that resolves to that data. This file
+ * covers a broad range of functionalities including fetching quotes, managing user profiles, interacting with products,
+ * processing orders, and more, aligning with the application's data model and business logic.
+ */
 const { User, Product, Category, Order, Quote, Affirmation } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 const { UserNotFoundError, QuoteNotFoundError, UserNotOwnerError } = require('../utils/errors.js');

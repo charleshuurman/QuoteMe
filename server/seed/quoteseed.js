@@ -1,3 +1,8 @@
+/**
+ * This script is designed to populate the QuoteMe application's MongoDB database with initial data, setting up a 
+ * development or testing environment with a predefined set of data. It connects to the database, optionally clears 
+ * existing collections, and inserts a variety of data including users, quotes, and their relationships.
+ */
 require('dotenv').config();
 const connection = require('../config/connection');
 const { User, Quote } = require('../models');

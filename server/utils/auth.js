@@ -1,3 +1,8 @@
+/**
+ * This module provides utility functions to support JWT (JSON Web Tokens)-based authentication within the QuoteMe 
+ * application. It facilitates the secure handling of user authentication by generating and verifying tokens, thereby 
+ * ensuring that users are correctly authenticated when making requests to the GraphQL API.
+ */
 const { GraphQLError } = require('graphql');
 const jwt = require('jsonwebtoken');
 

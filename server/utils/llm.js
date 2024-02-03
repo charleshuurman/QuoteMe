@@ -1,3 +1,9 @@
+/**
+ * This module leverages the OpenAI API to generate chatbot responses based on user input, specifically designed 
+ * to analyze emotions conveyed in user-submitted text and offer affirmations or encouragement. It utilizes the 
+ * GPT-3.5 model to process the input and generate responses that are both relevant and supportive, enhancing 
+ * the user experience by providing empathetic and insightful feedback.
+ */
 const { OpenAI } = require("openai");
 require("dotenv").config();
 
