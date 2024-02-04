@@ -7,7 +7,6 @@ import { useMutation } from "@apollo/client";
 import { QUERY_USER } from "../utils/queries";
 
 const Profile = () => {
-
   let userData;
 
   const userId = Auth.getProfile().data._id;
@@ -24,9 +23,9 @@ const Profile = () => {
 
   let userDataLength;
   if (userData) {
-    console.log('userData: ',userData);
+    console.log("userData: ", userData);
     userDataLength = Object.keys(userData).length;
-    console.log('userDataLength: ',userDataLength);
+    console.log("userDataLength: ", userDataLength);
   }
 
   // if data isn't here yet, say so
@@ -40,17 +39,36 @@ const Profile = () => {
 
   return (
     <>
-      <div className="container text-3xl rounded-box font-bold">
-        Profile
-        <br />
-        Welcome, {userData.userName} !
-        <div className="text-xl">
-          Current QuoteMe Tier: {userData.tier}
-          <br />
-          You have {userData.quotes.length} quotes.
-          <br />
-          You have {userData.friends.length} friends.
-          <br />
+      <div className="container text-3xl rounded-box font-bold gap-2 relative">
+        <h2 className="rounded-box bg-base-200 p-2">Profile</h2>
+        <h2 className="p-2">Welcome, {userData.userName} !</h2>
+        <div className="text-xl p-2">
+          <div className="overflow-x-auto">
+            <table className="table w-fit">
+              <tbody>
+                <tr>
+                  <td>username</td>
+                  <td>{userData.userName}</td>
+                </tr>
+                <tr>
+                  <td>Name</td>
+                  <td>{userData.firstName+" "+userData.lastName}</td>
+                </tr>
+                <tr>
+                  <td>email</td>
+                  <td>{userData.email}</td>
+                </tr>
+                <tr>
+                  <td>QuoteMe Tier</td>
+                  <td>{userData.tier}</td>
+                </tr>
+                <tr>
+                  <td># of Quotes</td>
+                  <td>{userData.quotes.length}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <Shop />

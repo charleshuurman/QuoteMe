@@ -41,7 +41,8 @@ function ProductItem(item) {
       </figure>
       <div className="card-body">
         <h2 className="card-title">{name}</h2>
-        <p className="text-sm">{quantity} {pluralize("item", quantity)} in stock</p>
+        {/* {(quantity===99999)?'max':'# not displayed'}
+        <p className="text-sm">{quantity} {pluralize("item", quantity)} in stock</p> */}
         <span className="text-2xl font-bold">${price}</span>
         <div className="card-actions justify-end">
           <button className="btn btn-primary" onClick={addToCart}>Add to cart</button>
