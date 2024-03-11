@@ -1,39 +1,39 @@
-// Purpose: This component allows users to select how they are feeling from a list of emotions. Upon selection,
-// it displays quotes related to the chosen emotion. It integrates user authentication to personalize the experience.
-
-// Importing React with the useState hook
 import React, { useState, useEffect } from 'react';
-// Importing the GeneratedQuotes component
 import GeneratedQuotes from '../GeneratedQuotes';
-
-// Import the emotions array
 import { emotions } from '../../utils/GlobalState';
-
 import AuthService from '../../utils/auth';
+
+
+
 
 const ChooseFeeling = () => {
   const [selectedEmotion, setSelectedEmotion] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
+  const [animationStarted, setAnimationStarted] = useState(false);
 
   useEffect(() => {
-    // Check if the user is logged in and fetch profile
     if (AuthService.loggedIn()) {
       const profile = AuthService.getProfile();
       setCurrentUser(profile.data);
     }
+    // Delay for the starting of emotion button animations
+    const timer = setTimeout(() => {
+      setAnimationStarted(true);
+    }, 2000);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleEmotionClick = (emotion) => {
     setSelectedEmotion(emotion);
-    console.log("user id:", currentUser);
   };
 
   const handleChooseAgain = () => {
     setSelectedEmotion(null);
   };
 
+
   return (
-    <div className="flex flex-col items-center justify-center p-4 bg-base-100">
+    <div className="flex flex-col items-center justify-center p-4 ">
       {selectedEmotion ? (
         <>
           <div className="w-full text-left">
@@ -48,24 +48,28 @@ const ChooseFeeling = () => {
         </>
       ) : (
         <>
-          <h2 className="text-6xl font-semibold text-base-800 mb-4 opacity-0 animate-fadeIn">How are you feeling?</h2>
-          <div className="flex flex-wrap justify-center gap-4">
-            {emotions.map((emotion, index) => (
-              <button
-                key={index}
-                className={`p-4 rounded-lg shadow-lg text-center transition-colors duration-300 ease-in-out ${emotion.name === selectedEmotion?.name ? 'bg-blue-300' : 'bg-white'} hover:bg-blue-200`}
-                style={{ fontSize: '2rem' }}
-                onClick={() => handleEmotionClick(emotion)}
-              >
-                <span className="text-6xl">{emotion.emoji}</span>
-                <p className="mt-2 font-medium">{emotion.name}</p>
-              </button>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
+           <h2 className="text-6xl font-semibold text-base-800 mb-12 animate-fadeIn">
+             How are you feeling?
+           </h2>
+           <div className="flex flex-wrap justify-center gap-4">
+             {emotions.map((emotion, index) => (
+               <button
+                 key={emotion.name}
+                 className={`emotion-btn p-4 rounded-lg text-center transition-all duration-300 ease-in-out hover:bg-blue-200 ${animationStarted ? 'start-animation' : ''}`}
+                 style={{
+                   fontSize: '1.5rem',
+                   animationDelay: `${index * 0.1 + 0.1}s`, // Start after text animation + staggered for each button
+                 }}
+                 onClick={() => handleEmotionClick(emotion)}
+               >
+                 <p className="font-medium">{emotion.name}</p>
+               </button>
+             ))}
+           </div>
+         </>
+       )}
+     </div>
   );
-};
+ };
 
 export default ChooseFeeling;

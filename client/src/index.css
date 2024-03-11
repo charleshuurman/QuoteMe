@@ -25,14 +25,45 @@ body {
   line-height: 1.5;
   font-size: 16px;
 }
+
+/* Keyframes for fading in the header */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-.animate-fadeIn {
-  animation: fadeIn 5s ease forwards;
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
+/* Keyframes for sliding in the emotion buttons */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Apply the animation to the header */
+.animate-fadeIn {
+  animation: fadeIn 3s ease forwards;
+}
+
+/* Initial state for the emotion buttons (invisible and ready to animate) */
+.emotion-btn {
+  opacity: 0;
+}
+
+/* Class to trigger the animation, added after a delay */
+.start-animation {
+  animation: fadeSlideIn 1s ease forwards;
+}
 
 
 h1,
@@ -48,10 +79,6 @@ h6 {
 
 h1 {
   font-size: 2.25rem;
-}
-
-h2 {
-  font-size: 2.8rem;
 }
 
 h3 {
