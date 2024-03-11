@@ -33,7 +33,7 @@ const ChooseFeeling = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 bg-base-200">
+    <div className="flex flex-col items-center justify-center p-4 bg-base-100">
       {selectedEmotion ? (
         <>
           <div className="w-full text-left">
@@ -48,7 +48,7 @@ const ChooseFeeling = () => {
         </>
       ) : (
         <>
-          <h2 className="text-2xl font-semibold text-base-800 mb-4">How are you feeling?</h2>
+          <h2 className="text-6xl font-semibold text-base-800 mb-4 opacity-0 animate-fadeIn">How are you feeling?</h2>
           <div className="flex flex-wrap justify-center gap-4">
             {emotions.map((emotion, index) => (
               <button

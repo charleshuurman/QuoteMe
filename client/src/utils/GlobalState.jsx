@@ -50,22 +50,22 @@ const useThemeContext = () => {
 // Define pre-selected emotions
 // Array of emotions with their corresponding names and emoji symbols
 const emotions = [
-  { name: 'Happy', emoji: '😊' },
-  { name: 'Sad', emoji: '😢' },
-  { name: 'Anxious', emoji: '😰' },
-  { name: 'Angry', emoji: '😠' },
-  { name: 'Stressed', emoji: '😥' },
-  { name: 'Lonely', emoji: '🙍‍♂️' },
-  { name: 'Overwhelmed', emoji: '😵' },
-  { name: 'Frustrated', emoji: '😤' },
-  { name: 'Disappointed', emoji: '😞' },
-  { name: 'Grateful', emoji: '🙏' },
-  { name: 'Exhausted', emoji: '😩' },
-  { name: 'Insecure', emoji: '🙇‍♂️' },
-  { name: 'Nervous', emoji: '😟' },
-  { name: 'Hopeless', emoji: '😔' },
-  { name: 'Jealous', emoji: '😒' },
-  { name: 'Lost', emoji: '🤔' }
+  { name: 'Happy' },
+  { name: 'Sad' },
+  { name: 'Anxious' },
+  { name: 'Angry' },
+  { name: 'Stressed' },
+  { name: 'Lonely' },
+  { name: 'Overwhelmed' },
+  { name: 'Frustrated' },
+  { name: 'Disappointed' },
+  { name: 'Grateful' },
+  { name: 'Exhausted' },
+  { name: 'Insecure' },
+  { name: 'Nervous' },
+  { name: 'Hopeless' },
+  { name: 'Jealous' },
+  { name: 'Lost' }
 ];
 
 

@@ -75,43 +75,43 @@ const EmotionColorCode = [
 
 
 const INITIAL_EmotionData = [
-  { name: 'Happy', emoji: '😊', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[0]},
-  { name: 'Sad', emoji: '😢' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[1]} ,
-  { name: 'Anxious', emoji: '😰' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[2]},
-  { name: 'Angry', emoji: '😠' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[3]},
-  { name: 'Stressed', emoji: '😥' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[4]},
-  { name: 'Lonely', emoji: '🙍‍♂️' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[5]},
-  { name: 'Overwhelmed', emoji: '😵' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[6]},
-  { name: 'Frustrated', emoji: '😤' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[7]},
-  { name: 'Disappointed', emoji: '😞' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[8]},
-  { name: 'Grateful', emoji: '🙏' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[9]},
-  { name: 'Exhausted', emoji: '😩' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[10]},
-  { name: 'Insecure', emoji: '🙇‍♂️' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[11]},
-  { name: 'Nervous', emoji: '😟' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[12]},
-  { name: 'Hopeless', emoji: '😔' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[13]},
-  { name: 'Jealous', emoji: '😒' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[14]},
-  { name: 'Lost', emoji: '🤔' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[15]}
+  { name: 'Happy', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[0]},
+  { name: 'Sad', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[1]} ,
+  { name: 'Anxious', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[2]},
+  { name: 'Angry', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[3]},
+  { name: 'Stressed', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[4]},
+  { name: 'Lonely', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[5]},
+  { name: 'Overwhelmed', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[6]},
+  { name: 'Frustrated', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[7]},
+  { name: 'Disappointed', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[8]},
+  { name: 'Grateful', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[9]},
+  { name: 'Exhausted', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[10]},
+  { name: 'Insecure', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[11]},
+  { name: 'Nervous', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[12]},
+  { name: 'Hopeless', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[13]},
+  { name: 'Jealous', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[14]},
+  { name: 'Lost', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[15]}
 
 ]
 
 
 const EmotionData = [
-  { name: 'Happy', emoji: '😊', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[0]},
-  { name: 'Sad', emoji: '😢' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[1]} ,
-  { name: 'Anxious', emoji: '😰' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[2]},
-  { name: 'Angry', emoji: '😠' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[3]},
-  { name: 'Stressed', emoji: '😥' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[4]},
-  { name: 'Lonely', emoji: '🙍‍♂️' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[5]},
-  { name: 'Overwhelmed', emoji: '😵' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[6]},
-  { name: 'Frustrated', emoji: '😤' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[7]},
-  { name: 'Disappointed', emoji: '😞' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[8]},
-  { name: 'Grateful', emoji: '🙏' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[9]},
-  { name: 'Exhausted', emoji: '😩' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[10]},
-  { name: 'Insecure', emoji: '🙇‍♂️' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[11]},
-  { name: 'Nervous', emoji: '😟' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[12]},
-  { name: 'Hopeless', emoji: '😔' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[13]},
-  { name: 'Jealous', emoji: '😒' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[14]},
-  { name: 'Lost', emoji: '🤔' , emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[15]}
+  { name: 'Happy', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[0]},
+  { name: 'Sad', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[1]} ,
+  { name: 'Anxious', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[2]},
+  { name: 'Angry', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[3]},
+  { name: 'Stressed', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[4]},
+  { name: 'Lonely', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[5]},
+  { name: 'Overwhelmed', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[6]},
+  { name: 'Frustrated', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[7]},
+  { name: 'Disappointed', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[8]},
+  { name: 'Grateful', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[9]},
+  { name: 'Exhausted', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[10]},
+  { name: 'Insecure', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[11]},
+  { name: 'Nervous', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[12]},
+  { name: 'Hopeless', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[13]},
+  { name: 'Jealous', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[14]},
+  { name: 'Lost', emotiondata: [0,0,0,0,0,0,0], color: EmotionColorCode[15]}
 
 ]
 
@@ -231,7 +231,7 @@ function buildLineChartData()
 
   for (let i=0; i<EmotionData.length; i++)
   {
-    const emotionString = EmotionData[i].name + EmotionData[i].emoji;
+    const emotionString = EmotionData[i].name;
 
     const data = {
       label: emotionString ,
