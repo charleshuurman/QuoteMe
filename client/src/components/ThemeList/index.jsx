@@ -6,44 +6,24 @@ function ThemeList() {
   console.log("theme component:", theme);
   // DaisyUI built-in themes from https://daisyui.com/docs/themes/
   const themes = [
-    "cupcake",
-    "light",
-    "dark",
-    "bumblebee",
-    "emerald",
-    "corporate",
-    "synthwave",
-    "retro",
-    "cyberpunk",
-    "valentine",
-    "halloween",
-    "garden",
-    "forest",
-    "aqua",
-    "lofi",
-    "pastel",
-    "fantasy",
     "wireframe",
     "black",
+    "synthwave",
+    "lofi",
     "luxury",
-    "dracula",
-    "cmyk",
-    "autumn",
-    "business",
-    "acid",
-    "lemonade",
-    "night",
-    "coffee",
-    "winter",
-    "dim",
+    "cyberpunk",
+    "valentine",
+    "pastel",
+    "forest",
     "nord",
-    "sunset",
+    "acid",
+    "night"
   ];
 
   const handleThemeChange = (themeName, event) => {
     event.preventDefault();
     setTheme(themeName); // Update the global theme state
-    document.querySelector('html').setAttribute('data-theme', theme); // Apply the theme to the document
+    document.querySelector('html').setAttribute('data-theme', themeName); // Apply the theme to the document
   };
 
   useEffect(() => {
@@ -58,7 +38,7 @@ function ThemeList() {
       <summary>
         <a className="mx-1 flex">
           <svg
-            className="w-6 h-6 text-gray-800 dark:text-white"
+            className="w-6 h-6 text-primary"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -75,7 +55,7 @@ function ThemeList() {
           Theme
         </a>
       </summary>
-      <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow-2xl bg-base-300 rounded-box w-52">
+      <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow-2xl bg-accent-400 rounded-box w-52">
         {themes.map((themename, index) => {
           return (
             <li key={index}>

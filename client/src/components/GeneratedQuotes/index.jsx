@@ -29,10 +29,10 @@ function SelectQuote({ quote, feeling, indexValue, image }) {
   }
 
   return (
-    <div key={indexValue} className="bg-white p-4 shadow-md rounded-lg flex flex-col justify-between">
+    <div key={indexValue} className="p-4 shadow-md rounded-lg flex flex-col justify-between border border-accent border-opacity-65">
       <p className="text-lg mb-4">{quote}</p>
       <figure>
-        <img className="object-cover w-full h-32 md:h-48" src={image} alt="image" />
+        <img className="object-cover w-full h-32 md:h-48 rounded" src={image} alt="Affirmation visual" />
       </figure>
       {Auth.loggedIn() ? (
         <button onClick={handleSaveQuote} className="badge badge-primary text-xs mt-4 self-end">

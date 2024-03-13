@@ -32,11 +32,11 @@ function Nav() {
     if (Auth.loggedIn()) {
       // Logged in navigation items
       return (
-        <ul className="primary bg-base-200 max-lg:text-lg flex flex-row menu menu-horizontal lg:menu-horizontal rounded-box">
+        <ul className="primary bg-base-50 max-lg:text-lg text-primary flex flex-row menu menu-horizontal lg:menu-horizontal rounded-box">
           <li>
             <Link to="/">
               <svg
-                className="w-6 h-6 text-gray-800 dark:text-white"
+                className="w-6 h-6 text-primary"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -49,14 +49,14 @@ function Nav() {
                   strokeWidth="2"
                   d="m4 12 8-8 8 8M6 10.5V19c0 .6.4 1 1 1h3v-3c0-.6.4-1 1-1h2c.6 0 1 .4 1 1v3h3c.6 0 1-.4 1-1v-8.5"
                 />
-              </svg>{" "}
+              </svg>{"Home"}
               {/* Home */}
             </Link>
           </li>
           <li>
             <Link to="/DashBoard">
               <svg
-                className="w-6 h-6 text-gray-800 dark:text-white"
+                className="w-6 h-6 text-primary"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -76,7 +76,7 @@ function Nav() {
           <li>
             <Link to="/Journal">
               <svg
-                className="w-6 h-6 text-gray-800 dark:text-white"
+                className="w-6 h-6 text-primary"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -96,7 +96,7 @@ function Nav() {
           <li>
             <Link to="/EmotionChart">
               <svg
-                className="w-6 h-6 text-gray-800 dark:text-white"
+                className="w-6 h-6 text-primary"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -120,7 +120,7 @@ function Nav() {
           <li className="mx-1">
             <Link to="/Profile">
               <svg
-                className="w-6 h-6 text-gray-800 dark:text-white"
+                className="w-6 h-6 text-primary"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -141,7 +141,7 @@ function Nav() {
             {/* this is not using the Link component to logout or user and then refresh the application to the start */}
             <a href="/" onClick={() => Auth.logout()}>
               <svg
-                className="w-6 h-6 text-gray-800 dark:text-white"
+                className="w-6 h-6 text-primary"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -179,7 +179,8 @@ function Nav() {
   }
 
   return (
-    <header className="bg-base-100 w-full fixed top-0 left-0 z-30">
+    <header className="w-full fixed top-0 left-0 z-30">
+      <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-4/5 border-b-2 border-accent"></span>
       <div className="max-w-6xl mx-auto px-4 py-2 flex justify-between items-center">
         <Link to="/" className="flex items-center text-2xl md:text-4xl font-bold">
           <img src={lotusFlower} alt="Logo" className="mr-2" style={{ height: '1em' }} />

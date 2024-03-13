@@ -115,8 +115,6 @@ const EmotionData = [
 
 ]
 
-
-
 function updateEmotionData(quoteEmotion, quoteDate)
 {
 //  console.log("updateEmotionData", quoteEmotion, quoteDate);

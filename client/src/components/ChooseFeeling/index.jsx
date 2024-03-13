@@ -33,7 +33,7 @@ const ChooseFeeling = () => {
 
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 ">
+    <div className="flex flex-col items-center text-color-primary justify-center p-4 ">
       {selectedEmotion ? (
         <>
           <div className="w-full text-left">
@@ -55,7 +55,7 @@ const ChooseFeeling = () => {
              {emotions.map((emotion, index) => (
                <button
                  key={emotion.name}
-                 className={`emotion-btn p-4 rounded-lg text-center transition-all duration-300 ease-in-out hover:bg-blue-200 ${animationStarted ? 'start-animation' : ''}`}
+                 className={`emotion-btn p-4 rounded-lg text-center text-color-primary transition-all duration-300 ease-in-out hover:text-color-secondary ${animationStarted ? 'start-animation' : ''}`}
                  style={{
                    fontSize: '1.5rem',
                    animationDelay: `${index * 0.1 + 0.1}s`, // Start after text animation + staggered for each button
