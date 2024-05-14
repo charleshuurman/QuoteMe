@@ -93,7 +93,7 @@ function Nav() {
               Journal
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link to="/EmotionChart">
               <svg
                 className="w-6 h-6 text-primary"
@@ -112,7 +112,7 @@ function Nav() {
               </svg>{" "}
               EmotionChart
             </Link>
-          </li>
+          </li> */}
 
           <li>
             <ThemeList />
@@ -180,7 +180,7 @@ function Nav() {
 
   return (
     <header className="w-full fixed top-0 left-0 z-30">
-      <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-4/5 border-b-2 border-accent"></span>
+      <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-3/5 border-b-2 border-accent"></span>
       <div className="max-w-6xl mx-auto px-4 py-2 flex justify-between items-center">
         <Link to="/" className="flex items-center text-2xl md:text-4xl font-bold">
           <img src={lotusFlower} alt="Logo" className="mr-2" style={{ height: '1em' }} />
